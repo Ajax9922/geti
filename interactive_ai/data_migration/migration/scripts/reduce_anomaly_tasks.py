@@ -39,7 +39,7 @@ class ReduceAnomalyTasksMigration(IMigrationScript):
         Updating the performance and annotations must happen after the reduction of the ANOM_STRINGS_MAPPING, due to it
         relying on the project type to be ANOMALY.
         """
-        for collection_name in ["project", "label", "label_schema", "task_node"]:
+        for collection_name in ["project", "label", "label_schema", "model", "model_storage", "task_node"]:
             cls._reduce(
                 collection_name=collection_name,
                 organization_id=organization_id,

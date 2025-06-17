@@ -177,6 +177,74 @@ def fxt_annotation_scene() -> dict:
 
 
 @pytest.fixture
+def fxt_model() -> dict:
+    return {
+        "_id": ObjectId("test_model_id"),
+        "configuration": {
+            "label_schema": {
+                "_id": ObjectId("test_label_schema_id"),
+                "label_groups": [
+                    {
+                        "_id": ObjectId("test_label_group_id"),
+                        "name": "UNDEFINED",
+                    }
+                ],
+            }
+        },
+    }
+
+
+@pytest.fixture
+def fxt_anomaly_classification_model(fxt_model) -> dict:
+    anom_cls_model = deepcopy(fxt_model)
+    anom_cls_model["configuration"]["label_schema"]["label_groups"][0]["name"] = "default - anomaly_classification"
+    return anom_cls_model
+
+
+@pytest.fixture
+def fxt_anomaly_detection_model(fxt_model) -> dict:
+    anom_det_model = deepcopy(fxt_model)
+    anom_det_model["configuration"]["label_schema"]["label_groups"][0]["name"] = "default - anomaly_detection"
+    return anom_det_model
+
+
+@pytest.fixture
+def fxt_anomaly_segmentation_model(fxt_model) -> dict:
+    anom_seg_model = deepcopy(fxt_model)
+    anom_seg_model["configuration"]["label_schema"]["label_groups"][0]["name"] = "default - anomaly_segmentation"
+    return anom_seg_model
+
+
+@pytest.fixture
+def fxt_model_storage() -> dict:
+    return {
+        "_id": ObjectId("test_model_storage_id"),
+        "model_template_id": "UNDEFINED",
+    }
+
+
+@pytest.fixture
+def fxt_anomaly_classification_model_storage(fxt_model_storage) -> dict:
+    anomaly_classification_model_storage = deepcopy(fxt_model_storage)
+    anomaly_classification_model_storage["model_template_id"] = "ote_anomaly_classification_padim"
+    return anomaly_classification_model_storage
+
+
+@pytest.fixture
+def fxt_anomaly_detection_model_storage(fxt_model_storage) -> dict:
+    anomaly_detection_model_storage = deepcopy(fxt_model_storage)
+    anomaly_detection_model_storage["model_template_id"] = "ote_anomaly_detection_padim"
+    return anomaly_detection_model_storage
+
+
+@pytest.fixture
+def fxt_anomaly_segmentation_model_storage(fxt_model_storage) -> dict:
+    anomaly_segmentation_model_storage = deepcopy(fxt_model_storage)
+    anomaly_segmentation_model_storage["model_template_id"] = "ote_anomaly_segmentation_padim"
+    return anomaly_segmentation_model_storage
+
+
+@pytest.fixture
 def fxt_mongo_client() -> MongoClient:
     database_address = os.environ.get("DATABASE_ADDRESS", "mongodb://localhost:27017/")
     database_username = os.environ.get("DATABASE_USERNAME", None)
@@ -208,24 +276,30 @@ def fxt_mongo_uuid(monkeypatch):
 
 class TestAnomalyReductionProcessMigration:
     @pytest.mark.parametrize(
-        "lazyfxt_project, lazyfxt_label, lazyfxt_label_schema, lazyfxt_task_node",
+        "lazyfxt_project, lazyfxt_label, lazyfxt_label_schema, lazyfxt_model, lazyfxt_model_storage, lazyfxt_task_node",
         [
             (
                 "fxt_anomaly_classification_project",
                 "fxt_anomaly_classification_label",
                 "fxt_anomaly_classification_label_schema",
+                "fxt_anomaly_classification_model",
+                "fxt_anomaly_classification_model_storage",
                 "fxt_anomaly_classification_task_node",
             ),
             (
                 "fxt_anomaly_detection_project",
                 "fxt_anomaly_detection_label",
                 "fxt_anomaly_detection_label_schema",
+                "fxt_anomaly_detection_model",
+                "fxt_anomaly_detection_model_storage",
                 "fxt_anomaly_detection_task_node",
             ),
             (
                 "fxt_anomaly_segmentation_project",
                 "fxt_anomaly_segmentation_label",
                 "fxt_anomaly_segmentation_label_schema",
+                "fxt_anomaly_segmentation_model",
+                "fxt_anomaly_segmentation_model_storage",
                 "fxt_anomaly_segmentation_task_node",
             ),
         ],
@@ -242,6 +316,8 @@ class TestAnomalyReductionProcessMigration:
         lazyfxt_project,
         lazyfxt_label,
         lazyfxt_label_schema,
+        lazyfxt_model,
+        lazyfxt_model_storage,
         lazyfxt_task_node,
         fxt_annotation_scene,
         request,
@@ -250,6 +326,8 @@ class TestAnomalyReductionProcessMigration:
         project = request.getfixturevalue(lazyfxt_project)
         label = request.getfixturevalue(lazyfxt_label)
         label_schema = request.getfixturevalue(lazyfxt_label_schema)
+        model = request.getfixturevalue(lazyfxt_model)
+        model_storage = request.getfixturevalue(lazyfxt_model_storage)
         task_node = request.getfixturevalue(lazyfxt_task_node)
 
         mock_db = fxt_mongo_client.get_database("geti_test")
@@ -257,12 +335,16 @@ class TestAnomalyReductionProcessMigration:
         project_collection = mock_db.project
         label_collection = mock_db.label
         label_schema_collection = mock_db.label_schema
+        model_collection = mock_db.model
+        model_storage_collection = mock_db.model_storage
         task_node_collection = mock_db.task_node
         annotation_scene_collection = mock_db.annotation_scene
 
         project_collection.insert_one(project)
         label_collection.insert_one(label)
         label_schema_collection.insert_one(label_schema)
+        model_collection.insert_one(model)
+        model_storage_collection.insert_one(model_storage)
         task_node_collection.insert_one(task_node)
         annotation_scene_collection.insert_one(fxt_annotation_scene)
 
@@ -287,6 +369,12 @@ class TestAnomalyReductionProcessMigration:
 
         label_schema_after_upgrade = list(label_schema_collection.find(filter={"project_id": PROJECT_ID}))
         assert label_schema_after_upgrade[0]["domain"] == "default - anomaly"
+
+        model_after_upgrade = list(model_collection.find(filter={"project_id": PROJECT_ID}))
+        assert model_after_upgrade[0]["configuration"]["label_schema"]["label_groups"][0]["name"] == "default - anomaly"
+
+        model_storage_after_upgrade = list(model_storage_collection.find(filter={"project_id": PROJECT_ID}))
+        assert model_storage_after_upgrade[0]["model_template_id"] == "ote_anomaly_padim"
 
         task_node_after_upgrade = list(task_node_collection.find(filter={"project_id": PROJECT_ID}))
         assert task_node_after_upgrade[0]["task_type"] == "ANOMALY"
