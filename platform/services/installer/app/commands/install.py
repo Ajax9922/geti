@@ -58,9 +58,8 @@ from geti_controller.uninstall import uninstall_geti_controller_chart
 from k3s.detect_ip import get_first_public_ip, get_master_node_ip_address
 from k3s.install import K3SInstallationError, install_k3s
 from k3s.uninstall import uninstall_k3s
-from platform_stages.install import install_platform
-from platform_stages.steps.errors import DownloadSystemPackagesError, StepsError
-from platform_stages.steps.install_system_packages import install_system_packages
+from platform_utils.errors import DownloadSystemPackagesError, StepsError
+from platform_utils.install_system_packages import install_system_packages
 from platform_utils.management.state import InstallationHandlerState, cluster_info_dump
 from texts.checks import (
     DNSChecksTexts,
@@ -256,21 +255,17 @@ def execute_installation(config: InstallationConfig) -> None:  # noqa: C901, RUF
 
     try:
         deploy_geti_controller_chart(config=config)
-        # TODO uncomment when charts will be ready
-        # controller_response = call_install_endpoint(kube_config=config.kube_config.value)
+        controller_response = call_install_endpoint(kube_config=config.kube_config.value)
         # logger.info(f"Response from the GetiController installation endpoint: {controller_response}")
         # status, message = monitor_installation_progress(config=config)
         # if status != OperationStatus.SUCCEEDED:
         #     raise GetiControllerError(f"Installation failed with status: {status}, message: {message}")
-        install_platform(config=config)  # TODO remove once installation via GetiController is implemented
-
     except (StepsError, GetiControllerError):
         logger.exception("Error during installation.")
         click.secho("\n" + InstallCmdTexts.installation_failed, fg="red")
         cluster_info_dump(kubeconfig=config.kube_config.value)
-        sys.exit(1)
     finally:
-        uninstall_geti_controller_chart(config=config)
+        # uninstall_geti_controller_chart(config=config)  # TODO uncomment when progress will be done
         # shutil.rmtree(PLATFORM_INSTALL_PATH, ignore_errors=True)  # TODO uncomment
         if config.lightweight_installer.value:
             # remove 'tools' dir on failure,
