@@ -10,7 +10,7 @@ from http import HTTPStatus
 import requests
 
 from geti_controller.errors import GetiControllerCommunicationError
-from platform_configuration.versions import get_target_platform_version
+from platform_configuration.versions import get_target_product_build
 
 LOCAL_PORT = 9200
 SERVICE_PORT = 9200
@@ -64,7 +64,7 @@ def call_install_endpoint(kube_config: str) -> dict:
 
     try:
         url = f"http://localhost:{LOCAL_PORT}/api/v1/platform/install"
-        payload = {"version_number": get_target_platform_version()}
+        payload = {"version_number": get_target_product_build()}
         response = requests.post(url, json=payload, timeout=10)
 
         if response.status_code != HTTPStatus.OK:

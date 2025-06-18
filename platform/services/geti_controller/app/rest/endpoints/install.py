@@ -25,6 +25,7 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 GETI_REGISTRY = os.getenv("GETI_REGISTRY")
+INSTALL_VERSION = os.getenv("INSTALL_VERSION")
 
 
 @platform_router.post(
@@ -85,12 +86,11 @@ def install_platform(payload: InstallRequest) -> InstallResponse:
     deploy_service_account(sa, namespace="default")
     deploy_cluster_role(cr)
     deploy_cluster_role_binding(crb)
-    # TODO change tag to generated one
     job = create_job(
         name="install-upgrade",
         registry=GETI_REGISTRY,
-        image=f"{GETI_REGISTRY}/geti/install-upgrade:michala",
-        manifest_version=os.environ.get("INSTALL_VERSION"),
+        image=f"{GETI_REGISTRY}/geti/install-upgrade:{INSTALL_VERSION}",
+        manifest_version=INSTALL_VERSION,
     )
     deploy_job(job, namespace="default")
 

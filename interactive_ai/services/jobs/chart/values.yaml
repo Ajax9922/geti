@@ -143,7 +143,7 @@ global:
   kubectl:
     registry: docker.io
     repository: bitnami
-    name: kubectl:1.31.0
+    name: kubectl:1.33.1
   debian:
     registry: docker.io
     repository: bitnami
