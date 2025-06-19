@@ -10,13 +10,12 @@
 }
 
 .errorMessageHeader {
-    font-family: intelOne !important;
+    font-family: var(--font-heading) !important;
     font-size: var(--spectrum-global-dimension-font-size-900) !important;
     color: var(--spectrum-global-color-gray-800) !important;
 }
 
 .errorCodeHeader {
-    font-family: intelOne !important;
     font-size: var(--spectrum-global-dimension-font-size-900) !important;
     line-height: var(--spectrum-global-dimension-size-600);
     color: var(--spectrum-global-color-gray-500) !important;
@@ -24,7 +23,6 @@
 }
 
 .errorCodeText {
-    font-family: intelOne !important;
     color: var(--spectrum-global-color-gray-800) !important;
 }
 

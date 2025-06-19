@@ -1,5 +1,7 @@
 @import 'react-notifications-component/dist/theme.css';
-@import 'fonts/intelone/intelone.css';
+@import 'fonts/intel-one-display/intel-one-display.css';
+@import 'fonts/intel-one-text/intel-one-text.css';
+@import 'fonts/intel-one-mono/intel-one-mono.css';
 
 @view-transition {
     navigation: auto;
@@ -9,10 +11,15 @@
     --intel-blue: #0095ca;
     --energy-blue: #00c7fd;
 
+    // Font family CSS variables
+    --font-heading: 'IntelOne Display', ui-serif, system-ui, serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-body: 'IntelOne Text', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-mono: 'IntelOne Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+
     height: 100vh;
 
     [class*='spectrum'] {
-        font-family: intelOne !important;
+        font-family: var(--font-body) !important;
     }
 }
 
@@ -28,7 +35,7 @@ html {
 
 body {
     margin: 0;
-    font-family: intelOne !important;
+    font-family: var(--font-body) !important;
     max-width: 100vw;
     scrollbar-width: var(--spectrum-global-dimension-size-65);
     background-color: var(--spectrum-alias-background-color-default, var(--spectrum-global-color-gray-100));
@@ -61,7 +68,7 @@ h4,
 h5,
 h6,
 span {
-    font-family: intelOne !important;
+    font-family: var(--font-body) !important;
 
     /* Apply this rule only for firefox */
     @supports (-moz-appearance: none) {

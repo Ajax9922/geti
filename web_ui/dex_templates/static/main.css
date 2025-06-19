@@ -1,3 +1,7 @@
+@import 'fonts/intel-one-display/intel-one-display.css';
+@import 'fonts/intel-one-text/intel-one-text.css';
+@import 'fonts/intel-one-mono/intel-one-mono.css';
+
 @view-transition {
     navigation: auto;
 }
@@ -31,11 +35,14 @@ input:-webkit-autofill {
 }
 
 .spectrum {
-    --spectrum-global-font-family-base:
-        adobe-clean, 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, 'Trebuchet MS',
-        'Lucida Grande', sans-serif;
-    --spectrum-global-font-family-serif: adobe-clean-serif, 'Source Serif Pro', Georgia, serif;
-    --spectrum-global-font-family-code: 'Source Code Pro', Monaco, monospace;
+    /* Intel font family CSS variables */
+    --font-heading: 'IntelOne Display', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+    --font-body: 'IntelOne Text', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-mono: 'IntelOne Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+
+    --spectrum-global-font-family-base: var(--font-body);
+    --spectrum-global-font-family-serif: var(--font-heading);
+    --spectrum-global-font-family-code: var(--font-mono);
     --spectrum-global-font-weight-bold: 700;
 }
 .spectrum--medium {
@@ -160,11 +167,6 @@ input:-webkit-autofill {
     --spectrum-well-background-color: var(--spectrum-global-color-gray-100);
 }
 
-@font-face {
-    font-family: intelOne;
-    src: url(intelone-text-regular.woff);
-}
-
 .container {
     background-image: url(../static/img/login_background.webp);
     background-position: top center;
@@ -226,12 +228,12 @@ input:-webkit-autofill {
 .loginBox__content {
     padding: 2rem 4.5rem;
     color: #fff;
-    font-family: intelOne;
+    font-family: 'IntelOne Text', ui-sans-serif, system-ui, sans-serif;
 }
 
 .loginBox__signIn {
     font-size: 2.4rem;
-    font-family: intelOne;
+    font-family: 'IntelOne Text', ui-sans-serif, system-ui, sans-serif;
     letter-spacing: 0.2rem;
     margin-bottom: 2.5rem;
 }
@@ -247,7 +249,7 @@ input:-webkit-autofill {
 }
 
 .loginBox__btn {
-    font-family: intelOne;
+    font-family: 'IntelOne Text', ui-sans-serif, system-ui, sans-serif;
     font-size: 1.4rem;
     letter-spacing: 0.1rem;
     line-height: 1.6rem;
@@ -265,7 +267,7 @@ input:-webkit-autofill {
 }
 
 .loginBox__label {
-    font-family: intelOne;
+    font-family: 'IntelOne Text', ui-sans-serif, system-ui, sans-serif;
     font-size: 1.2rem;
     line-height: 1.4rem;
     color: var(--spectrum-global-color-gray-800);
@@ -279,7 +281,7 @@ input:-webkit-autofill {
     display: flex;
     padding: 1.8rem 1.5rem;
     background-color: #c81326;
-    font-family: intelOne;
+    font-family: 'IntelOne Text', ui-sans-serif, system-ui, sans-serif;
     font-size: 1.4rem;
     color: #fff;
     line-height: 2rem;
@@ -329,7 +331,7 @@ input:-webkit-autofill {
 
 .errorMsg {
     color: #fff;
-    font-family: intelOne;
+    font-family: 'IntelOne Text', ui-sans-serif, system-ui, sans-serif;
     font-size: var(--spectrum-global-dimension-font-size-700);
     margin-top: var(--spectrum-global-dimension-size-150);
 }

@@ -1,9 +1,12 @@
-@font-face {
-    font-family: intelOne;
-    src: url(./intelone-text-regular.woff);
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
+@import '../assets/fonts/intel-one-text/intel-one-text.css';
+@import '../assets/fonts/intel-one-display/intel-one-display.css';
+@import '../assets/fonts/intel-one-mono/intel-one-mono.css';
+
+:root {
+    /* Intel font family CSS variables */
+    --font-heading: 'IntelOne Display', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+    --font-body: 'IntelOne Text', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-mono: 'IntelOne Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 }
 
 html {
@@ -17,7 +20,7 @@ html {
 
 body {
     margin: 0;
-    font-family: intelOne;
+    font-family: var(--font-body);
     max-width: 100vw;
     scrollbar-width: 5px;
     background-color: #313236;
@@ -54,7 +57,7 @@ p {
 }
 
 .heading {
-    font-family: intelOne;
+    font-family: 'IntelOne Text', ui-sans-serif, system-ui, sans-serif;
     font-size: 36px;
     color: #e3e3e5;
 }
