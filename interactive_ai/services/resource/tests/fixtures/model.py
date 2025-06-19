@@ -158,24 +158,6 @@ def fxt_model_template_anomaly():
 
 
 @pytest.fixture
-def fxt_model_template_anomaly_detection():
-    yield ModelTemplate(
-        model_template_id="test_template_anomaly_detection",
-        model_template_path="",
-        name="Sample Anomaly Detection Template",
-        task_family=TaskFamily.VISION,
-        task_type=TaskType.ANOMALY_DETECTION,
-        is_trainable=True,
-        hyper_parameters=HyperParameterData(base_path=""),
-        instantiation=InstantiationType.NONE,
-        gigaflops=24,
-        size=88.8,
-        framework="dummy framework",
-        dataset_requirements=DatasetRequirements(classes=["Normal", "Anomalous"]),
-    )
-
-
-@pytest.fixture
 def fxt_model_template_keypoint_detection():
     yield ModelTemplate(
         model_template_id="test_template_keypoint_detection",
@@ -321,12 +303,12 @@ def fxt_model_storage_anomaly_classification(fxt_model_template_anomaly, fxt_mon
 
 
 @pytest.fixture
-def fxt_model_storage_anomaly_detection(fxt_model_template_anomaly_detection, fxt_mongo_id):
+def fxt_model_storage_anomaly(fxt_model_template_anomaly, fxt_mongo_id):
     yield ModelStorage(
         id_=fxt_mongo_id(5),
         project_id=fxt_mongo_id(1),
         task_node_id=fxt_mongo_id(14),
-        model_template=fxt_model_template_anomaly_detection,
+        model_template=fxt_model_template_anomaly,
     )
 
 

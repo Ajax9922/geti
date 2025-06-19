@@ -1021,8 +1021,8 @@ class TestAnnotationRestValidator:
 
     def test_validate_annotation_scene_anomalous_label_conflict(
         self,
-        fxt_project_with_anomaly_detection_task,
-        fxt_anomaly_segmentation_label_schema,
+        fxt_project_with_anomaly_task,
+        fxt_anomaly_label_schema,
         fxt_annotation_scene_rest_anomaly_label_conflict,
         fxt_image_identifier_1,
     ) -> None:
@@ -1031,15 +1031,13 @@ class TestAnnotationRestValidator:
         annotations with the same ID.
         """
         label_schema_by_task = label_schema_by_task_for_single_task_project(
-            fxt_project_with_anomaly_detection_task,
-            fxt_anomaly_segmentation_label_schema,
+            fxt_project_with_anomaly_task,
+            fxt_anomaly_label_schema,
         )
-        with pytest.raises(
-            BadRequestException,
-        ):
+        with pytest.raises(DuplicatedAnnotationIDException):
             AnnotationRestValidator().validate_annotation_scene(
                 annotation_scene_rest=fxt_annotation_scene_rest_anomaly_label_conflict,
-                project=fxt_project_with_anomaly_detection_task,
+                project=fxt_project_with_anomaly_task,
                 media_identifier=fxt_image_identifier_1,
                 media_width=DummyValues.MEDIA_WIDTH,
                 media_height=DummyValues.MEDIA_HEIGHT,
