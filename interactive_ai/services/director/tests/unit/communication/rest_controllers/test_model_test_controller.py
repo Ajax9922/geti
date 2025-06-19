@@ -7,11 +7,7 @@ import pytest
 from testfixtures import compare
 
 from communication.controllers.model_test_controller import ModelTestController
-from communication.exceptions import (
-    DatasetStorageHasNoAnnotationsException,
-    DeprecatedModelTestException,
-    UnsupportedFormatForModelTestingException,
-)
+from communication.exceptions import DatasetStorageHasNoAnnotationsException, UnsupportedFormatForModelTestingException
 from communication.views.job_rest_views import JobRestViews
 from communication.views.model_test_result_rest_views import ModelTestResultRestViews
 from communication.views.prediction_rest_views import PredictionRESTViews
@@ -146,12 +142,12 @@ class TestModelTestRESTController:
 
     def test_get_model_test_result_anomaly_reduction(
         self,
-        fxt_project_with_anomaly_classification_task,
+        fxt_project_with_anomaly_task,
         fxt_model_test_result_with_accuracy_metric,
         fxt_model_test_result_with_accuracy_metric_rest,
     ) -> None:
         # Arrange
-        project = fxt_project_with_anomaly_classification_task
+        project = fxt_project_with_anomaly_task
         workspace_id = project.workspace_id
         project_id = project.id_
         model_test_result_id = fxt_model_test_result_with_accuracy_metric.id_
@@ -199,41 +195,6 @@ class TestModelTestRESTController:
             datasets_counts=datasets_counts,
         )
         compare(result, fxt_model_test_result_with_accuracy_metric_rest, ignore_eq=True)
-
-    def test_get_model_test_result_anomaly_reduction_deprecated(
-        self,
-        fxt_project_with_anomaly_detection_task,
-        fxt_model_test_result,
-    ) -> None:
-        # Arrange
-        project = fxt_project_with_anomaly_detection_task
-        workspace_id = project.workspace_id
-        project_id = project.id_
-        model_test_result_id = fxt_model_test_result.id_
-
-        # Act
-        with (
-            patch.object(
-                ModelTestResultRepo,
-                "get_by_id",
-                return_value=fxt_model_test_result,
-            ) as mock_get_model_test_result,
-            patch.object(
-                ProjectRepo,
-                "get_by_id",
-                return_value=project,
-            ) as mock_get_project_by_id,
-            pytest.raises(DeprecatedModelTestException),
-        ):
-            _ = ModelTestController().get_model_test_result(
-                workspace_id=workspace_id,
-                project_id=project_id,
-                model_test_result_id=model_test_result_id,
-            )
-
-        # Assert
-        mock_get_model_test_result.assert_called_once_with(model_test_result_id)
-        mock_get_project_by_id.assert_called_once_with(project_id)
 
     def test_delete_model_test_result(self, fxt_project, fxt_model_test_result) -> None:
         # Arrange
@@ -345,17 +306,17 @@ class TestModelTestRESTController:
 
     def test_create_and_submit_job_anomaly_task_no_metric(
         self,
-        fxt_project_with_anomaly_detection_task,
+        fxt_project_with_anomaly_task,
         fxt_model,
-        fxt_model_storage_anomaly_detection,
+        fxt_model_storage_anomaly,
         fxt_mongo_id,
         fxt_model_test_result,
         fxt_ote_id,
     ) -> None:
         # Arrange
-        project = fxt_project_with_anomaly_detection_task
+        project = fxt_project_with_anomaly_task
         model = fxt_model
-        model.model_storage = fxt_model_storage_anomaly_detection
+        model.model_storage = fxt_model_storage_anomaly
         workspace_id = project.workspace_id
         project_id = project.id_
         dataset_storage = project.get_training_dataset_storage()
@@ -420,7 +381,7 @@ class TestModelTestRESTController:
         assert mock_count_images.called_once()
         assert mock_testing_job_submit.called_once_with(
             model_test_result=fxt_model_test_result,
-            project=fxt_project_with_anomaly_detection_task,
+            project=fxt_project_with_anomaly_task,
             author=DUMMY_USER,
         )
         assert model_test_result is not None

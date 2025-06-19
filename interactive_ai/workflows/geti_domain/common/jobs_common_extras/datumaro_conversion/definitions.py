@@ -22,33 +22,25 @@ FORMAT_NAME_MAP: dict[str, str] = {
 ANNOTATION_TYPE_TO_SUPPORTED_DOMAINS: dict[dm.AnnotationType, list[Domain]] = {
     dm.AnnotationType.label: [
         Domain.CLASSIFICATION,
-        Domain.ANOMALY_CLASSIFICATION,
-        Domain.ANOMALY_DETECTION,
-        Domain.ANOMALY_SEGMENTATION,
         Domain.ANOMALY,
     ],
     dm.AnnotationType.bbox: [
         Domain.DETECTION,
         Domain.SEGMENTATION,  # Geti tool supports rectangle(which is same to bbox) tool for seg., ins-seg.
         Domain.INSTANCE_SEGMENTATION,
-        Domain.ANOMALY_DETECTION,
-        Domain.ANOMALY_SEGMENTATION,
     ],
     dm.AnnotationType.polygon: [
         Domain.SEGMENTATION,
         Domain.INSTANCE_SEGMENTATION,
-        Domain.ANOMALY_SEGMENTATION,
         Domain.ROTATED_DETECTION,
     ],
     dm.AnnotationType.ellipse: [
         Domain.SEGMENTATION,
         Domain.INSTANCE_SEGMENTATION,
-        Domain.ANOMALY_SEGMENTATION,
     ],
     dm.AnnotationType.mask: [
         Domain.SEGMENTATION,
         Domain.INSTANCE_SEGMENTATION,
-        Domain.ANOMALY_SEGMENTATION,
     ],
     dm.AnnotationType.points: [
         Domain.KEYPOINT_DETECTION,

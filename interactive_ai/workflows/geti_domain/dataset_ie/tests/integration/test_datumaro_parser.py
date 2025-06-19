@@ -98,9 +98,10 @@ class TestDatumaroProjectParser:
             GetiProjectType.SEGMENTATION: TaskType.SEGMENTATION,
             GetiProjectType.INSTANCE_SEGMENTATION: TaskType.INSTANCE_SEGMENTATION,
             GetiProjectType.ROTATED_DETECTION: TaskType.ROTATED_DETECTION,
-            GetiProjectType.ANOMALY_CLASSIFICATION: TaskType.ANOMALY_CLASSIFICATION,
-            GetiProjectType.ANOMALY_DETECTION: TaskType.ANOMALY_DETECTION,
-            GetiProjectType.ANOMALY_SEGMENTATION: TaskType.ANOMALY_SEGMENTATION,
+            GetiProjectType.ANOMALY: TaskType.ANOMALY,
+            GetiProjectType.ANOMALY_CLASSIFICATION: TaskType.ANOMALY,  # Legacy Geti project type
+            GetiProjectType.ANOMALY_DETECTION: TaskType.ANOMALY,  # Legacy Geti project type
+            GetiProjectType.ANOMALY_SEGMENTATION: TaskType.ANOMALY,  # Legacy Geti project type
         }
         last_task_type = project_type_to_last_task_type[project_type]
         last_task_name = dm_parser.get_tasks_names()[-1]

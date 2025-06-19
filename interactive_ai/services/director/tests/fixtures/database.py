@@ -184,11 +184,11 @@ DETECTION_CLASSIFICATION_PIPELINE_DATA = {
 }
 
 
-ANOMALY_CLASSIFICATION_PIPELINE_DATA = {
+ANOMALY_PIPELINE_DATA = {
     "connections": [
         {
             "from": "dataset",
-            "to": "anomaly classification task",
+            "to": "anomaly task",
         },
     ],
     "tasks": [
@@ -197,8 +197,8 @@ ANOMALY_CLASSIFICATION_PIPELINE_DATA = {
             "title": "dataset",
         },
         {
-            "task_type": "anomaly_classification",
-            "title": "anomaly classification task",
+            "task_type": "anomaly",
+            "title": "anomaly task",
         },
     ],
 }
@@ -686,9 +686,9 @@ class DBProjectService:
         ]
 
     @staticmethod
-    def create_anomaly_classification_model_templates() -> list[ModelTemplate]:
+    def create_anomaly_model_templates() -> list[ModelTemplate]:
         model_template_dataset = ModelTemplateList().get_by_id("dataset")
-        model_template_classification = ModelTemplateList().get_by_id("anomaly_classification")
+        model_template_classification = ModelTemplateList().get_by_id("anomaly")
         return [
             model_template_dataset,
             model_template_classification,

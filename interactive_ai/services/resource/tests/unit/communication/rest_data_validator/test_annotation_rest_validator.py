@@ -358,17 +358,17 @@ def fxt_annotation_scene_rest_duplicate_annotation_id(
 
 @pytest.fixture
 def fxt_annotation_scene_rest_anomaly_label_conflict(
-    fxt_anomaly_segmentation_labels,
+    fxt_anomaly_labels,
 ):
     scored_label_normal = {
-        "id": str(fxt_anomaly_segmentation_labels[0].id_),
-        "name": fxt_anomaly_segmentation_labels[0].name,
+        "id": str(fxt_anomaly_labels[0].id_),
+        "name": fxt_anomaly_labels[0].name,
         "probability": 1,
         "color": "#ff0000ff",
     }
     scored_label_anomalous = {
-        "id": str(fxt_anomaly_segmentation_labels[1].id_),
-        "name": fxt_anomaly_segmentation_labels[1].name,
+        "id": str(fxt_anomaly_labels[1].id_),
+        "name": fxt_anomaly_labels[1].name,
         "probability": 1,
         "color": "#ff0000ff",
     }
@@ -402,11 +402,11 @@ def fxt_annotation_scene_rest_anomaly_label_conflict(
 
 @pytest.fixture
 def fxt_annotation_scene_rest_anomaly_reduced_full_box(
-    fxt_anomaly_segmentation_labels,
+    fxt_anomaly_labels,
 ):
     scored_label_anomalous = {
-        "id": str(fxt_anomaly_segmentation_labels[1].id_),
-        "name": fxt_anomaly_segmentation_labels[1].name,
+        "id": str(fxt_anomaly_labels[1].id_),
+        "name": fxt_anomaly_labels[1].name,
         "probability": 1,
         "color": "#ff0000ff",
     }
@@ -429,11 +429,11 @@ def fxt_annotation_scene_rest_anomaly_reduced_full_box(
 
 @pytest.fixture
 def fxt_annotation_scene_rest_anomaly_reduced_local_box(
-    fxt_anomaly_segmentation_labels,
+    fxt_anomaly_labels,
 ):
     scored_label_anomalous = {
-        "id": str(fxt_anomaly_segmentation_labels[1].id_),
-        "name": fxt_anomaly_segmentation_labels[1].name,
+        "id": str(fxt_anomaly_labels[1].id_),
+        "name": fxt_anomaly_labels[1].name,
         "probability": 1,
         "color": "#ff0000ff",
     }

@@ -66,9 +66,7 @@ SUPPORTED_DOMAINS = [
     Domain.DETECTION,
     Domain.SEGMENTATION,
     Domain.INSTANCE_SEGMENTATION,
-    Domain.ANOMALY_CLASSIFICATION,
-    Domain.ANOMALY_DETECTION,
-    Domain.ANOMALY_SEGMENTATION,
+    Domain.ANOMALY,
     Domain.ROTATED_DETECTION,
     Domain.KEYPOINT_DETECTION,
 ]
@@ -738,9 +736,9 @@ class ImportUtils:
             GetiProjectType.CLASSIFICATION: [TaskType.CLASSIFICATION],
             GetiProjectType.DETECTION: [TaskType.DETECTION],
             GetiProjectType.SEGMENTATION: [TaskType.SEGMENTATION],
-            GetiProjectType.ANOMALY_CLASSIFICATION: [TaskType.ANOMALY_CLASSIFICATION],
-            GetiProjectType.ANOMALY_DETECTION: [TaskType.ANOMALY_DETECTION],
-            GetiProjectType.ANOMALY_SEGMENTATION: [TaskType.ANOMALY_SEGMENTATION],
+            GetiProjectType.ANOMALY_CLASSIFICATION: [TaskType.ANOMALY],  # Legacy Geti project type
+            GetiProjectType.ANOMALY_DETECTION: [TaskType.ANOMALY],  # Legacy Geti project type
+            GetiProjectType.ANOMALY_SEGMENTATION: [TaskType.ANOMALY],  # Legacy Geti project type
             GetiProjectType.ANOMALY: [TaskType.ANOMALY],
             GetiProjectType.INSTANCE_SEGMENTATION: [TaskType.INSTANCE_SEGMENTATION],
             GetiProjectType.ROTATED_DETECTION: [TaskType.ROTATED_DETECTION],
@@ -788,9 +786,10 @@ class ImportUtils:
             GetiProjectType.HIERARCHICAL_CLASSIFICATION: Domain.CLASSIFICATION,
             GetiProjectType.DETECTION: Domain.DETECTION,
             GetiProjectType.SEGMENTATION: Domain.SEGMENTATION,
-            GetiProjectType.ANOMALY_CLASSIFICATION: Domain.ANOMALY_CLASSIFICATION,
-            GetiProjectType.ANOMALY_DETECTION: Domain.ANOMALY_DETECTION,
-            GetiProjectType.ANOMALY_SEGMENTATION: Domain.ANOMALY_SEGMENTATION,
+            GetiProjectType.ANOMALY: Domain.ANOMALY,
+            GetiProjectType.ANOMALY_CLASSIFICATION: Domain.ANOMALY,  # Legacy Geti project type
+            GetiProjectType.ANOMALY_DETECTION: Domain.ANOMALY,  # Legacy Geti project type
+            GetiProjectType.ANOMALY_SEGMENTATION: Domain.ANOMALY,  # Legacy Geti project type
             GetiProjectType.INSTANCE_SEGMENTATION: Domain.INSTANCE_SEGMENTATION,
             GetiProjectType.ROTATED_DETECTION: Domain.ROTATED_DETECTION,
             # For CHAINED_DETECTION_CLASSIFICATION project, we interest in bbox annotations in dm_dataset
@@ -836,9 +835,6 @@ class ImportUtils:
             TaskType.DETECTION,
             TaskType.SEGMENTATION,
             TaskType.INSTANCE_SEGMENTATION,
-            TaskType.ANOMALY_CLASSIFICATION,
-            TaskType.ANOMALY_DETECTION,
-            TaskType.ANOMALY_SEGMENTATION,
             TaskType.ANOMALY,
             TaskType.ROTATED_DETECTION,
             TaskType.KEYPOINT_DETECTION,

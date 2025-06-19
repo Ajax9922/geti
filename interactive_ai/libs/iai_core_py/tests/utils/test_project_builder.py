@@ -19,23 +19,11 @@ from tests.tools.custom_project_parser import CustomTestProjectParser
 
 
 class TestProjectBuilder:
-    @pytest.mark.parametrize(
-        "domain, default_name",
-        [
-            (Domain.ANOMALY_DETECTION, "default - anomaly_detection"),
-            (Domain.ANOMALY_SEGMENTATION, "default - anomaly_segmentation"),
-            (Domain.ANOMALY_CLASSIFICATION, "default - anomaly_classification"),
-        ],
-    )
-    def test_build_anomaly_labels(
-        self,
-        domain,
-        default_name,
-    ):
-        label_groups, labels = ProjectBuilder._build_anomaly_labels(domain=domain, task_label_by_group_name={})
+    def test_build_anomaly_labels(self):
+        label_groups, labels = ProjectBuilder._build_anomaly_labels(domain=Domain.ANOMALY, task_label_by_group_name={})
         assert len(labels) == 2
         assert len(label_groups) == 1
-        assert label_groups[0].name == default_name
+        assert label_groups[0].name == "default - anomaly"
 
     @pytest.mark.parametrize(
         "domain, empty_label_name, label_names_by_group_name, child_name_to_parent_name",

@@ -252,12 +252,7 @@ class DatumaroProjectParser(ProjectParser):
         last_task_type = self.get_task_type_by_name(task_name=last_task_name)
 
         # ProjectBuilder will generate Labels with pre-defined metadata for anomaly project
-        if include_all_labels or last_task_type not in [
-            TaskType.ANOMALY,
-            TaskType.ANOMALY_CLASSIFICATION,
-            TaskType.ANOMALY_DETECTION,
-            TaskType.ANOMALY_SEGMENTATION,
-        ]:
+        if include_all_labels or last_task_type != TaskType.ANOMALY:
             task_name_to_label_meta[last_task_name] = label_name_to_label_meta
 
         return task_name_to_label_meta
