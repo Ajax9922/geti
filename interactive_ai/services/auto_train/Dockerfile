@@ -42,6 +42,9 @@ RUN useradd -l -u 10001 non-root && \
 COPY --link --from=build --chown=10001 /interactive_ai/services/auto_train /interactive_ai/services/auto_train
 COPY --link --from=build --chown=10001 /training_extensions/src/otx/tools/templates /model_templates
 
+# Update anomaly classification templates to anomaly, needed for anomaly reduction process
+RUN find /model_templates/templates/anomaly/classification -type f -name "template.yaml" -exec sed -i 's/task_type: ANOMALY_CLASSIFICATION/task_type: ANOMALY/g' {} +
+
 # Place executables in the environment at the front of the path
 ENV PATH="/interactive_ai/services/auto_train/.venv/bin:$PATH"
 ENV PYTHONPATH="/interactive_ai/services/auto_train"
