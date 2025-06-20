@@ -45,7 +45,7 @@ COPY --link --from=build --chown=10001 /training_extensions/src/otx/tools/templa
 COPY --link --from=schemas . /interactive_ai/services/api
 
 # Update anomaly classification templates to anomaly, needed for anomaly reduction process
-RUN find /model_templates/templates/anomaly/classification -type f -name "template.yaml" -exec sed -i 's/task_type: ANOMALY_CLASSIFICATION/task_type: ANOMALY/g' {} +
+RUN find /model_templates/anomaly/classification -type f -name "template.yaml" -exec sed -i 's/task_type: ANOMALY_CLASSIFICATION/task_type: ANOMALY/g' {} +
 
 # Place executables in the environment at the front of the path
 ENV PATH="/interactive_ai/services/director/.venv/bin:$PATH"
