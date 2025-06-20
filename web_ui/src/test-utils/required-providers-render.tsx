@@ -59,11 +59,11 @@ const PrefilledQueryClientProvider = ({
             ...featureFlags,
         });
 
-        if (profile !== null && profile !== undefined) {
+        if (profile !== null) {
             client.setQueryData(QUERY_KEYS.USER_ONBOARDING_PROFILE, {
-                ...profile,
                 organizations: [{ id: prefilledOrgId, status: AccountStatusDTO.ACTIVE }],
                 hasAcceptedUserTermsAndConditions: true,
+                ...profile,
             });
         }
 
@@ -92,18 +92,20 @@ export const RequiredProviders = ({
     return (
         <Suspense fallback={<IntelBrandedLoading />}>
             <Router initialEntries={initialEntries}>
-                <AuthProvider>
-                    <NotificationProvider>
-                        <Notifications />
-                        <PrefilledQueryClientProvider featureFlags={featureFlags} profile={profile}>
-                            <ThemeProvider theme={defaultTheme}>
+                <NotificationProvider>
+                    <Notifications />
+                    <PrefilledQueryClientProvider featureFlags={featureFlags} profile={profile}>
+                        <ThemeProvider theme={defaultTheme}>
+                            <Suspense fallback={<IntelBrandedLoading />}>
                                 <ApplicationServicesProvider useInMemoryEnvironment {...services}>
-                                    <TusUploadProvider>{children}</TusUploadProvider>
+                                    <AuthProvider>
+                                        <TusUploadProvider>{children}</TusUploadProvider>
+                                    </AuthProvider>
                                 </ApplicationServicesProvider>
-                            </ThemeProvider>
-                        </PrefilledQueryClientProvider>
-                    </NotificationProvider>
-                </AuthProvider>
+                            </Suspense>
+                        </ThemeProvider>
+                    </PrefilledQueryClientProvider>
+                </NotificationProvider>
             </Router>
         </Suspense>
     );

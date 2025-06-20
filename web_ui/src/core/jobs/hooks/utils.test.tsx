@@ -1,7 +1,7 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
-import { QueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { waitFor } from '@testing-library/react';
 
 import { getMockedWorkspaceIdentifier } from '../../../test-utils/mocked-items-factory/mocked-identifiers';
@@ -36,32 +36,39 @@ describe('Use jobs hook utils', () => {
     });
 
     it('Should not invalidate balance if feature flag is disabled', async () => {
-        const queryClient = new QueryClient();
-        queryClient.invalidateQueries = jest.fn();
+        const queryClient = renderHookWithProviders(useQueryClient);
+        queryClient.result.current.invalidateQueries = jest.fn();
+
         renderHookWithProviders(
-            () =>
-                useInvalidateBalanceOnNewJob(
+            () => {
+                return useInvalidateBalanceOnNewJob(
                     workspaceIdentifier,
                     getMockedResponse([getMockedJob({ cost: { leaseId: '123', requests: [], consumed: [] } })]),
                     { jobState: JobState.SCHEDULED }
-                ),
+                );
+            },
             {
-                providerProps: { queryClient, featureFlags: { FEATURE_FLAG_CREDIT_SYSTEM: false } },
+                providerProps: { featureFlags: { FEATURE_FLAG_CREDIT_SYSTEM: false } },
             }
         );
 
         await waitFor(() => {
-            expect(queryClient.invalidateQueries).not.toHaveBeenCalled();
+            expect(queryClient.result.current.invalidateQueries).not.toHaveBeenCalled();
         });
     });
 
     it('Should invalidate balance if feature flag is enabled', async () => {
-        const queryClient = new QueryClient();
-        queryClient.invalidateQueries = jest.fn();
+        let invalidateSpy: jest.SpyInstance | undefined;
+
         const { rerender } = renderHookWithProviders(
-            ({ jobs }) => useInvalidateBalanceOnNewJob(workspaceIdentifier, getMockedResponse(jobs), {}),
+            ({ jobs }) => {
+                const queryClient = useQueryClient();
+                invalidateSpy = jest.spyOn(queryClient, 'invalidateQueries');
+
+                return useInvalidateBalanceOnNewJob(workspaceIdentifier, getMockedResponse(jobs), {});
+            },
             {
-                providerProps: { queryClient, featureFlags: { FEATURE_FLAG_CREDIT_SYSTEM: true } },
+                providerProps: { featureFlags: { FEATURE_FLAG_CREDIT_SYSTEM: true } },
                 initialProps: {
                     jobs: [
                         getMockedJob({
@@ -87,54 +94,57 @@ describe('Use jobs hook utils', () => {
         });
 
         await waitFor(() => {
-            expect(queryClient.invalidateQueries).toHaveBeenCalledTimes(2);
+            expect(invalidateSpy).toHaveBeenCalledTimes(2);
         });
     });
 
     it('Should not invalidate balance if there are no jobs', async () => {
-        const queryClient = new QueryClient();
-        queryClient.invalidateQueries = jest.fn();
+        const queryClient = renderHookWithProviders(useQueryClient);
+        queryClient.result.current.invalidateQueries = jest.fn();
 
         renderHookWithProviders(
             () =>
                 useInvalidateBalanceOnNewJob(workspaceIdentifier, getMockedResponse([]), {
                     jobState: JobState.SCHEDULED,
                 }),
-            { providerProps: { queryClient, featureFlags: { FEATURE_FLAG_CREDIT_SYSTEM: true } } }
+            { providerProps: { featureFlags: { FEATURE_FLAG_CREDIT_SYSTEM: true } } }
         );
 
         await waitFor(() => {
-            expect(queryClient.invalidateQueries).not.toHaveBeenCalled();
+            expect(queryClient.result.current.invalidateQueries).not.toHaveBeenCalled();
         });
     });
 
     it('Should not invalidate balance if there are no jobs with cost', async () => {
-        const queryClient = new QueryClient();
-        queryClient.invalidateQueries = jest.fn();
+        const queryClient = renderHookWithProviders(useQueryClient);
+        queryClient.result.current.invalidateQueries = jest.fn();
         renderHookWithProviders(
             () =>
                 useInvalidateBalanceOnNewJob(workspaceIdentifier, getMockedResponse([getMockedJob()]), {
                     jobState: JobState.SCHEDULED,
                 }),
-            { providerProps: { queryClient, featureFlags: { FEATURE_FLAG_CREDIT_SYSTEM: true } } }
+            { providerProps: { featureFlags: { FEATURE_FLAG_CREDIT_SYSTEM: true } } }
         );
 
         await waitFor(() => {
-            expect(queryClient.invalidateQueries).not.toHaveBeenCalled();
+            expect(queryClient.result.current.invalidateQueries).not.toHaveBeenCalled();
         });
     });
 
     it('Should invalidate balance if there is a job with new id or a new job', async () => {
-        const queryClient = new QueryClient();
-        queryClient.invalidateQueries = jest.fn();
+        let invalidateSpy: jest.SpyInstance | undefined;
+
         const { rerender } = renderHookWithProviders(
-            ({ jobs }) =>
-                useInvalidateBalanceOnNewJob(workspaceIdentifier, getMockedResponse(jobs), {
+            ({ jobs }) => {
+                const queryClient = useQueryClient();
+                invalidateSpy = jest.spyOn(queryClient, 'invalidateQueries');
+
+                return useInvalidateBalanceOnNewJob(workspaceIdentifier, getMockedResponse(jobs), {
                     jobState: JobState.SCHEDULED,
-                }),
+                });
+            },
             {
                 providerProps: {
-                    queryClient,
                     featureFlags: { FEATURE_FLAG_CREDIT_SYSTEM: true },
                 },
                 initialProps: {
@@ -149,7 +159,7 @@ describe('Use jobs hook utils', () => {
         );
 
         await waitFor(() => {
-            expect(queryClient.invalidateQueries).toHaveBeenCalledTimes(1);
+            expect(invalidateSpy).toHaveBeenCalledTimes(1);
         });
 
         rerender({
@@ -163,7 +173,7 @@ describe('Use jobs hook utils', () => {
         });
 
         await waitFor(() => {
-            expect(queryClient.invalidateQueries).toHaveBeenCalledTimes(2);
+            expect(invalidateSpy).toHaveBeenCalledTimes(2);
         });
 
         rerender({
@@ -178,7 +188,7 @@ describe('Use jobs hook utils', () => {
         });
 
         await waitFor(() => {
-            expect(queryClient.invalidateQueries).toHaveBeenCalledTimes(3);
+            expect(invalidateSpy).toHaveBeenCalledTimes(3);
         });
     });
 });
