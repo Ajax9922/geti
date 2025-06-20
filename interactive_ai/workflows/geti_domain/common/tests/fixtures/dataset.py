@@ -192,10 +192,8 @@ def fxt_dataset_item_anomalous(fxt_image_entity_factory, fxt_annotation_scene_an
         "classification",
         "segmentation",
         "detection",
-        "anomaly_detection",
         "instance_segmentation",
-        "anomaly_segmentation",
-        "anomaly_classification",
+        "anomaly",
         "rotated_detection",
         "keypoint_detection",
     ]

@@ -169,7 +169,7 @@ def fxt_model_storage_classification(fxt_empty_project, fxt_model_template_class
 
 
 @pytest.fixture
-def fxt_model_storage_anomaly_detection(fxt_model_template_anomaly, fxt_mongo_id):
+def fxt_anomaly_task_detection(fxt_model_template_anomaly, fxt_mongo_id):
     yield ModelStorage(
         project_id=fxt_mongo_id(1),
         task_node_id=fxt_mongo_id(14),
