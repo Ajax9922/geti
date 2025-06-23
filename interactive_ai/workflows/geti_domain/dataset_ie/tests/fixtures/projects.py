@@ -38,9 +38,7 @@ supported_task_types = [
     TaskType.SEGMENTATION,
     TaskType.CLASSIFICATION,
     TaskType.INSTANCE_SEGMENTATION,
-    TaskType.ANOMALY_CLASSIFICATION,
-    TaskType.ANOMALY_DETECTION,
-    TaskType.ANOMALY_SEGMENTATION,
+    TaskType.ANOMALY,
     TaskType.KEYPOINT_DETECTION,
 ]
 for task_type in supported_task_types:

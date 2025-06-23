@@ -48,6 +48,14 @@ COPY --link --from=build --chown=10001 /interactive_ai/services/resource /intera
 COPY --link --from=build --chown=10001 /training_extensions/src/otx/tools/templates /model_templates
 COPY --link --from=schemas . /interactive_ai/services/api
 
+# Update anomaly classification templates to anomaly, needed for anomaly reduction process
+RUN if [ ! -d "/model_templates/anomaly" ]; then \
+        mkdir -p /model_templates/anomaly && \
+        cp -r /model_templates/anomaly_classification/* /model_templates/anomaly/ && \
+        find /model_templates/anomaly -type f -name "template.yaml" -exec sed -i 's/task_type: ANOMALY_CLASSIFICATION/task_type: ANOMALY/g' {} +; \
+    fi && \
+    find /model_templates -maxdepth 1 -type d -name "anomaly_*" -exec rm -rf {} +
+
 # Place executables in the environment at the front of the path
 ENV PATH="/interactive_ai/services/resource/.venv/bin:$PATH"
 ENV PYTHONPATH="/interactive_ai/services/resource:/interactive_ai/services/resource/app"

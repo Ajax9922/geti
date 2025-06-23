@@ -66,9 +66,7 @@ SUPPORTED_DOMAINS = [
     Domain.DETECTION,
     Domain.SEGMENTATION,
     Domain.INSTANCE_SEGMENTATION,
-    Domain.ANOMALY_CLASSIFICATION,
-    Domain.ANOMALY_DETECTION,
-    Domain.ANOMALY_SEGMENTATION,
+    Domain.ANOMALY,
     Domain.ROTATED_DETECTION,
     Domain.KEYPOINT_DETECTION,
 ]
@@ -659,11 +657,6 @@ class ImportUtils:
         :param task_type: OTX task type identifier
         :return: task name for REST API
         """
-        if (
-            FeatureFlagProvider.is_enabled(FeatureFlag.FEATURE_FLAG_ANOMALY_REDUCTION)
-            and task_type == TaskType.ANOMALY_CLASSIFICATION
-        ):
-            return "anomaly"
         return task_type.name.lower() if task_type != TaskType.ROTATED_DETECTION else STR_DETECTION_ORIENTED
 
     @staticmethod
@@ -680,8 +673,6 @@ class ImportUtils:
             GetiProjectType.CHAINED_DETECTION_SEGMENTATION: "detection_segmentation",
             GetiProjectType.ROTATED_DETECTION: STR_DETECTION_ORIENTED,
         }
-        if FeatureFlagProvider.is_enabled(FeatureFlag.FEATURE_FLAG_ANOMALY_REDUCTION):
-            exceptions[GetiProjectType.ANOMALY_CLASSIFICATION] = "anomaly"
         return exceptions.get(geti_project_type, geti_project_type.name.lower())
 
     @staticmethod
@@ -745,9 +736,10 @@ class ImportUtils:
             GetiProjectType.CLASSIFICATION: [TaskType.CLASSIFICATION],
             GetiProjectType.DETECTION: [TaskType.DETECTION],
             GetiProjectType.SEGMENTATION: [TaskType.SEGMENTATION],
-            GetiProjectType.ANOMALY_CLASSIFICATION: [TaskType.ANOMALY_CLASSIFICATION],
-            GetiProjectType.ANOMALY_DETECTION: [TaskType.ANOMALY_DETECTION],
-            GetiProjectType.ANOMALY_SEGMENTATION: [TaskType.ANOMALY_SEGMENTATION],
+            GetiProjectType.ANOMALY_CLASSIFICATION: [TaskType.ANOMALY],  # Legacy Geti project type
+            GetiProjectType.ANOMALY_DETECTION: [TaskType.ANOMALY],  # Legacy Geti project type
+            GetiProjectType.ANOMALY_SEGMENTATION: [TaskType.ANOMALY],  # Legacy Geti project type
+            GetiProjectType.ANOMALY: [TaskType.ANOMALY],
             GetiProjectType.INSTANCE_SEGMENTATION: [TaskType.INSTANCE_SEGMENTATION],
             GetiProjectType.ROTATED_DETECTION: [TaskType.ROTATED_DETECTION],
             GetiProjectType.CHAINED_DETECTION_CLASSIFICATION: [
@@ -794,9 +786,10 @@ class ImportUtils:
             GetiProjectType.HIERARCHICAL_CLASSIFICATION: Domain.CLASSIFICATION,
             GetiProjectType.DETECTION: Domain.DETECTION,
             GetiProjectType.SEGMENTATION: Domain.SEGMENTATION,
-            GetiProjectType.ANOMALY_CLASSIFICATION: Domain.ANOMALY_CLASSIFICATION,
-            GetiProjectType.ANOMALY_DETECTION: Domain.ANOMALY_DETECTION,
-            GetiProjectType.ANOMALY_SEGMENTATION: Domain.ANOMALY_SEGMENTATION,
+            GetiProjectType.ANOMALY: Domain.ANOMALY,
+            GetiProjectType.ANOMALY_CLASSIFICATION: Domain.ANOMALY,  # Legacy Geti project type
+            GetiProjectType.ANOMALY_DETECTION: Domain.ANOMALY,  # Legacy Geti project type
+            GetiProjectType.ANOMALY_SEGMENTATION: Domain.ANOMALY,  # Legacy Geti project type
             GetiProjectType.INSTANCE_SEGMENTATION: Domain.INSTANCE_SEGMENTATION,
             GetiProjectType.ROTATED_DETECTION: Domain.ROTATED_DETECTION,
             # For CHAINED_DETECTION_CLASSIFICATION project, we interest in bbox annotations in dm_dataset
@@ -834,7 +827,7 @@ class ImportUtils:
         """
         Validate project valid for dataset import and return the task type of the project
 
-        :param project_id: str project id
+        :param project: Geti project object
         :return: task type of the (only) trainable task in the project
         """
         supported_types = [
@@ -842,9 +835,7 @@ class ImportUtils:
             TaskType.DETECTION,
             TaskType.SEGMENTATION,
             TaskType.INSTANCE_SEGMENTATION,
-            TaskType.ANOMALY_CLASSIFICATION,
-            TaskType.ANOMALY_DETECTION,
-            TaskType.ANOMALY_SEGMENTATION,
+            TaskType.ANOMALY,
             TaskType.ROTATED_DETECTION,
             TaskType.KEYPOINT_DETECTION,
         ]
