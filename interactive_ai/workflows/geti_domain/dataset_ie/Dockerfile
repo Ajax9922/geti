@@ -3,12 +3,10 @@ FROM python:3.10-slim-bookworm@sha256:99d6b199420e2a3588649813218bef3e727fac9642
 FROM base AS build
 
 # Install Git and clone the OTX at the specified tag
-ARG OTX_RELEASE_TAG=2.4.2
-
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     git
-RUN git clone --branch $OTX_RELEASE_TAG --single-branch https://github.com/open-edge-platform/training_extensions.git
+RUN git clone --branch anomaly_template --single-branch https://github.com/rajeshgangireddy/training_extensions.git
 
 ENV UV_COMPILE_BYTECODE=1
 ENV UV_LINK_MODE=copy
