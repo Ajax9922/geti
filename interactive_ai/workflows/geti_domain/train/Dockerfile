@@ -51,7 +51,12 @@ COPY --link --from=build --chown=10001 /interactive_ai/workflows/geti_domain/wor
 COPY --link --from=build --chown=10001 /training_extensions/src/otx/tools/templates /model_templates
 
 # Update anomaly classification templates to anomaly, needed for anomaly reduction process
-RUN find /model_templates/anomaly/classification -type f -name "template.yaml" -exec sed -i 's/task_type: ANOMALY_CLASSIFICATION/task_type: ANOMALY/g' {} +
+RUN if [ ! -d "/model_templates/anomaly" ]; then \
+        mkdir -p /model_templates/anomaly && \
+        cp -r /model_templates/anomaly_classification/* /model_templates/anomaly/ && \
+        find /model_templates/anomaly -type f -name "template.yaml" -exec sed -i 's/task_type: ANOMALY_CLASSIFICATION/task_type: ANOMALY/g' {} +; \
+    fi && \
+    find /model_templates -maxdepth 1 -type d -name "anomaly_*" -exec rm -rf {} +
 
 ENV MODEL_TEMPLATES_DIR=/model_templates
 
