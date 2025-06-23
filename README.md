@@ -19,6 +19,7 @@ LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 [Key Features](#key-features) | [User Guide](https://docs.geti.intel.com/docs/user-guide/getting-started/introduction) | [Dev Guide](https://docs.geti.intel.com/docs/developer-guide) | [License](LICENSE)
 
 <br>
+
 [![python](https://img.shields.io/badge/python-3.10%2B-green)]()
 [![pytorch](https://img.shields.io/badge/pytorch-2.5%2B-orange)]()
 [![openvino](https://img.shields.io/badge/openvino-2025.1.0-purple)]()
