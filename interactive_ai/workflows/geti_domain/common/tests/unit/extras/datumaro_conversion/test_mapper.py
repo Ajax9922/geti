@@ -194,8 +194,8 @@ class TestRoiMapper:
 
 
 class TestAnnotationSceneMapper:
-    def test_forward(self, fxt_annotation_scene, fxt_anomalous_rectangle_annotation) -> None:
-        fxt_annotation_scene.append_annotation(fxt_anomalous_rectangle_annotation)
+    def test_forward(self, fxt_annotation_scene, fxt_rectangle_annotation) -> None:
+        fxt_annotation_scene.append_annotation(fxt_rectangle_annotation)
         mocked_label_map = MagicMock(spec=LabelMap)
         mocked_label_map.include_empty = True
         task_label_id = next(

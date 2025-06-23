@@ -435,13 +435,13 @@ class TestAnomalySubsetHelper:
         fxt_label,
         fxt_configuration,
         fxt_anomalous_label,
-        fxt_dataset_item,
+        fxt_anomaly_dataset_item_normal_annotation,
     ) -> None:
         """
-        Checks that the 'assign_item_to_subset' method properly assigns anomalous items to the first empty subset,
+        Checks that the 'assign_item_to_subset' method properly assigns the normal items to the first empty subset,
         which is the training subset.
         """
-        dataset_item = fxt_dataset_item()
+        dataset_item = fxt_anomaly_dataset_item_normal_annotation()
         with (
             patch.object(_AnomalySubsetHelper, "__init__", new=do_nothing),
             patch.object(_AnomalySubsetHelper, "count_item", return_value=None) as mock_count_item,
@@ -475,13 +475,13 @@ class TestAnomalySubsetHelper:
         fxt_label,
         fxt_configuration,
         fxt_anomalous_label,
-        fxt_dataset_item_anomalous,
+        fxt_anomaly_dataset_item_anomalous_annotation,
     ) -> None:
         """
         Checks that the 'assign_item_to_subset' method properly assigns anomalous items to the first empty
         non-training subset, which is the validation subset.
         """
-        dataset_item = fxt_dataset_item_anomalous()
+        dataset_item = fxt_anomaly_dataset_item_anomalous_annotation()
         with (
             patch.object(_AnomalySubsetHelper, "__init__", new=do_nothing),
             patch.object(_AnomalySubsetHelper, "count_item", return_value=None) as mock_count_item,

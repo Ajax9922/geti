@@ -12,7 +12,7 @@ class DummyValues:
     MEDIA_WIDTH = 640
     LABEL_NAMES = ["rectangle", "ellipse", "triangle"]
     CREATOR_NAME = "SC SDK Fixtures"
-    CREATION_DATE = datetime.strptime("01/01/1970 00:00:01", "%d/%m/%Y %H:%M:%S").astimezone(timezone.utc)
+    CREATION_DATE = datetime.now()
     ANNOTATION_SCENE_KIND = AnnotationSceneKind.ANNOTATION
     ANNOTATION_EDITOR_NAME = "editor"
     MODIFICATION_DATE = datetime(2021, 7, 15, tzinfo=timezone.utc)
