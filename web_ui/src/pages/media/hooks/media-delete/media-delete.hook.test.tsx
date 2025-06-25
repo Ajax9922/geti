@@ -1,13 +1,12 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
-import { QueryClient } from '@tanstack/react-query';
+import { QueryClient, useQueryClient } from '@tanstack/react-query';
 import { waitFor } from '@testing-library/react';
 
 import { MEDIA_TYPE } from '../../../../core/media/base-media.interface';
 import { createInMemoryMediaService } from '../../../../core/media/services/in-memory-media-service/in-memory-media-service';
 import { MediaService } from '../../../../core/media/services/media-service.interface';
-import { NOTIFICATION_TYPE } from '../../../../notification/notification-toast/notification-type.enum';
 import { getMockedProjectIdentifier } from '../../../../test-utils/mocked-items-factory/mocked-identifiers';
 import { getMockedImageMediaItem } from '../../../../test-utils/mocked-items-factory/mocked-media';
 import { renderHookWithProviders } from '../../../../test-utils/render-hook-with-providers';
@@ -16,16 +15,10 @@ import { filterPageMedias } from '../../utils';
 import { useDeleteMediaMutation } from './media-delete.hook';
 
 const mockSetQueriesData = jest.fn();
-const mockAddNotification = jest.fn();
 
 jest.mock('../../utils', () => ({
     ...jest.requireActual('../../utils'),
     filterPageMedias: jest.fn(),
-}));
-
-jest.mock('../../../../notification/notification.component', () => ({
-    ...jest.requireActual('../../../../notification/notification.component'),
-    useNotification: () => ({ addNotification: mockAddNotification }),
 }));
 
 const mockedImageMedia = getMockedImageMediaItem({
@@ -42,15 +35,22 @@ const renderDeleteMediaMutationHook = ({
 }: {
     mediaService?: MediaService;
 } = {}) => {
-    const queryClient = new QueryClient();
-    queryClient.setQueriesData = mockSetQueriesData;
+    let queryClient: QueryClient;
 
-    return renderHookWithProviders(useDeleteMediaMutation, {
-        wrapper: ({ children }) => (
-            <ProjectProvider projectIdentifier={getMockedProjectIdentifier()}>{children}</ProjectProvider>
-        ),
-        providerProps: { mediaService, queryClient },
-    });
+    return renderHookWithProviders(
+        () => {
+            queryClient = useQueryClient();
+            queryClient.setQueriesData = mockSetQueriesData;
+
+            return useDeleteMediaMutation();
+        },
+        {
+            wrapper: ({ children }) => (
+                <ProjectProvider projectIdentifier={getMockedProjectIdentifier()}>{children}</ProjectProvider>
+            ),
+            providerProps: { mediaService },
+        }
+    );
 };
 
 const mockedResponse = {
@@ -85,7 +85,6 @@ describe('useDeleteMediaMutation', () => {
         await waitFor(() => {
             expect(filterPageMedias).toHaveBeenCalled();
             expect(mockSetQueriesData).toHaveBeenCalledTimes(1);
-            expect(mockAddNotification).not.toHaveBeenCalled();
         });
     });
 
@@ -106,10 +105,6 @@ describe('useDeleteMediaMutation', () => {
         await waitFor(() => {
             expect(filterPageMedias).toHaveBeenCalled();
             expect(mockSetQueriesData).toHaveBeenCalledTimes(2);
-            expect(mockAddNotification).toHaveBeenCalledWith({
-                message: `Media cannot be deleted. ${errorMessage}`,
-                type: NOTIFICATION_TYPE.ERROR,
-            });
         });
     });
 });

@@ -17,6 +17,20 @@ import { isAxiosError } from 'axios';
 import { NOTIFICATION_TYPE } from '../../notification/notification-toast/notification-type.enum';
 import { AddNotificationProps, useNotification } from '../../notification/notification.component';
 
+declare module '@tanstack/react-query' {
+    interface Register {
+        queryMeta: {
+            notifyOnError?: boolean;
+            errorMessage?: string;
+            disableGlobalErrorHandling?: boolean;
+        };
+        mutationMeta: {
+            notifyOnError?: boolean;
+            errorMessage?: string;
+        };
+    }
+}
+
 export const createGetiQueryClient = ({
     defaultQueryOptions,
     addNotification,
@@ -30,6 +44,7 @@ export const createGetiQueryClient = ({
         onError: (error, query) => {
             if (isAxiosError(error) && query.meta && 'notifyOnError' in query.meta) {
                 const message = query.meta.errorMessage;
+
                 if (query.meta.notifyOnError === true) {
                     notify.current({
                         message: typeof message === 'string' ? message : getErrorMessage(error),
@@ -47,11 +62,10 @@ export const createGetiQueryClient = ({
     });
 
     const mutationCache = new MutationCache({
-        onError: (error) => {
-            // TODO: If we decide to add an "opt-out" mechanism we can use the same logic
-            // as query cache and use the `meta` field
-            if (isAxiosError(error)) {
-                const message = error.message;
+        onError: (error, _variables, _ctx, mutation) => {
+            if (isAxiosError(error) && mutation.meta && 'notifyOnError' in mutation.meta) {
+                const message = mutation.meta.errorMessage;
+
                 notify.current({
                     message: typeof message === 'string' ? message : getErrorMessage(error),
                     type: NOTIFICATION_TYPE.ERROR,
@@ -72,19 +86,6 @@ export const createGetiQueryClient = ({
         mutationCache,
     });
 };
-
-declare module '@tanstack/react-query' {
-    interface Register {
-        queryMeta: {
-            notifyOnError?: boolean;
-            errorMessage?: string;
-            disableGlobalErrorHandling?: boolean;
-        };
-        mutationMeta: {
-            notifyOnError?: boolean;
-        };
-    }
-}
 
 export const QueryClientProvider = ({
     children,
