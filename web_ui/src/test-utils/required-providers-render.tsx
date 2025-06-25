@@ -11,16 +11,14 @@ import {
 } from '@geti/core/src/services/application-services-provider.component';
 import { OnboardingProfile } from '@geti/core/src/users/services/onboarding-service.interface';
 import { defaultTheme, IntelBrandedLoading, Provider as ThemeProvider } from '@geti/ui';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { render, RenderOptions, RenderResult } from '@testing-library/react';
 import { AuthProvider } from 'react-oidc-context';
 import { MemoryRouter as Router } from 'react-router-dom';
 
 import { AccountStatusDTO } from '../core/organizations/dtos/organizations.interface';
 import { NotificationProvider, Notifications, useNotification } from '../notification/notification.component';
-import {
-    createGetiQueryClient,
-    QueryClientProvider,
-} from '../providers/query-client-provider/query-client-provider.component';
+import { createGetiQueryClient } from '../providers/query-client-provider/query-client-provider.component';
 import { TusUploadProvider } from '../providers/tus-upload-provider/tus-upload-provider.component';
 import { getMockedWorkspace } from './mocked-items-factory/mocked-workspace';
 
@@ -79,7 +77,7 @@ const PrefilledQueryClientProvider = ({
         return client;
     }, [addNotification, featureFlags, profile]);
 
-    return <QueryClientProvider customQueryClient={prefilledQueryClient}>{children}</QueryClientProvider>;
+    return <QueryClientProvider client={prefilledQueryClient}>{children}</QueryClientProvider>;
 };
 
 export const RequiredProviders = ({

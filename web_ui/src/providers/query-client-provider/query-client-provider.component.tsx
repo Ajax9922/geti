@@ -90,11 +90,9 @@ export const createGetiQueryClient = ({
 export const QueryClientProvider = ({
     children,
     defaultQueryOptions,
-    customQueryClient,
 }: {
     children: ReactNode;
     defaultQueryOptions?: DefaultOptions;
-    customQueryClient?: QueryClient;
 }) => {
     const { addNotification } = useNotification();
 
@@ -106,12 +104,8 @@ export const QueryClientProvider = ({
     }, [addNotification]);
 
     const queryClient = useMemo(() => {
-        if (customQueryClient) {
-            return customQueryClient;
-        }
-
         return createGetiQueryClient({ addNotification, defaultQueryOptions });
-    }, [addNotification, customQueryClient, defaultQueryOptions]);
+    }, [addNotification, defaultQueryOptions]);
 
     return (
         <TanstackQueryClientProvider client={queryClient}>
