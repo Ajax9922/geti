@@ -3,14 +3,26 @@ name: Components workflow
 on:
   workflow_call:
     inputs:
-      component-dir:
+      component_dir:
         description: "Dir in root directory"
         type: string
         required: true
-      image-tag:
-        description: "Docker image tag"
+      build_version:
+        description: "Specifies the build version to apply to all binaries produced by this workflow"
         type: string
         required: true
+      publish_binaries:
+        description: "Enable publishing binaries to repos"
+        type: boolean
+        default: false
+      ref:
+        description: 'The branch, tag or SHA to checkout'
+        type: string
+        default: ""
+      manifest_registry:
+        description: 'The registry to use for the manifest'
+        type: string
+        default: ""
     secrets:
       AWS_ROLE:
         required: true
@@ -18,20 +30,22 @@ on:
         required: true
       REGISTRY:
         required: true
+      MANIFEST_REGISTRY:
+        required: true
   workflow_dispatch:
     inputs:
-      branch:
-        description: "Branch to checkout"
+      ref:
+        description: 'The branch, tag or SHA to checkout'
         required: true
         default: "main"
-      component-dir:
+      component_dir:
         description: "Path to the component (relative to the root of the repository)"
         required: true
 
-permissions: {} # No permissions by default on workflow level
+permissions: { } # No permissions by default on workflow level
 
 env:
-  COMPONENT_DIR: ${{ inputs.component-dir }}
+  COMPONENT_DIR: ${{ inputs.component_dir }}
 
 jobs:
   component-check:
@@ -42,22 +56,32 @@ jobs:
       id-token: write
     timeout-minutes: 30
     env:
-      TAG: ${{ inputs.image-tag || github.sha }}
+      TAG: ${{ inputs.build_version || github.sha }}
       REGISTRY: ${{ secrets.REGISTRY }}
+      MANIFEST_REGISTRY: ${{ inputs.manifest_registry || secrets.MANIFEST_REGISTRY }}
       PYTHON_BUILDER_IMAGE: builder-images/python-builder:v0.1
       GO_BUILDER_IMAGE: builder-images/go-builder:v0.1
     steps:
-      - name: Free space on runner (delete unnecessary tools)
-        run: rm -rf /opt/hostedtoolcache
-
       - name: Checkout code
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           persist-credentials: false
-          ref: ${{ inputs.branch || '' }}
+          ref: ${{ inputs.ref || '' }}
+
+      - name: Read component config
+        id: component-config
+        uses: ./.github/actions/read-component-config
+        with:
+          component_dir: ${{ env.COMPONENT_DIR }}
+
+      - name: Initial cleanup
+        if: steps.component-config.outputs.cleanup_type == 'initial' || steps.component-config.outputs.cleanup_type == 'all'
+        uses: ./.github/actions/cleanup-runner
+        with:
+          type: 'initial'
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
+        uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df # v4.2.1
         with:
           role-to-assume: ${{ secrets.AWS_ROLE }}
           role-session-name: Github
@@ -70,13 +94,14 @@ jobs:
       - name: Check if Python/Go project
         id: check-python-go
         run: |
+          BUILDER_IMAGE=""
           if [ -f "${COMPONENT_DIR}/setup.py" ] || [ -f "${COMPONENT_DIR}/pyproject.toml" ] || [ -f "${COMPONENT_DIR}/.python" ]; then
-            echo "BUILDER_IMAGE=${REGISTRY}/${PYTHON_BUILDER_IMAGE}" >> $GITHUB_ENV
+            BUILDER_IMAGE=${REGISTRY}/${PYTHON_BUILDER_IMAGE}
           elif [ -f "${COMPONENT_DIR}/go.mod" ] || [ -f "${COMPONENT_DIR}/.go" ]; then
-            echo "BUILDER_IMAGE=${REGISTRY}/${GO_BUILDER_IMAGE}" >> $GITHUB_ENV
-          else
-            echo "BUILDER_IMAGE=builder_image_not_set" >> $GITHUB_ENV
+            BUILDER_IMAGE=${REGISTRY}/${GO_BUILDER_IMAGE}
           fi
+          echo "BUILDER_IMAGE=${BUILDER_IMAGE}" >> $GITHUB_ENV
+          echo "BUILDER_IMAGE=${BUILDER_IMAGE}"
 
       - name: Static code analysis
         run: make builder -C "${COMPONENT_DIR}" static-code-analysis
@@ -86,11 +111,18 @@ jobs:
 
       - name: Integration testing
         run: |
-          if [[ "${COMPONENT_DIR}" == "interactive_ai/workflows/geti_domain/project_ie" ]]; then
+          if [[ "${{ steps.component-config.outputs.integration_builder }}" == "false" ]]; then
             make -C "${COMPONENT_DIR}" test-integration
           else
             make builder -C "${COMPONENT_DIR}" test-integration
           fi
+      
+
+      - name: Pre-build cleanup
+        if: steps.component-config.outputs.cleanup_type == 'pre-build' || steps.component-config.outputs.cleanup_type == 'all'
+        uses: ./.github/actions/cleanup-runner
+        with:
+          type: 'pre-build'
 
       - name: Build image
         id: build-image
@@ -101,7 +133,7 @@ jobs:
           fi
 
       - name: Push image
-        if: steps.build-image.outputs.SKIP_IMAGE != 'true'
+        if: steps.build-image.outputs.SKIP_IMAGE != 'true' && inputs.publish_binaries
         run: make -C "${COMPONENT_DIR}" publish-image
 
       - name: Lint chart
@@ -109,5 +141,7 @@ jobs:
         run: make -C "${COMPONENT_DIR}" lint-chart
 
       - name: Publish chart
-        if: steps.build-image.outputs.SKIP_IMAGE != 'true'
+        env:
+          VERSION: ${{ env.TAG }}
+        if: steps.build-image.outputs.SKIP_IMAGE != 'true' && inputs.publish_binaries
         run: make -C "${COMPONENT_DIR}" publish-chart
