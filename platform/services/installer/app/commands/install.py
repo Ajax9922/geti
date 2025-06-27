@@ -34,7 +34,6 @@ from checks.resources import (
 from checks.user import check_user_id
 from cli_utils.checks import run_checks
 
-# from platform_configuration.versions import get_target_product_build
 from cli_utils.credentials import hash_ldap_password
 from cli_utils.platform_logs import configure_logging, create_logs_dir
 from cli_utils.spinner import click_spinner
@@ -302,12 +301,6 @@ def display_final_confirmation(config: InstallationConfig) -> None:
 
 
 @click.command()
-@click.option(  # TODO remove later, workaround for Jenkins builds
-    "--config-file",
-    type=click.Path(exists=True, resolve_path=True, dir_okay=False),
-    required=False,
-    help="Config file with installation parameters. When calling installer outside of its directory use absolute path.",
-)
 @click.option(
     "--data-folder",
     type=click.Path(),
@@ -329,12 +322,10 @@ def install(
     password: str,
     tls_cert_file: str | None = None,
     tls_key_file: str | None = None,
-    config_file: str | None = None,  # TODO remove later, workaround for Jenkins builds
 ) -> None:
     """
     Install platform.
     """
-    logger.debug(f"Remove {config_file} param later")  # TODO
     click.echo(InstallCmdTexts.start_message)
     create_logs_dir()
     configure_logging()
@@ -344,8 +335,8 @@ def install(
     config.password.value = password
     config.password_sha.value = hash_ldap_password(config.password.value)
     check_tls_certificates(tls_cert_file=tls_cert_file, tls_key_file=tls_key_file)
-    config.tls_key_file.value = tls_key_file
     config.tls_cert_file.value = tls_cert_file
+    config.tls_key_file.value = tls_key_file
     run_initial_checks(config=config)
     run_installation_checks(config=config)
     display_final_confirmation(config=config)
