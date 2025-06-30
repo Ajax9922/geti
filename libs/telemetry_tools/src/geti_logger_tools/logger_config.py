@@ -7,7 +7,6 @@ import logging
 import os
 
 LOGGER_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
-NON_CONFIGURABLE_LOGGERS = ["uvicorn.access", "werkzeug", "pika", "aiohttp.access", "geti_logger_tools.logger_config"]
 LOG_LEVEL = getattr(logging, os.getenv("LOG_LEVEL", "INFO").upper(), logging.INFO)
 
 
