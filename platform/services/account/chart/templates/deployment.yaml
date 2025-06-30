@@ -64,14 +64,10 @@ spec:
               containerPort: {{ .Values.service.ports.http }}
               protocol: TCP
           volumeMounts:
-            - name: config
-              mountPath: {{ .Values.global.logging_config_dir }}
             - name: spicedb-tls-secrets
               mountPath: "/etc/tls-secrets"
               readOnly: true
           env:
-            - name: LOGGING_CONFIG_DIR
-              value: {{ .Values.global.logging_config_dir }}
             - name: POSTGRES_HOST
               value: "{{ .Release.Namespace }}-postgresql"
             - name: POSTGRES_DB_NAME

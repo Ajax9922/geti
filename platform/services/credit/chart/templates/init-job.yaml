@@ -119,8 +119,6 @@ spec:
               echo "done" > /init/2;
               exit $retVal
           env:
-            - name: LOGGING_CONFIG_DIR
-              value: {{ .Values.global.logging_config_dir }}
             - name: "POSTGRES_HOST"
               value: "{{ .Release.Namespace }}-postgresql.{{ .Release.Namespace }}"
             - name: POSTGRES_DB_NAME

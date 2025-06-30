@@ -35,16 +35,11 @@ spec:
             - mountPath: {{ .Values.gtw_tmp_dir }}
               name: tmp
               readOnly: false
-            - mountPath: {{ .Values.global.logging_config_dir }}
-              name: config
-              readOnly: true
             - mountPath: "{{ .Values.logs_mount_path }}"
               name: data-storage
               subPath: logs
               readOnly: true
           env:
-            - name: LOGGING_CONFIG_DIR
-              value: {{ .Values.global.logging_config_dir }}
             - name: K8S_SECRETS_NAMESPACE
               value: {{ .Release.Namespace }}
             - name: K8S_CR_NAMESPACE

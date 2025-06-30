@@ -35,7 +35,6 @@ PRIMARY_CONTAINER_NAME = "flyte-workflow"
 BINARY_STORAGE_MOUNT_PATH = "/binary_data"
 IE_STORAGE_MOUNT_PATH = "/ie_storage"
 LOGGING_VOLUME_NAME = "logging"
-LOGGING_MOUNT_PATH = "/mnt/logging_config"
 DATA_STORAGE_VOLUME_NAME = "data-storage"
 SERVICE_ACCOUNT_NAME = "impt-jobs"
 TMP_DIR_VOLUME_NAME = "tmp-dir"
@@ -76,11 +75,6 @@ def get_flyte_pod_spec(
                         name=DATA_STORAGE_VOLUME_NAME,
                         mount_path=IE_STORAGE_MOUNT_PATH,
                         sub_path="ie_storage",
-                    ),
-                    V1VolumeMount(
-                        name=LOGGING_VOLUME_NAME,
-                        read_only=True,
-                        mount_path=LOGGING_MOUNT_PATH,
                     ),
                     V1VolumeMount(
                         name=TMP_DIR_VOLUME_NAME,
@@ -192,10 +186,6 @@ def get_flyte_pod_spec(
                     V1EnvVar(
                         name="MPLCONFIGDIR",
                         value=TMP_DIR_MOUNT_PATH,
-                    ),
-                    V1EnvVar(
-                        name="LOGGING_CONFIG_DIR",
-                        value=LOGGING_MOUNT_PATH,
                     ),
                     V1EnvVar(
                         name="KAFKA_TOPIC_PREFIX",

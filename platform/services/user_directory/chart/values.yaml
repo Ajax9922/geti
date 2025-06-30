@@ -52,7 +52,6 @@ global:
   ldap_service_user_secret_name: "impt-ldap-service-user"
   security_headers: ""
   stripped_headers: ""
-  logging_config_dir: "/mnt/logging_config"
   storage_volume_claim_name_gtw: 'data-storage-volume-claim'
   enable_master_node_selector: true
   docker_namespace: geti

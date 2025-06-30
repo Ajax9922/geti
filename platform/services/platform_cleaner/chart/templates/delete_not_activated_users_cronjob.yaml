@@ -41,9 +41,6 @@ spec:
                 {{- end }}
                 exit $retVal
             securityContext: {{- toYaml .Values.securityContext | nindent 14 }}
-            volumeMounts:
-              - mountPath: {{ .Values.global.logging_config_dir }}
-                name: logger-config
             env:
               - name: ACCOUNT_SERVICE_HOST
                 value: "{{ .Values.account_service.address }}"
@@ -54,8 +51,6 @@ spec:
                   configMapKeyRef:
                     key: not_activated_user_expiration_in_days
                     name: "{{ .Release.Namespace }}-configuration"
-              - name: LOGGING_CONFIG_DIR
-                value: {{ .Values.global.logging_config_dir }}
           volumes:
             - name: logger-config
               configMap:

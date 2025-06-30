@@ -103,11 +103,7 @@ spec:
               secretKeyRef:
                 name: "{{ .Release.Namespace }}-postgresql"
                 key: "spicedb-postgresql-password"
-        - name: LOGGING_CONFIG_DIR
-          value: {{ .Values.global.logging_config_dir }}
         volumeMounts:
-          - mountPath: {{ .Values.global.logging_config_dir }}
-            name: config
           - name: tls-secrets
             mountPath: "/etc/tls-secrets"
             readOnly: true

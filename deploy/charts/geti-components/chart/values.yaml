@@ -32,7 +32,6 @@ global:
   istio_ambient_mesh: false
   istio_gateway_name: "istio-gateway"
   istio_ingress_namespace: "istio-system"
-  logging_config_dir: "/mnt/logging_config"
   logs_dir: "/mnt/logs"
   enable_object_storage: true
   s3_endpoint: impt-seaweed-fs.impt:8333

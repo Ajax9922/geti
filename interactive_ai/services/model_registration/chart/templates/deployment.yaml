@@ -48,8 +48,6 @@ spec:
               value: {{ .Values.global.logs_dir }}
             - name: MODELMESH_NAMESPACE
               value: {{ .Values.modelMeshNamespace | default .Release.Namespace }}
-            - name: LOGGING_CONFIG_DIR
-              value: {{ .Values.global.logging_config_dir }}
             {{- if .Values.global.enable_object_storage }}
             - name: S3_CREDENTIALS_PROVIDER
               valueFrom:
@@ -82,9 +80,6 @@ spec:
           resources:
             {{ toYaml .Values.resources | nindent 12 }}
           volumeMounts:
-            - mountPath: {{ .Values.global.logging_config_dir }}
-              name: config
-              readOnly: true
             - mountPath: /tmp
               name: tmp
           ports:

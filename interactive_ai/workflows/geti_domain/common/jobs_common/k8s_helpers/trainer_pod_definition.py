@@ -220,7 +220,6 @@ def create_flyte_container_task(  # noqa: PLR0913
                     V1EnvVar(name="MLFLOW_RUN_ID", value=job_id),
                     V1EnvVar(name="MLFLOW_ENABLE_ASYNC_LOGGING", value="1"),
                     V1EnvVar(name="MODEL_TEMPLATES_DIR", value="/model_templates"),
-                    V1EnvVar(name="LOGGING_CONFIG_DIR", value="/mnt/logging_config"),
                     V1EnvVar(name="EXECUTION_ID", value=current_context().execution_id.name),
                     V1EnvVar(name="TASK_ID", value=container_name),
                     V1EnvVar(name="SESSION_ORGANIZATION_ID", value=str(session.organization_id)),

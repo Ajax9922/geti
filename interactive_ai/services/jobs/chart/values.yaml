@@ -123,7 +123,6 @@ policies:
     value: "1"
 
 global:
-  logging_config_dir: ''
   storage_volume_claim_name_jobs: ''
   docker_namespace: geti
   security_headers: ''

@@ -164,9 +164,6 @@ spec:
           - configMapRef:
               name: {{ .Release.Namespace }}-feature-flags
           volumeMounts:
-            - mountPath: {{ .Values.global.logging_config_dir }}
-              name: config
-              readOnly: true
             - mountPath: "/{{ .Values.audit_logs_mount_path }}"
               name: data-storage
               subPath: {{ .Values.audit_logs_mount_path }}
@@ -474,9 +471,6 @@ spec:
             - name: tls-secrets
               mountPath: "/etc/tls-secrets"
               readOnly: true
-            - mountPath: {{ .Values.global.logging_config_dir }}
-              name: config
-              readOnly: true
             - mountPath: {{ .Values.jobs_templates_dir }}
               name: jobs-templates
               readOnly: true
@@ -597,9 +591,6 @@ spec:
           volumeMounts:
             - mountPath: /tmp
               name: temp
-            - mountPath: {{ .Values.global.logging_config_dir }}
-              name: config
-              readOnly: true
           envFrom:
             - configMapRef:
                 name: {{ .Release.Namespace }}-feature-flags

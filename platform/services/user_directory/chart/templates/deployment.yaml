@@ -53,9 +53,6 @@ spec:
             - mountPath: {{ .Values.tmp_dir }}
               name: tmp
               readOnly: false
-            - mountPath: {{ .Values.global.logging_config_dir }}
-              name: config
-              readOnly: true
             - mountPath: "/{{ .Values.audit_logs_mount_path }}"
               name: data-storage
               subPath: {{ .Values.audit_logs_mount_path }}
@@ -112,8 +109,6 @@ spec:
                 secretKeyRef:
                   key: password
                   name: {{ .Values.global.ldap_service_user_secret_name }}
-            - name: LOGGING_CONFIG_DIR
-              value: {{ .Values.global.logging_config_dir }}
             - name: K8S_SECRETS_NAMESPACE
               value: {{ .Release.Namespace }}
             - name: K8S_CR_NAMESPACE

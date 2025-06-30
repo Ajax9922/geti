@@ -16,8 +16,6 @@ import (
 )
 
 const (
-	loggingConfigDirEnvVarName = "LOGGING_CONFIG_DIR"
-	logLevelFilename           = "LOG_LEVEL"
 	loggerSyncerSleepTime      = 30 * time.Second
 )
 
@@ -32,18 +30,12 @@ func syncLogLevel(loggerLevel *zap.AtomicLevel) {
 		"error":   zapcore.ErrorLevel,
 	}
 	for {
-		loggingConfigDir := os.Getenv(loggingConfigDirEnvVarName)
-		levelFilePath := filepath.Join(loggingConfigDir, logLevelFilename)
-		logLevelFromFileBytes, err := os.ReadFile(levelFilePath)
-		if err != nil {
-			fmt.Printf("logger syncer exited due to error reading level file: %v\n", levelFilePath)
-			return
-		}
-		logLevelFromFile := string(logLevelFromFileBytes[:])
-		requestedLogLevelLowered := strings.ToLower(logLevelFromFile)
-
+		logLevel := os.Getenv("LOG_LEVEL")
+		if logLevel == "" {
+            logLevel = "INFO"
+        }
+		requestedLogLevelLowered := strings.ToLower(logLevel)
 		zapLevelConverted := logLevelMapping[requestedLogLevelLowered]
-
 		loggerLevel.SetLevel(zapLevelConverted)
 		time.Sleep(loggerSyncerSleepTime)
 	}

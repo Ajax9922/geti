@@ -44,8 +44,6 @@ spec:
               containerPort: {{ .Values.service.ports.http }}
               protocol: TCP
           volumeMounts:
-            - name: config
-              mountPath: {{ .Values.global.logging_config_dir }}
             - name: {{ .Values.certificate.volumeName }}
               mountPath: {{ .Values.certificate.mountPath }}
               readOnly: true
@@ -60,8 +58,6 @@ spec:
               value: {{ .Values.certificate.jwksUpdateTime }}
             - name: JWKS_ENTRY_EXPIRATION
               value: {{ .Values.certificate.jwksEntryExpiration }}
-            - name: LOGGING_CONFIG_DIR
-              value: {{ .Values.global.logging_config_dir }}
             - name: ISS_INTERNAL
               valueFrom:
                 configMapKeyRef:

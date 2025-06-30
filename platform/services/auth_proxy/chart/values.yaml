@@ -43,7 +43,6 @@ global:
   istio_ingress_namespace: "istio-system"
   istio_gateway_name: "istio-gateway"
   istio_ambient_mesh: false
-  logging_config_dir: "/mnt/logging_config"
   tag: ""
   docker_namespace: geti
   registry_address: ""

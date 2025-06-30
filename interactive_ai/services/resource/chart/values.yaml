@@ -51,7 +51,6 @@ global:
   security_headers: ''
   stripped_headers: ''
   logs_dir: ''
-  logging_config_dir: ''
   storage_volume_claim_name_resource: ''
   docker_namespace: geti
   enable_master_node_selector: true

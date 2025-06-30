@@ -80,11 +80,3 @@ spec:
                   name: "{{ .Release.Namespace }}-email-config"
             - name: GETI_NOTIFICATION_TOPIC
               value: "{{ .Values.kafka.topic }}"
-          volumeMounts:
-            - mountPath: {{ .Values.global.logging_config_dir }}
-              name: config
-              readOnly: true
-      volumes:
-        - name: config
-          configMap:
-            name: "{{ .Values.logging_config.name }}"

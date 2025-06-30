@@ -98,8 +98,6 @@ spec:
               value: "{{ .Values.global.min_free_disk_space_gib }}"
             - name: LOGS_DIR
               value: {{ .Values.global.logs_dir }}
-            - name: LOGGING_CONFIG_DIR
-              value: {{ .Values.global.logging_config_dir }}
             - name: DATABASE_ADDRESS
               value: mongodb://{{ .Release.Namespace }}-mongodb:27017/
             {{- if .Values.global.enable_mongodb_credentials }}
@@ -231,9 +229,6 @@ spec:
           resources:
             {{ toYaml .Values.resources | nindent 12 }}
           volumeMounts:
-            - mountPath: {{ .Values.global.logging_config_dir }}
-              name: config
-              readOnly: true
             - mountPath: {{ .Values.global.logs_dir }}
               readOnly: false
               subPath: logs

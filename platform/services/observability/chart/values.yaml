@@ -44,7 +44,6 @@ periodSeconds: 45
 global:
   security_headers: ""
   stripped_headers: ""
-  logging_config_dir: ""
   storage_volume_claim_name_gtw: 'data-storage-volume-claim'
   enable_master_node_selector: true
   docker_namespace: geti
