@@ -31,8 +31,8 @@ func syncLogLevel(loggerLevel *zap.AtomicLevel) {
 	for {
 		logLevel := os.Getenv("LOG_LEVEL")
 		if logLevel == "" {
-            logLevel = "INFO"
-        }
+            		logLevel = "INFO"
+        	}
 		requestedLogLevelLowered := strings.ToLower(logLevel)
 		zapLevelConverted := logLevelMapping[requestedLogLevelLowered]
 		loggerLevel.SetLevel(zapLevelConverted)
