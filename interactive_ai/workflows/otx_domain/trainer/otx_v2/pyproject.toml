@@ -19,6 +19,9 @@ dependencies = [
 geti-kafka-tools = { path = "../../../../../libs/kafka_tools" }
 geti-telemetry-tools = { path = "../../../../../libs/telemetry_tools" }
 
+[tool.hatch.metadata]
+allow-direct-references = true
+
 [dependency-groups]
 dev = [
     "pytest~=8.3",
