@@ -6,7 +6,6 @@ package utils
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
 	"sync"
 	"time"
@@ -34,7 +33,7 @@ func syncLogLevel(loggerLevel *zap.AtomicLevel) {
 		if logLevel == "" {
             logLevel = "INFO"
         }
-		requestedLogLevelLowered := strings.ToLower(logLevelFromFile)
+		requestedLogLevelLowered := strings.ToLower(logLevel)
 		zapLevelConverted := logLevelMapping[requestedLogLevelLowered]
 		loggerLevel.SetLevel(zapLevelConverted)
 		time.Sleep(loggerSyncerSleepTime)
