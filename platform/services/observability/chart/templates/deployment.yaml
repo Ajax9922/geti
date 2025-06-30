@@ -48,6 +48,8 @@ spec:
               value: {{ .Values.global.istio_ingress_namespace }}
             - name: IMPT_CONFIGURATION_CM
               value: {{ .Values.configuration_cm_name }}
+            - name: LOG_LEVEL
+              value: "INFO"
             - name: LOGS_DIR
               value: {{ .Values.logs_mount_path }}
             - name: K8S_POD_NAME

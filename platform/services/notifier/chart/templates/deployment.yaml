@@ -78,5 +78,7 @@ spec:
                 secretKeyRef:
                   key: smtp_password
                   name: "{{ .Release.Namespace }}-email-config"
+            - name: LOG_LEVEL
+              value: "INFO"
             - name: GETI_NOTIFICATION_TOPIC
               value: "{{ .Values.kafka.topic }}"

@@ -94,6 +94,8 @@ spec:
             - name: ENABLE_TRACING
               value: "true"
             {{- end }}
+            - name: LOG_LEVEL
+              value: "INFO"
             - name: OTEL_SERVICE_NAME
               value: "{{ include "credit-system.name" . }}-microservice"
             - name: OTLP_TRACES_RECEIVER

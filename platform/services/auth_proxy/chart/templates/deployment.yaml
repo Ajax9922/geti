@@ -56,6 +56,8 @@ spec:
               value: {{ .Values.certificate.mountPath }}/tls.crt
             - name: JWKS_UPDATE_TIME
               value: {{ .Values.certificate.jwksUpdateTime }}
+            - name: LOG_LEVEL
+              value: "INFO"
             - name: JWKS_ENTRY_EXPIRATION
               value: {{ .Values.certificate.jwksEntryExpiration }}
             - name: ISS_INTERNAL

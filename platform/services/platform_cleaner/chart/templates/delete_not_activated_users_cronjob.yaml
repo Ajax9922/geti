@@ -51,6 +51,8 @@ spec:
                   configMapKeyRef:
                     key: not_activated_user_expiration_in_days
                     name: "{{ .Release.Namespace }}-configuration"
+              - name: LOG_LEVEL
+                value: "INFO"
           volumes:
             - name: logger-config
               configMap:

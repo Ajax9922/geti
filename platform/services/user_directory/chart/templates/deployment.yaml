@@ -127,6 +127,8 @@ spec:
                   fieldPath: metadata.uid
             - name: K8S_CONTAINER_NAME
               value: *containerName
+            - name: LOG_LEVEL
+              value: "INFO"
           livenessProbe:
             tcpSocket:
               port: {{ .Values.port }}

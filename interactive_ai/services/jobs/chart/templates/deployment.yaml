@@ -118,6 +118,8 @@ spec:
               value: "true"
             - name: ENABLE_METRICS
               value: "true"
+            - name: LOG_LEVEL
+              value: "INFO"
             - name: OTEL_SERVICE_NAME
               value: jobs-microservice
             - name: OTLP_TRACES_RECEIVER

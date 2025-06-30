@@ -204,6 +204,10 @@ def get_flyte_pod_spec(
                             )
                         ),
                     ),
+                    V1EnvVar(
+                        name="LOG_LEVEL",
+                        value="INFO",
+                    ),
                     # dataset ie constants.
                     V1EnvVar(
                         name="MAX_NUMBER_OF_MEDIA_PER_PROJECT",

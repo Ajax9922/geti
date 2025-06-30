@@ -91,6 +91,8 @@ spec:
                   fieldPath: metadata.uid
             - name: K8S_CONTAINER_NAME
               value: *containerName
+            - name: LOG_LEVEL
+              value: "INFO"
             - name: OTEL_RESOURCE_ATTRIBUTES
               value: service.instance.id=$(K8S_POD_NAME),k8s.pod.uid=$(K8S_POD_UID),k8s.container.name=$(K8S_CONTAINER_NAME)
             - name: MONGODB_CREDENTIALS_PROVIDER

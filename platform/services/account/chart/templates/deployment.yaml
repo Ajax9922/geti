@@ -121,6 +121,8 @@ spec:
                   key: kafka_topic_prefix
             - name: GETI_NOTIFICATION_TOPIC
               value: "{{ .Values.kafka.topic }}"
+            - name: LOG_LEVEL
+              value: "INFO"
             - name: INVITATION_FROM_ADDRESS
               value: "{{ .Values.invitation.from_address }}"
             - name: INVITATION_FROM_NAME
