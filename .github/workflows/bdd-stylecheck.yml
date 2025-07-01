@@ -50,5 +50,4 @@ jobs:
       - name: Static code analysis
         working-directory: interactive_ai/tests/e2e
         run: |
-          openapi-generator-cli version-manager set 7.13.0
           make static-code-analysis

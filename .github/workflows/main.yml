@@ -145,6 +145,18 @@ jobs:
       component-dir: ${{ matrix.component }}
       ref: ${{ needs.get-vars.outputs.checkout_ref }}
 
+  bdd_stylecheck_workflow:
+    name: BDD stylecheck workflow
+    needs: get-vars
+    permissions:
+      contents: read
+    uses: ./.github/workflows/bdd-stylecheck.yml
+    if: ${{ !contains(needs.get-vars.outputs.libs-list, '[]') }}
+    strategy:
+      fail-fast: false
+      matrix:
+        component: ${{ fromJSON(needs.get-vars.outputs.libs-list) }}
+
   component-workflow:
     name: Component workflow
     needs: get-vars
