@@ -199,7 +199,7 @@ export const TestDetailsPreview = ({
 
     const datasetIdentifier = useTestDatasetIdentifier(test);
 
-    const { imageQuery, annotationsQuery, predictionsQuery, testResult } = useTestResultsQuery(
+    const { imageQuery, annotationsQuery, predictionsQuery, explanationsQuery, testResult } = useTestResultsQuery(
         datasetIdentifier,
         selectedMediaItem,
         testMediaItem,
@@ -210,7 +210,7 @@ export const TestDetailsPreview = ({
 
     const annotations = useVisibleAnnotations(annotationsQuery.data ?? []);
     const predictions = useVisibleAnnotations(predictionsQuery.data?.annotations ?? []);
-    const explanations = sortExplanationsByName(predictionsQuery.data?.maps);
+    const explanations = sortExplanationsByName(explanationsQuery.data ?? []);
 
     useEffect(() => {
         setSelectedMediaItem(testMediaItem.media);

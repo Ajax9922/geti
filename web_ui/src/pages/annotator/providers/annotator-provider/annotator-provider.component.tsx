@@ -69,7 +69,7 @@ export const AnnotatorProvider = ({ children }: AnnotatorProviderProps): JSX.Ele
 
     const [activeTool, setActiveTool] = useState<ToolType>(() => defaultToolForProject(activeDomains));
 
-    const { selectedMediaItem, predictionsQuery } = useSelectedMediaItem();
+    const { selectedMediaItem, predictionsQuery, explanationsQuery } = useSelectedMediaItem();
     const isTaskChainSelectedClassification = isTaskChainDomainSelected(DOMAIN.CLASSIFICATION);
 
     const initialPredictionAnnotations = predictionsQuery.data?.annotations;
@@ -79,6 +79,7 @@ export const AnnotatorProvider = ({ children }: AnnotatorProviderProps): JSX.Ele
         userProjectSettings,
         isTaskChainSelectedClassification
     );
+    const explanations = explanationsQuery.data || [];
 
     const { undoRedoActions, ...userAnnotationScene } = useAnnotationSceneState(
         initialAnnotations,
@@ -109,7 +110,7 @@ export const AnnotatorProvider = ({ children }: AnnotatorProviderProps): JSX.Ele
                                     settings={userProjectSettings}
                                     userAnnotationScene={userAnnotationScene}
                                     initPredictions={initialPredictionAnnotations}
-                                    explanations={selectedMediaItem?.predictions?.maps || EMPTY_EXPLANATION}
+                                    explanations={explanations || EMPTY_EXPLANATION}
                                 >
                                     <SubmitAnnotationsProvider
                                         settings={userProjectSettings}

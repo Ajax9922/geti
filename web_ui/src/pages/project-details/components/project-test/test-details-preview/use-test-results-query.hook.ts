@@ -15,6 +15,7 @@ import { TestMediaItem } from '../../../../../core/tests/test-media.interface';
 import { useProjectIdentifier } from '../../../../../hooks/use-project-identifier/use-project-identifier';
 import { isNonEmptyString } from '../../../../../shared/utils';
 import { useAnnotationsQuery } from '../../../../annotator/providers/selected-media-item-provider/use-annotations-query.hook';
+import { useExplanationsQuery } from '../../../../annotator/providers/selected-media-item-provider/use-explanation-query.hook';
 import { useLoadImageQuery } from '../../../../annotator/providers/selected-media-item-provider/use-load-image-query.hook';
 import { useProject } from '../../../providers/project-provider/project-provider.component';
 
@@ -88,10 +89,16 @@ export const useTestResultsQuery = (
         enabled: isNonEmptyString(testResult?.predictionId),
     });
 
+    const explanationsQuery = useExplanationsQuery({
+        datasetIdentifier,
+        mediaItem,
+    });
+
     return {
         imageQuery,
         annotationsQuery,
         predictionsQuery,
+        explanationsQuery,
         testResult,
     };
 };

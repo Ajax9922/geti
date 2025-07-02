@@ -6,7 +6,10 @@ import { Explanation } from '../prediction.interface';
 
 export interface PredictionResult {
     annotations: ReadonlyArray<Annotation>;
-    maps: Explanation[];
+}
+
+export interface ExplanationResult {
+    maps: ReadonlyArray<Explanation>;
 }
 
 export interface InferenceServerStatusResult {

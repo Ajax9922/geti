@@ -135,7 +135,7 @@ describe('usePredictionsRoiQuery', () => {
         });
 
         await waitFor(() => {
-            expect(result.current.data).toEqual({ annotations: [], maps: [] });
+            expect(result.current.data).toEqual({ annotations: [] });
         });
     });
 
@@ -149,7 +149,6 @@ describe('usePredictionsRoiQuery', () => {
         await waitFor(() => {
             expect(result.current.data).toEqual({
                 annotations: [],
-                maps: [],
             });
         });
 
@@ -236,7 +235,7 @@ describe('usePredictionsRoiQuery', () => {
             });
 
             await waitFor(() => {
-                expect(result.current.data).toEqual({ annotations: [], maps: [] });
+                expect(result.current.data).toEqual({ annotations: [] });
             });
         });
     });
