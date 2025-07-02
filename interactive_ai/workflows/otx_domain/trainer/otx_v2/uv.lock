@@ -1885,7 +1885,7 @@ wheels = [
 [[package]]
 name = "otx"
 version = "2.4.5"
-source = { git = "https://github.com/open-edge-platform/training_extensions?rev=94c0423fd09a46b1ff9ff4cd510b6eabbac70bc6#94c0423fd09a46b1ff9ff4cd510b6eabbac70bc6" }
+source = { git = "https://github.com/open-edge-platform/training_extensions?rev=a686e0f205694320e259d26d37fbd43af85efb1e#a686e0f205694320e259d26d37fbd43af85efb1e" }
 dependencies = [
     { name = "datumaro" },
     { name = "decord" },
@@ -1955,7 +1955,7 @@ requires-dist = [
     { name = "geti-telemetry-tools", extras = ["telemetry", "kafka"], directory = "../../../../../libs/telemetry_tools" },
     { name = "minio", specifier = "~=7.1.0" },
     { name = "numpy", specifier = "==1.26.4" },
-    { name = "otx", extras = ["base"], git = "https://github.com/open-edge-platform/training_extensions?rev=94c0423fd09a46b1ff9ff4cd510b6eabbac70bc6" },
+    { name = "otx", extras = ["base"], git = "https://github.com/open-edge-platform/training_extensions?rev=a686e0f205694320e259d26d37fbd43af85efb1e" },
     { name = "requests", specifier = "==2.32.3" },
     { name = "torchmetrics", specifier = "<1.7.0" },
     { name = "tqdm", specifier = "==4.67.1" },
