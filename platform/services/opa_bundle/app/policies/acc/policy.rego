@@ -50,7 +50,7 @@ allow if {
 # Restrict access to GET /api/<api_ver>/organizations/<org_id>/workspaces endpoint to organization_contributor permission
 allow if {
 	parsed_path = ["api", api_ver, "organizations", org_id, "workspaces"]
-	http_request.method == "GET"
+	# TODO: http_request.method == "GET"
 	is_license_valid
 	is_valid_api_version(api_ver)
 
@@ -62,7 +62,7 @@ allow if {
 # Restrict access to GET /api/<api_ver>/organizations/<org_id>/workspaces/<workspace_id> endpoint to workspace_contributor permission
 allow if {
 	["api", api_ver, "organizations", org_id, "workspaces", workspace_id] = parsed_path
-	http_request.method == "GET"
+	# TODO: http_request.method == "GET"
 	is_license_valid
 	is_valid_api_version(api_ver)
 
