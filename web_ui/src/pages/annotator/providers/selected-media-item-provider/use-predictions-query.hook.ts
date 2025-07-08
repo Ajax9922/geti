@@ -84,7 +84,6 @@ export const usePredictionsQuery = ({
                 };
             }
 
-            // Only fetch predictions here
             const annotations = await inferenceService.getPredictions(
                 datasetIdentifier,
                 coreLabels,
