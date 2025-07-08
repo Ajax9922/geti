@@ -36,7 +36,19 @@ export const useExplanationsQuery = ({
         queryFn: async ({ signal }) => {
             if (!mediaItem) throw new Error("Can't fetch undefined media item");
 
-            return await inferenceService.getExplanations(datasetIdentifier, mediaItem, taskId, undefined, signal);
+            try {
+                const explanations = await inferenceService.getExplanations(
+                    datasetIdentifier,
+                    mediaItem,
+                    taskId,
+                    undefined,
+                    signal
+                );
+
+                return explanations ?? [];
+            } catch (_error) {
+                return [];
+            }
         },
         enabled: enabled && !!mediaItem,
         staleTime: 5 * 60_000,

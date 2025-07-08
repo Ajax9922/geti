@@ -73,14 +73,18 @@ export const useTestResultsQuery = (
     const predictionsQuery = useQuery<PredictionResult, AxiosError>({
         queryKey: QUERY_KEYS.TEST_PREDICTIONS(projectIdentifier, testId, String(testResult?.predictionId)),
         queryFn: async () => {
-            const predictions = await inferenceService.getTestPredictions(
-                datasetIdentifier,
-                labels,
-                testId,
-                String(testResult?.predictionId)
-            );
+            try {
+                const predictions = await inferenceService.getTestPredictions(
+                    datasetIdentifier,
+                    labels,
+                    testId,
+                    String(testResult?.predictionId)
+                );
 
-            return { annotations: predictions };
+                return { annotations: predictions ?? [] };
+            } catch (_error) {
+                return { annotations: [] };
+            }
         },
         enabled: isNonEmptyString(testResult?.predictionId),
     });

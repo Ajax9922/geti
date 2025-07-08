@@ -7,10 +7,8 @@ import QUERY_KEYS from '@geti/core/src/requests/query-keys';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { noop } from 'lodash-es';
 
-import {
-    ExplanationResult,
-    PredictionResult,
-} from '../../../../core/annotations/services/prediction-service.interface';
+import { ExplanationResult } from '../../../../core/annotations/services/inference-service.interface';
+import { PredictionResult } from '../../../../core/annotations/services/prediction-service.interface';
 import { SelectedMediaItemContext, SelectedMediaItemProps } from './selected-media-item-provider.component';
 import { SelectedMediaItem } from './selected-media-item.interface';
 
