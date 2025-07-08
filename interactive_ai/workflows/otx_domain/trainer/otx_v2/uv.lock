@@ -1885,7 +1885,7 @@ wheels = [
 [[package]]
 name = "otx"
 version = "2.4.5"
-source = { registry = "https://pypi.org/simple" }
+source = { git = "https://github.com/open-edge-platform/training_extensions?rev=e3b73a2639d8c896d45c6602d6aa74a79e110c65#e3b73a2639d8c896d45c6602d6aa74a79e110c65" }
 dependencies = [
     { name = "datumaro" },
     { name = "decord" },
@@ -1902,10 +1902,6 @@ dependencies = [
     { name = "rich-argparse" },
     { name = "setuptools" },
     { name = "typeguard" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/5d/34/42332e5b3450f9d7e19be85ccfde478292d4f63573d3086ac262be3e1842/otx-2.4.5.tar.gz", hash = "sha256:486bb24386f99a3002dd4b235034a672df4204ceb14eb0f7d54f674fa1134f07", size = 12147090, upload-time = "2025-07-03T13:47:06.881Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/22/01/436aa9c950686540bf35bde8d4f74a16fec54523639190484b4e7157cedd/otx-2.4.5-py3-none-any.whl", hash = "sha256:5164aef8bd8133bdb1035e4efff5ceb109f8c1cbc15ea6c6fd19ca9bb62e9a18", size = 959636, upload-time = "2025-07-03T13:47:04.701Z" },
 ]
 
 [package.optional-dependencies]
@@ -1958,7 +1954,7 @@ requires-dist = [
     { name = "geti-telemetry-tools", extras = ["telemetry", "kafka"], directory = "../../../../../libs/telemetry_tools" },
     { name = "minio", specifier = "~=7.1.0" },
     { name = "numpy", specifier = "==1.26.4" },
-    { name = "otx", extras = ["base"], specifier = "==2.4.5" },
+    { name = "otx", extras = ["base"], git = "https://github.com/open-edge-platform/training_extensions?rev=e3b73a2639d8c896d45c6602d6aa74a79e110c65" },
     { name = "requests", specifier = "==2.32.3" },
     { name = "tqdm", specifier = "==4.67.1" },
 ]
