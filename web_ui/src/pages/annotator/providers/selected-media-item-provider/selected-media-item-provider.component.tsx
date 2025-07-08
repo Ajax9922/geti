@@ -175,11 +175,17 @@ export const SelectedMediaItemProvider = ({ children }: SelectedMediaItemProvide
     const explanationsQuery = useExplanationsQuery({
         datasetIdentifier,
         mediaItem,
+        taskId: selectedTask?.id,
     });
 
     const selectedMediaItemQueryKey = [
         ...QUERY_KEYS.SELECTED_MEDIA_ITEM.SELECTED(pendingMediaItem?.identifier, selectedTask?.id),
-        [imageQuery.fetchStatus, annotationsQuery.fetchStatus, predictionsQuery.fetchStatus],
+        [
+            imageQuery.fetchStatus,
+            annotationsQuery.fetchStatus,
+            predictionsQuery.fetchStatus,
+            explanationsQuery.fetchStatus,
+        ],
     ];
 
     const isSelectedMediaItemQueryEnabled = mediaItem !== undefined;
@@ -191,31 +197,32 @@ export const SelectedMediaItemProvider = ({ children }: SelectedMediaItemProvide
                 throw new Error("Can't fetch undefined media item");
             }
 
-            const [image, annotations, predictions] = await new Promise<[ImageData, Annotation[], PredictionResult]>(
-                (resolve, reject) => {
-                    if (imageQuery.isError) {
-                        reject({
-                            message: 'Failed loading media item. Please try refreshing or selecting a different item.',
-                        });
-                    }
-
-                    if (imageQuery.data && annotationsQuery.data) {
-                        if (!predictionsQuery.data && predictionsQuery.isFetching) {
-                            // If we do not yet have predictions and the user has not yet made any annotations
-                            // for the selected task, then we will wait for predictions
-                            if (isNotAnnotatedForTask(annotationsQuery.data, selectedTask)) {
-                                return;
-                            }
-                        }
-
-                        const predictionsData = predictionsQuery.data ?? { annotations: [] };
-
-                        resolve([imageQuery.data, annotationsQuery.data, predictionsData]);
-                    }
+            const [image, annotations, predictions, explanations] = await new Promise<
+                [ImageData, Annotation[], PredictionResult, ExplanationResult]
+            >((resolve, reject) => {
+                if (imageQuery.isError) {
+                    reject({
+                        message: 'Failed loading media item. Please try refreshing or selecting a different item.',
+                    });
                 }
-            );
 
-            const newlySelectedMediaItem = { ...mediaItem, image, annotations, predictions };
+                if (imageQuery.data && annotationsQuery.data) {
+                    if (!predictionsQuery.data && predictionsQuery.isFetching) {
+                        // If we do not yet have predictions and the user has not yet made any annotations
+                        // for the selected task, then we will wait for predictions
+                        if (isNotAnnotatedForTask(annotationsQuery.data, selectedTask)) {
+                            return;
+                        }
+                    }
+
+                    const predictionsData = predictionsQuery.data ?? { annotations: [] };
+                    const explanationsData = explanationsQuery.data ?? [];
+
+                    resolve([imageQuery.data, annotationsQuery.data, predictionsData, explanationsData]);
+                }
+            });
+
+            const newlySelectedMediaItem = { ...mediaItem, image, annotations, predictions, explanations };
 
             if (isSingleDomainProject(isClassificationDomain)) {
                 return {

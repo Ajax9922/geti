@@ -72,20 +72,16 @@ export const useTestResultsQuery = (
 
     const predictionsQuery = useQuery<PredictionResult, AxiosError>({
         queryKey: QUERY_KEYS.TEST_PREDICTIONS(projectIdentifier, testId, String(testResult?.predictionId)),
-        queryFn: () =>
-            Promise.allSettled([
-                inferenceService.getTestPredictions(
-                    datasetIdentifier,
-                    labels,
-                    testId,
-                    String(testResult?.predictionId)
-                ),
-                inferenceService.getExplanations(datasetIdentifier, mediaItem),
-            ]).then(([predictions, explanations]) => {
-                // @ts-expect-error PromiseSettledResult type is not exported
-                // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/allSettled
-                return { annotations: predictions.value ?? [], maps: explanations.value ?? [] };
-            }),
+        queryFn: async () => {
+            const predictions = await inferenceService.getTestPredictions(
+                datasetIdentifier,
+                labels,
+                testId,
+                String(testResult?.predictionId)
+            );
+
+            return { annotations: predictions };
+        },
         enabled: isNonEmptyString(testResult?.predictionId),
     });
 

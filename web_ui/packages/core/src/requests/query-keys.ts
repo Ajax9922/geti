@@ -123,7 +123,7 @@ const getSelectedMediaItemQueryKeys = () => {
             datasetIdentifier: DatasetIdentifier,
             mediaIdentifier: MediaIdentifier | undefined,
             taskId?: string
-        ) => ['explanations', datasetIdentifier, mediaIdentifier, taskId],
+        ) => [...commonKey(mediaIdentifier), 'explanations', datasetIdentifier, mediaIdentifier, taskId],
 
         SELECTED: (mediaIdentifier: MediaIdentifier | undefined, taskId?: string) => [
             ...commonKey(mediaIdentifier),

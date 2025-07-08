@@ -6,7 +6,7 @@ import { useApplicationServices } from '@geti/core/src/services/application-serv
 import { QueryKey, useQuery, UseQueryResult } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
-import { Explanation } from '../../../../core/annotations/prediction.interface';
+import { ExplanationResult } from '../../../../core/annotations/services/inference-service.interface';
 import { MediaItem } from '../../../../core/media/media.interface';
 import { DatasetIdentifier } from '../../../../core/projects/dataset.interface';
 
@@ -22,7 +22,7 @@ export const useExplanationsQuery = ({
     mediaItem,
     enabled = true,
     taskId,
-}: UseGetExplanations): UseQueryResult<Explanation[], AxiosError> => {
+}: UseGetExplanations): UseQueryResult<ExplanationResult, AxiosError> => {
     const { inferenceService } = useApplicationServices();
 
     const queryKey: QueryKey = QUERY_KEYS.SELECTED_MEDIA_ITEM.EXPLANATIONS(
@@ -31,12 +31,12 @@ export const useExplanationsQuery = ({
         taskId
     );
 
-    return useQuery<Explanation[], AxiosError>({
+    return useQuery({
         queryKey,
         queryFn: async ({ signal }) => {
             if (!mediaItem) throw new Error("Can't fetch undefined media item");
 
-            return inferenceService.getExplanations(datasetIdentifier, mediaItem, taskId, undefined, signal);
+            return await inferenceService.getExplanations(datasetIdentifier, mediaItem, taskId, undefined, signal);
         },
         enabled: enabled && !!mediaItem,
         staleTime: 5 * 60_000,

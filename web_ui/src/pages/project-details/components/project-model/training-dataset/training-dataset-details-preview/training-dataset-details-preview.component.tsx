@@ -103,6 +103,7 @@ export const TrainingDatasetDetailsPreview = ({
         mediaItem: selectedPreviewItem,
         datasetIdentifier,
         taskId,
+        enabled: isPredictionsEnabled,
     });
 
     const predictions = useVisibleAnnotations(predictionsQuery.data?.annotations ?? []);
