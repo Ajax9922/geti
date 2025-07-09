@@ -1,12 +1,13 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
-import { QueryClient, useQueryClient } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { waitFor } from '@testing-library/react';
 
 import { MEDIA_TYPE } from '../../../../core/media/base-media.interface';
 import { createInMemoryMediaService } from '../../../../core/media/services/in-memory-media-service/in-memory-media-service';
 import { MediaService } from '../../../../core/media/services/media-service.interface';
+import { createGetiQueryClient } from '../../../../providers/query-client-provider/query-client-provider.component';
 import { getMockedProjectIdentifier } from '../../../../test-utils/mocked-items-factory/mocked-identifiers';
 import { getMockedImageMediaItem } from '../../../../test-utils/mocked-items-factory/mocked-media';
 import { renderHookWithProviders } from '../../../../test-utils/render-hook-with-providers';
@@ -35,22 +36,19 @@ const renderDeleteMediaMutationHook = ({
 }: {
     mediaService?: MediaService;
 } = {}) => {
-    let queryClient: QueryClient;
+    const queryClient = createGetiQueryClient({
+        addNotification: jest.fn(),
+    });
+    queryClient.setQueriesData = mockSetQueriesData;
 
-    return renderHookWithProviders(
-        () => {
-            queryClient = useQueryClient();
-            queryClient.setQueriesData = mockSetQueriesData;
-
-            return useDeleteMediaMutation();
-        },
-        {
-            wrapper: ({ children }) => (
+    return renderHookWithProviders(useDeleteMediaMutation, {
+        wrapper: ({ children }) => (
+            <QueryClientProvider client={queryClient}>
                 <ProjectProvider projectIdentifier={getMockedProjectIdentifier()}>{children}</ProjectProvider>
-            ),
-            providerProps: { mediaService },
-        }
-    );
+            </QueryClientProvider>
+        ),
+        providerProps: { mediaService },
+    });
 };
 
 const mockedResponse = {
