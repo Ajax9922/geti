@@ -104,8 +104,8 @@ export const QueryClientProvider = ({
     }, [addNotification]);
 
     const queryClient = useMemo(() => {
-        return createGetiQueryClient({ addNotification, defaultQueryOptions });
-    }, [addNotification, defaultQueryOptions]);
+        return createGetiQueryClient({ addNotification: notify.current, defaultQueryOptions });
+    }, [defaultQueryOptions]);
 
     return (
         <TanstackQueryClientProvider client={queryClient}>
