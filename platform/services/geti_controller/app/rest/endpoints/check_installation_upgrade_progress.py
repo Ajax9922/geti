@@ -7,6 +7,7 @@ import time
 import requests
 from fastapi import BackgroundTasks, status
 
+from constants.platform import MAX_RETRIES, NAMESPACE, RETRY_INTERVAL, SERVICE_NAME
 from platform_operations.cluster import (
     is_job_completed_or_failed,
     is_job_running,
@@ -19,12 +20,6 @@ from routers import platform_router
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-# Constants
-SERVICE_NAME = "install-upgrade"
-NAMESPACE = "default"
-MAX_RETRIES = 5
-RETRY_INTERVAL = 5
 
 
 class ProgressManager:
@@ -103,14 +98,14 @@ def wait_for_service_ready(service_endpoint: str, timeout: int = 300, interval: 
     return False
 
 
-def periodic_progress_check(progress_manager: ProgressManager, job_name: str, interval: int = 10) -> None:
+def periodic_progress_check(progress_manager: ProgressManager, interval: int = 10) -> None:
     """Periodically calls the progress endpoint."""
     logger.info("Starting periodic progress check.")
     service_endpoint = f"http://{SERVICE_NAME}.{NAMESPACE}.svc.cluster.local:8000"
     service_ready = False
 
     while True:
-        is_finished, status_message = is_job_completed_or_failed(NAMESPACE, job_name)
+        is_finished, status_message = is_job_completed_or_failed(NAMESPACE)
 
         if is_finished:
             logger.info(f"Job finished: {status_message}")
@@ -132,7 +127,7 @@ def periodic_progress_check(progress_manager: ProgressManager, job_name: str, in
                 )
             break
 
-        if is_job_running(NAMESPACE, job_name):
+        if is_job_running(NAMESPACE):
             logger.info("Job is running")
 
             # Wait for service to be ready if not already checked
@@ -183,12 +178,12 @@ def check_installation_upgrade_progress(background_tasks: BackgroundTasks) -> In
     logger.info("GET check_installation_upgrade_progress request received.")
     load_kube_config()
 
-    if not is_job_running(NAMESPACE, SERVICE_NAME):
+    if not is_job_running(NAMESPACE):
         logger.info("Job not found, waiting for its creation.")
-        wait_for_job_creation(NAMESPACE, SERVICE_NAME)
+        wait_for_job_creation(NAMESPACE)
 
     if not progress_manager.task_started:
-        background_tasks.add_task(periodic_progress_check, progress_manager, SERVICE_NAME)
+        background_tasks.add_task(periodic_progress_check, progress_manager)
         progress_manager.task_started = True
 
     return progress_manager.get_progress()

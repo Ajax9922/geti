@@ -7,6 +7,7 @@ metadata:
   labels:
     app: {{ .Chart.Name }}-ms
 spec:
+  ttlSecondsAfterFinished: 120
   backoffLimit: 3
   template:
     metadata:
@@ -88,6 +89,7 @@ metadata:
     job_type: init
     app: {{ .Chart.Name }}-scheduler
 spec:
+  ttlSecondsAfterFinished: 120
   backoffLimit: 3
   template:
     metadata:
@@ -242,6 +244,7 @@ metadata:
   labels:
     app: {{ .Chart.Name }}-scheduling-policy
 spec:
+  ttlSecondsAfterFinished: 120
   backoffLimit: 3
   template:
     metadata:

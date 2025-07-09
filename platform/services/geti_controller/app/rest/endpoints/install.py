@@ -2,32 +2,16 @@
 # LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
 import logging
-import os
 
 from fastapi import HTTPException, status
 
-from platform_operations.cluster import (
-    check_config_map_exists,
-    create_cluster_role,
-    create_cluster_role_binding,
-    create_job,
-    create_service,
-    create_service_account,
-    deploy_cluster_role,
-    deploy_cluster_role_binding,
-    deploy_job,
-    deploy_service,
-    deploy_service_account,
-    load_kube_config,
-)
+from constants.platform import GETI_REGISTRY, INSTALL_VERSION
+from platform_operations.cluster import check_config_map_exists, deploy_service_job, load_kube_config
 from rest.schema.install import InstallRequest, InstallResponse
 from routers import platform_router
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
-
-GETI_REGISTRY = os.getenv("GETI_REGISTRY")
-INSTALL_VERSION = os.getenv("INSTALL_VERSION")
 
 
 @platform_router.post(
@@ -80,24 +64,7 @@ def install_platform(payload: InstallRequest) -> InstallResponse:
     if check_config_map_exists(name="impt-configuration", namespace="impt"):
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Platform is already installed.")
 
-    se = create_service(name="install-upgrade", namespace="default", selector={"job": "install-upgrade"})
-    sa = create_service_account(name="install-upgrade", namespace="default")
-    cr = create_cluster_role(name="install-upgrade")
-    crb = create_cluster_role_binding(
-        name="install-upgrade", service_account_name="install-upgrade", namespace="default"
-    )
-    deploy_service(se, namespace="default")
-    deploy_service_account(sa, namespace="default")
-    deploy_cluster_role(cr)
-    deploy_cluster_role_binding(crb)
-    job = create_job(
-        name="install-upgrade",
-        registry=GETI_REGISTRY,
-        image=f"{GETI_REGISTRY}/geti/install-upgrade:{INSTALL_VERSION}",
-        manifest_version=INSTALL_VERSION,
-        port=8000,
-    )
-    deploy_job(job, namespace="default")
+    deploy_service_job(registry=GETI_REGISTRY, image_tag=INSTALL_VERSION, manifest_version=INSTALL_VERSION)
 
     logger.info(f"Installation of version {payload.version_number} has started.")
     return InstallResponse(detail=f"Installation of version {payload.version_number} has started.")
