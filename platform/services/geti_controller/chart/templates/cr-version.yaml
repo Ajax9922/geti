@@ -4,7 +4,7 @@ kind: ClusterRole
 metadata:
   name: {{ include "geti-controller.name" . }}-version
 rules:
-{{ .Files.Get "files/rules.yaml" }}
+{{ .Files.Get "files/rules.yaml" -}}
 - apiGroups: [""]
   resources: ["pods", "pods/exec"]  # needed for nvidia device plugin communication (different namespace)
   verbs: ["get", "watch", "list"]

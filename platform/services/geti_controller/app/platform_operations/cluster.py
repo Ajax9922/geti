@@ -1,8 +1,11 @@
 # Copyright (C) 2022-2025 Intel Corporation
 # LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
+import datetime
+import http
 import logging
 import os
+import re
 import time
 
 from kubernetes import client, config
@@ -27,6 +30,9 @@ from kubernetes.client import (
     V1ServicePort,
 )
 from kubernetes.client.rest import ApiException
+from packaging.version import Version
+
+from constants.platform import NAMESPACE, SERVICE_NAME
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -96,7 +102,7 @@ def create_cluster_role(name: str) -> V1ClusterRole:
     return V1ClusterRole(
         metadata=V1ObjectMeta(name=name),
         rules=[
-            V1PolicyRule(api_groups=["helm.cattle.io"], resources=["helmcharts"], verbs=["create", "update"]),
+            V1PolicyRule(api_groups=["helm.cattle.io"], resources=["helmcharts"], verbs=["create", "patch"]),
             V1PolicyRule(api_groups=["batch"], resources=["jobs"], verbs=["list", "watch"]),
             V1PolicyRule(api_groups=[""], resources=["secrets"], verbs=["create", "patch", "update"]),
         ],
@@ -119,7 +125,10 @@ def deploy_service(service: V1Service, namespace: str) -> None:
         v1.create_namespaced_service(namespace=namespace, body=service)
         logger.info(f"Service '{service.metadata.name}' deployed successfully in namespace '{namespace}'.")
     except ApiException as e:
-        logger.error(f"An error occurred: {e}")
+        if e.status == http.HTTPStatus.CONFLICT:
+            logger.warning(f"Service '{service.metadata.name}' already exists, skipping creation.")
+        else:
+            logger.error(f"An error occurred: {e}")
 
 
 def deploy_service_account(service_account: V1ServiceAccount, namespace: str) -> None:
@@ -141,7 +150,10 @@ def deploy_cluster_role(cluster_role: V1ClusterRole) -> None:
         rbac_v1.create_cluster_role(body=cluster_role)
         logger.info(f"ClusterRole '{cluster_role.metadata.name}' deployed successfully.")
     except ApiException as e:
-        logger.error(f"An error occurred: {e}")
+        if e.status == http.HTTPStatus.CONFLICT:
+            logger.warning(f"ClusterRole '{cluster_role.metadata.name}' already exists, skipping creation.")
+        else:
+            logger.error(f"An error occurred: {e}")
 
 
 def deploy_cluster_role_binding(cluster_role_binding: V1ClusterRoleBinding) -> None:
@@ -160,8 +172,9 @@ def create_job(name: str, image: str, registry: str, manifest_version: str, port
     https_proxy = os.getenv("HTTPS_PROXY")
     no_proxy = os.getenv("NO_PROXY") or ""
     image_registry = os.getenv("IMAGE_REGISTRY") or None
+    short_name = name.split("-")[0]
     container = V1Container(
-        name=name,
+        name=short_name,
         image=image,
         image_pull_policy="Always",
         command=["python3"],
@@ -169,7 +182,6 @@ def create_job(name: str, image: str, registry: str, manifest_version: str, port
         env=[
             V1EnvVar(name="GETI_REGISTRY", value=registry),
             V1EnvVar(name="GETI_MANIFEST_VERSION", value=manifest_version),
-            V1EnvVar(name="GETI_INSTALL_MODE", value="install"),
             V1EnvVar(
                 name="DATA_FOLDER",
                 value_from=V1EnvVarSource(
@@ -223,7 +235,7 @@ def create_job(name: str, image: str, registry: str, manifest_version: str, port
 
     pod_spec = V1PodSpec(containers=[container], restart_policy="Never", service_account_name=name)
 
-    pod_template = V1PodTemplateSpec(metadata=V1ObjectMeta(labels={"job": name}), spec=pod_spec)
+    pod_template = V1PodTemplateSpec(metadata=V1ObjectMeta(labels={"direction": short_name}), spec=pod_spec)
 
     job_spec = V1JobSpec(template=pod_template, backoff_limit=0)
 
@@ -240,15 +252,26 @@ def deploy_job(job: V1Job, namespace: str) -> None:
         logger.error(f"An error occurred: {e}")
 
 
-def is_job_completed_or_failed(namespace: str, job_name: str) -> tuple[bool, str]:
+def is_job_completed_or_failed(namespace: str) -> tuple[bool, str]:
     """
     Check if the job is completed or failed.
     Returns (is_finished, status_message)
     """
+    running_jobs = []
+    load_kube_config()
     try:
-        load_kube_config()
         batch_v1 = client.BatchV1Api()
-        job = batch_v1.read_namespaced_job(name=job_name, namespace=namespace)
+        jobs = batch_v1.list_namespaced_job(namespace=namespace)
+        for job in jobs.items:
+            if job.status.active and job.status.active > 0:
+                match = re.search(r"\d{14}", job.metadata.name)
+                if match:
+                    timestamp = match.group()
+                    running_jobs.append((job.metadata.name, timestamp))
+        latest_job = max(running_jobs, key=lambda x: x[1], default=None)
+        logger.debug(f"Latest job in namespace '{namespace}': {latest_job}")
+
+        job = batch_v1.read_namespaced_job(name=latest_job[0], namespace=namespace)
         status = job.status
 
         if status.succeeded is not None and status.succeeded > 0:
@@ -263,19 +286,24 @@ def is_job_completed_or_failed(namespace: str, job_name: str) -> tuple[bool, str
         return False, f"Error checking job status: {e}"
 
 
-def is_job_running(namespace: str, job_name: str) -> bool:
+def is_job_running(namespace: str = "default") -> bool:
     """
     Check if the Kubernetes job is still running.
     """
+    load_kube_config()
+    running_jobs = []
     try:
         batch_v1 = client.BatchV1Api()
-        job = batch_v1.read_namespaced_job(name=job_name, namespace=namespace)
-        status = job.status
-        return status.active is not None and status.active > 0
+        jobs = batch_v1.list_namespaced_job(namespace=namespace)
+        for job in jobs.items:
+            if job.status.active and job.status.active > 0:
+                match = re.search(r"\d{14}", job.metadata.name)
+                if match:
+                    timestamp = match.group()
+                    running_jobs.append((job.metadata.name, timestamp))
+        latest_job = max(running_jobs, key=lambda x: x[1], default=None)
+        return bool(latest_job[0])
     except client.exceptions.ApiException as e:
-        if e.status == 404:
-            logger.info(f"Job '{job_name}' not found in namespace '{namespace}'")
-            return False
         logger.error(f"Failed to get job status: {e}")
         return False
     except Exception as e:
@@ -283,24 +311,62 @@ def is_job_running(namespace: str, job_name: str) -> bool:
         return False
 
 
-def wait_for_job_creation(namespace: str, job_name: str, timeout: int = 300, interval: int = 10) -> None:
+def wait_for_job_creation(namespace: str, timeout: int = 300, interval: int = 10) -> None:
     """
     Waits for the job to be created and ready in the specified namespace.
 
     :param namespace: The namespace where the job should be running.
-    :param job_name: The name of the job to wait for.
     :param timeout: Maximum time to wait for the job creation in seconds.
     :param interval: Time interval between checks in seconds.
     """
-    logger.debug(f"Waiting for job '{job_name}' to be created in namespace '{namespace}'.")
+    logger.debug(f"Waiting for job  to be created in namespace '{namespace}'.")
     start_time = time.time()
 
     while time.time() - start_time < timeout:
-        if is_job_running(namespace, job_name):
-            logger.debug(f"Job '{job_name}' is now running.")
+        if is_job_running(namespace):
+            logger.debug("Job is now running.")
             return
-        logger.debug(f"Job '{job_name}' not found, retrying in {interval} seconds...")
+        logger.debug(f"Job  not found, retrying in {interval} seconds...")
         time.sleep(interval)
 
-    logger.error(f"Timeout reached: Job '{job_name}' was not created within {timeout} seconds.")
-    raise TimeoutError(f"Job '{job_name}' was not created within {timeout} seconds.")
+    logger.error(f"Timeout reached: Job was not created within {timeout} seconds.")
+    raise TimeoutError(f"Job was not created within {timeout} seconds.")
+
+
+def deploy_service_job(
+    name: str = SERVICE_NAME,
+    namespace: str = NAMESPACE,
+    registry: str | None = None,
+    image_tag: str | None = None,
+    manifest_version: str | None = None,
+    port: int = 8000,
+    direction: str = "install",
+) -> None:
+    """
+    Deploys the installation and upgrade job for the platform.
+    This function sets up the necessary Kubernetes resources such as services, service accounts,
+    cluster roles, and bindings, and then deploys the job that performs the installation or upgrade.
+    """
+    current_timestamp = datetime.datetime.now()
+
+    # Format the timestamp as a string
+    timestamp_string = current_timestamp.strftime("%Y%m%d%H%M%S")
+    version = Version(re.match(r"^\d+\.\d+\.\d+", image_tag).group())
+    prepared_name = f"{direction}-job-{version}-{timestamp_string}"
+    load_kube_config()
+    se = create_service(name=name, namespace=namespace, selector={"direction": direction})
+    sa = create_service_account(name=prepared_name, namespace=namespace)
+    cr = create_cluster_role(name=prepared_name)
+    crb = create_cluster_role_binding(name=prepared_name, service_account_name=prepared_name, namespace=namespace)
+    deploy_service(se, namespace=namespace)
+    deploy_service_account(sa, namespace=namespace)
+    deploy_cluster_role(cr)
+    deploy_cluster_role_binding(crb)
+    job = create_job(
+        name=prepared_name,
+        registry=registry,
+        image=f"{registry}/geti/install-upgrade:{image_tag}",
+        manifest_version=manifest_version,
+        port=port,
+    )
+    deploy_job(job, namespace="default")

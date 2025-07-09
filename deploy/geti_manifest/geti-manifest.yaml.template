@@ -13,6 +13,8 @@ spec:
   version: $VERSION
   insecureSkipTLSVerify: true
   chart: "oci://{{ geti_registry }}/geti/helm/geti-namespaces"
+  backOffLimit: 0
+  failurePolicy: abort
 ---
 apiVersion: helm.cattle.io/v1
 kind: HelmChart
@@ -23,6 +25,8 @@ spec:
   chart: "oci://{{ geti_registry }}/geti/helm/reloader"
   version: $VERSION
   targetNamespace: kube-system
+  backOffLimit: 0
+  failurePolicy: abort
 ---
 apiVersion: helm.cattle.io/v1
 kind: HelmChart
@@ -33,6 +37,8 @@ spec:
   chart: "oci://{{ geti_registry }}/geti/helm/geti-pv-creation"
   version: $VERSION
   targetNamespace: impt
+  backOffLimit: 0
+  failurePolicy: abort
   valuesContent: |-
     dataStoragePath: "{{ data_folder }}"
 ---
@@ -45,6 +51,8 @@ spec:
   chart: "oci://{{ geti_registry }}/geti/helm/cert-manager"
   version: $VERSION
   targetNamespace: cert-manager
+  backOffLimit: 0
+  failurePolicy: abort
 ---
 apiVersion: helm.cattle.io/v1
 kind: HelmChart
@@ -65,6 +73,8 @@ spec:
   chart: "oci://{{ geti_registry }}/geti/helm/cert-manager-istio-csr"
   version: $VERSION
   targetNamespace: cert-manager
+  backOffLimit: 0
+  failurePolicy: abort
 ---
 apiVersion: helm.cattle.io/v1
 kind: HelmChart
@@ -75,6 +85,8 @@ spec:
   chart: "oci://{{ geti_registry }}/geti/helm/istio-base"
   version: $VERSION
   targetNamespace: istio-system
+  backOffLimit: 0
+  failurePolicy: abort
 ---
 apiVersion: helm.cattle.io/v1
 kind: HelmChart
@@ -85,6 +97,8 @@ spec:
   chart: "oci://{{ geti_registry }}/geti/helm/istio-istiod"
   version: $VERSION
   targetNamespace: istio-system
+  backOffLimit: 0
+  failurePolicy: abort
   valuesSecrets:
     - name: external-registry
       ignoreUpdates: true
@@ -104,6 +118,8 @@ spec:
   chart: "oci://{{ geti_registry }}/geti/helm/istio-gateway"
   version: $VERSION
   targetNamespace: istio-system
+  backOffLimit: 0
+  failurePolicy: abort
   valuesSecrets:
     - name: external-registry
       ignoreUpdates: true
@@ -124,6 +140,8 @@ spec:
   version: $VERSION
   targetNamespace: impt
   timeout: 20m
+  backOffLimit: 0
+  failurePolicy: abort
   valuesSecrets:
     - name: external-registry
       ignoreUpdates: true
@@ -143,6 +161,8 @@ spec:
   version: $VERSION
   targetNamespace: impt
   timeout: 60m
+  backOffLimit: 0
+  failurePolicy: abort
   valuesSecrets:
     - name: external-registry
       ignoreUpdates: true
@@ -191,6 +211,8 @@ spec:
   version: $VERSION
   targetNamespace: flyte
   timeout: 20m
+  backOffLimit: 0
+  failurePolicy: abort
   valuesSecrets:
     - name: external-registry
       ignoreUpdates: true
