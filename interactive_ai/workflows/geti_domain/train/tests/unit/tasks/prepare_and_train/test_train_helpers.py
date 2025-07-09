@@ -95,4 +95,4 @@ class TestTrainHelpers:
             assert call_args.kwargs["model"] == model
             assert call_args.kwargs["model_status"] == ModelStatus.TRAINED_NO_STATS
 
-        mock_ml_artifacts_adapter.pull_output_configuration.assert_not_called()
+        mock_geti_otx_interface_adapter.pull_output_configuration.assert_called_once()

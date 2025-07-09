@@ -9,6 +9,7 @@ dependencies = [
     "geti-types~=1.0.2",
     "geti-k8s-tools==1.0.0",
     "workflows_common[evaluation, shard-dataset]",
+    "pyyaml~=6.0",
 ]
 
 [tool.uv.sources]

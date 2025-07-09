@@ -232,7 +232,7 @@ class TestMLArtifactsAdapter:
         # Act
         adapter = MLArtifactsAdapter(project_identifier=fxt_project_identifier, job_metadata=fxt_job_metadata)
         adapter.push_input_configuration(
-            model_template_id="dummy_id",
+            model_manifest_id="dummy_id",
             hyper_parameters={"dummy": {"params": 1}},
             export_parameters={"export": [{"a": "b"}]},
             label_schema=fxt_label_schema,
@@ -406,26 +406,18 @@ class TestMLArtifactsAdapter:
         fxt_project_identifier,
         fxt_job_metadata,
         fxt_organization_id,
-        fxt_configurable_parameters_1,
     ) -> None:
         # Arrange
         mock_project_repo.return_value.get_by_id.return_value = fxt_project
         mock_repo.return_value.organization_id = fxt_organization_id
-        mock_repo.return_value.get_by_filename.return_value = json.dumps(
-            convert(
-                config=fxt_configurable_parameters_1,
-                target=dict,
-                enum_to_str=True,
-                id_to_str=True,
-            )
-        ).encode()
+        mock_repo.return_value.get_by_filename.return_value = json.dumps(dummy_advanced_configuration).encode()
 
         # Act
         adapter = MLArtifactsAdapter(project_identifier=fxt_project_identifier, job_metadata=fxt_job_metadata)
-        configuration = adapter.pull_output_configuration()
+        advanced_configuration = adapter.pull_output_configuration()
 
         # Assert
-        assert configuration == fxt_configurable_parameters_1
+        assert advanced_configuration == dummy_advanced_configuration
 
     @patch("jobs_common_extras.experiments.adapters.ml_artifacts.ProjectRepo")
     @patch("jobs_common_extras.experiments.adapters.ml_artifacts.ExperimentsBinaryRepo")
@@ -440,6 +432,14 @@ class TestMLArtifactsAdapter:
         fxt_performance: Performance,
     ) -> None:
         # Arrange
+        dummy_advanced_configuration = [
+            {
+                "key": "optimum_confidence_threshold",
+                "name": "Optimum confidence threshold",
+                "description": "The confidence threshold for ideal predictions",
+                "value": 0.65
+            }
+        ]
         mock_project_repo.return_value.get_by_id.return_value = fxt_project
         mock_repo.return_value.organization_id = fxt_organization_id
         performance_dict = {"dummy": [1.0, 2.0, 3.0]}

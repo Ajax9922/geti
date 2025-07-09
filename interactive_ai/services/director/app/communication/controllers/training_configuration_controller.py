@@ -50,25 +50,29 @@ class TrainingConfigurationRESTController:
             raise TaskNodeNotFoundException(task_node_id=task_id)
 
         if model_id is not None:
-            model_hyperparams_dict, model_storage = ConfigurationService.get_configuration_from_model(
+            model_parameters_dict, model_storage = ConfigurationService.get_configuration_from_model(
                 project_identifier=project_identifier,
                 task_id=task_id,
                 model_id=model_id,
             )
-            if not model_hyperparams_dict:
+            if not model_parameters_dict:
                 model = ModelRepo(model_storage.identifier).get_by_id(model_id)
                 model_hyperparams = ConfigurationsBackwardCompatibility.forward_hyperparameters(
                     legacy_hyperparams=model.configuration.configurable_parameters
                 )
-                model_hyperparams_dict = model_hyperparams.model_dump()
+                model_parameters_dict = model_hyperparams.model_dump()
+            advanced_model_configuration = model_parameters_dict.pop("advanced_model_configuration", None)
             model_config = PartialTrainingConfiguration.model_validate(
                 {
                     "task_id": task_id,
                     "model_manifest_id": model_storage.model_template.model_template_id,
-                    "hyperparameters": model_hyperparams_dict,
+                    "hyperparameters": model_parameters_dict,
                 }
             )
-            return TrainingConfigurationRESTViews.training_configuration_to_rest(training_configuration=model_config)
+            rest_view = TrainingConfigurationRESTViews.training_configuration_to_rest(model_config)
+            if advanced_model_configuration is not None:
+                rest_view["advanced_configuration"] = advanced_model_configuration
+            return rest_view
 
         dataset_size = cls._get_dataset_size(
             project_identifier=project_identifier,

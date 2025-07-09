@@ -136,11 +136,10 @@ class _ModelBuilder:
 def _prepare_s3_bucket(
     project: Project,
     label_schema: LabelSchema,
-    model_template_id: str,
+    model_manifest_id: str,
     input_model: Model | None,
     hyper_parameters: dict,
     export_parameters: dict[str, str | bool] | list[dict[str, str | bool]],
-    optimization_type: ModelOptimizationType = ModelOptimizationType.NONE,
 ) -> None:
     """Prepare files required for model training, optimize.
 
@@ -150,19 +149,18 @@ def _prepare_s3_bucket(
     This is a list of files which is created by this function:
 
     - <root>: metadata.json, project.json
-    - <root>/inputs: .placeholder, config.json, model.pth
+    - <root>/inputs: .placeholder, config.yaml, model.pth
     - <root>/live_metrics: .placeholder
     - <root>/outputs/models: .placeholder
     - <root>/outputs/exportable-codes: .placeholder
     - <root>/outputs/configurations: .placeholder
 
     :param project: Project owning this job
-    :param model_template_id: ID of model template for this job (obtained from CRD)
+    :param model_manifest_id: ID of model template for this job (obtained from CRD)
     :param input_model: Model to use as a checkpoint to reload weights for training.
         If None, training will be from scratch
     :param hyper_parameters: Hyperparameters for this job (obtained from CRD)
     :param export_parameters: Exportparameters for this job (obtained from CRD)
-    :param optimization_type: Model optimization type enum. It is only used for the model optimize job.
     :param label_schema: If not `None`, it is used to create `ClsSubTaskType`
         used to distinguish classification tasks.
         Otherwise, do not add `ClsSubTaskType` value to the configuration file.
@@ -171,10 +169,9 @@ def _prepare_s3_bucket(
     adapter.push_placeholders()
     adapter.push_metadata()
     adapter.push_input_configuration(
-        model_template_id=model_template_id,
+        model_manifest_id=model_manifest_id,
         hyper_parameters=hyper_parameters,
         export_parameters=export_parameters,
-        optimization_type=optimization_type,
         label_schema=label_schema,
     )
     if input_model:
@@ -193,7 +190,7 @@ def _get_export_parameters(
         }:
             export_parameters.append(
                 {
-                    "type": model.model_format.name.lower(),
+                    "format": model.model_format.name.lower(),
                     "output_model_id": str(model.id_),
                     "precision": model.precision[0].name if model.precision else "null",
                     "with_xai": model.has_xai_head,
@@ -292,7 +289,7 @@ def prepare_train(train_data: TrainWorkflowData, dataset: Dataset) -> TrainOutpu
     _prepare_s3_bucket(
         project=project,
         label_schema=label_schema,
-        model_template_id=model_storage.model_template.model_template_id,
+        model_manifest_id=model_storage.model_manifest_id,
         input_model=input_model,
         hyper_parameters=hyper_parameter_dict,
         export_parameters=_get_export_parameters(train_output_models=output_models),
@@ -339,7 +336,10 @@ def finalize_train(
             job_metadata=JobMetadata.from_env_vars(),
         )
 
-        # If succeeded, clean the directory under the mlflowexperiments bucket
+        advanced_model_configuration = adapter.pull_output_configuration()
+        train_output_models.set_advanced_configuration(advanced_model_configuration)
+
+        # If succeeded, clean the directory under the  mlflowexperiments bucket
         if retain_training_artifacts:
             logger.warning(
                 "Parameter `retain_training_artifacts` is set to true, so the bucket will not be cleaned up. "

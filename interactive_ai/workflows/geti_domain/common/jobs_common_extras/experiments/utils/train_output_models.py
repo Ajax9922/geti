@@ -113,6 +113,18 @@ class TrainOutputModels:
         for model in self.get_all_models():
             model_repo.update_model_status(model=model, model_status=model_status)
 
+    def set_advanced_configuration(self, advanced_configuration: dict) -> None:
+        """
+        Set the advanced configuration for all models in the class.
+        This method updates the corresponding attribute in the database.
+
+        :param advanced_configuration: Dictionary containing the advanced configuration to set
+        """
+        model_repo = ModelRepo(self.base.model_storage_identifier)
+
+        for model in self.get_all_models():
+            model_repo.update_advanced_configuration(model, advanced_configuration)
+
     def to_train_output_model_ids(self) -> TrainOutputModelIds:
         def _parse(model: Model | None) -> str | None:
             return str(model.id_) if model is not None else None
@@ -127,9 +139,9 @@ class TrainOutputModels:
 
     @classmethod
     def from_train_output_model_ids(
-        cls,
-        train_output_model_ids: TrainOutputModelIds,
-        model_storage_identifier: ModelStorageIdentifier,
+            cls,
+            train_output_model_ids: TrainOutputModelIds,
+            model_storage_identifier: ModelStorageIdentifier,
     ) -> "TrainOutputModels":
         model_repo = ModelRepo(model_storage_identifier)
 
