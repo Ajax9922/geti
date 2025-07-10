@@ -11,6 +11,8 @@ from tempfile import TemporaryDirectory
 from typing import Any
 
 import numpy as np
+import yaml
+
 from geti_telemetry_tools import unified_tracing
 from geti_types import ProjectIdentifier
 from iai_core.adapters.binary_interpreters import RAWBinaryInterpreter
@@ -211,28 +213,24 @@ class MLArtifactsAdapter:
     @unified_tracing
     def push_input_configuration(
         self,
-        model_template_id: str,
+        model_manifest_id: str,
         hyper_parameters: dict[str, Any],
         export_parameters: dict[str, str] | list[dict[str, str]],
-        optimization_type: ModelOptimizationType = ModelOptimizationType.NONE,
         label_schema: LabelSchema | None = None,
     ) -> None:
-        """Push the configuration file to the inputs directory.
+        """Push the configuration file to the input directory.
 
-        :param model_template_id: ID of model template for this job (obtained from CRD)
+        :param model_manifest_id: ID of model manifest for this job (obtained from CRD)
         :param hyper_parameters: Hyperparameters for this job (obtained from CRD)
         :param export_parameters: Exportparameters for this job (obtained from CRD)
-        :param optimization_type: Model optimization type enum. It is only used for the model optimize job.
-        :param sub_task: Sub task type used to distinguish classification tasks.
-            If `None`, do not add this value to the configuration file.
+        :param label_schema: label schema of the project. Used to determined classification subtask if available.
         """
         config_dict: dict[str, Any] = {}
 
         config_dict["job_type"] = self.job_metadata.type
-        config_dict["model_template_id"] = model_template_id
-        config_dict["hyperparameters"] = hyper_parameters
+        config_dict["model_manifest_id"] = model_manifest_id
         config_dict["export_parameters"] = export_parameters
-        config_dict["optimization_type"] = optimization_type.name
+        config_dict["hyperparameters"] = hyper_parameters
 
         if label_schema:
             config_dict["sub_task_type"] = ClsSubTaskType.create_from_label_schema(label_schema=label_schema).value
@@ -241,8 +239,8 @@ class MLArtifactsAdapter:
             prefix = os.path.join(root, self.dst_path_prefix, "inputs")
             os.makedirs(prefix)
 
-            with open(os.path.join(prefix, "config.json"), "w") as fp:
-                json.dump(obj=config_dict, fp=fp)
+            with open(os.path.join(prefix, "config.yaml"), "w") as fp:
+                yaml.dump(config_dict, fp, default_flow_style=False, sort_keys=False)
 
             # NOTE: This is a workaround to construct
             # jobs/<job-id>/... directory structure in the S3 bucket.
@@ -415,19 +413,20 @@ class MLArtifactsAdapter:
         )
 
     @unified_tracing
-    def pull_output_configuration(self) -> ConfigurableParameters:
+    def pull_output_configuration(self) -> dict:
+        # advanced_config.json contains extra configuration used by OTX that were NOT included in the input config.yaml
         data = _check_bytes_type(
             self.binary_repo.get_by_filename(
                 filename=os.path.join(
                     self.dst_path_prefix,
                     "outputs",
                     "configurations",
-                    "optimized-config.json",
+                    "advanced_config.json",
                 ),
                 binary_interpreter=RAWBinaryInterpreter(),
             )
         )
-        return create(input_config=json.loads(data))
+        return json.loads(data)
 
     @unified_tracing
     def pull_metrics(self) -> Performance | None:

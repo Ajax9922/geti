@@ -4,7 +4,8 @@
 import logging
 from typing import Optional
 
-import iai_core.configuration.helper as otx_config_helper
+from features.feature_flag import FeatureFlag
+from geti_feature_tools import FeatureFlagProvider
 from geti_telemetry_tools.tracing.common import unified_tracing
 from geti_types import ID, ProjectIdentifier
 from iai_core.entities.model import (
@@ -23,8 +24,10 @@ from jobs_common.tasks.utils.progress import publish_metadata_update
 from jobs_common.tasks.utils.secrets import JobMetadata
 from jobs_common.utils.annotation_filter import AnnotationFilter
 from jobs_common_extras.experiments.adapters.ml_artifacts import MLArtifactsAdapter
+from jobs_common_extras.experiments.utils.legacy_configuration_converter import forward_legacy_hyperparameters
 
 from job.models import OptimizationConfig, OptimizationTrainerContext
+
 
 logger = logging.getLogger(__name__)
 
@@ -34,8 +37,18 @@ def _prepare_s3_bucket(
     optimization_cfg: OptimizationConfig,
 ) -> None:
     input_model = optimization_cfg.input_model
-    hyper_parameters = input_model.get_previous_trained_revision().configuration.configurable_parameters
-    hyper_parameter_dict = otx_config_helper.convert(hyper_parameters, target=dict, enum_to_str=True, id_to_str=True)
+
+    ff_enabled = FeatureFlagProvider.is_enabled(FeatureFlag.FEATURE_FLAG_NEW_CONFIGURABLE_PARAMETERS)
+    model_configuration = input_model.get_previous_trained_revision().configuration
+    revamped_hyperparameters = model_configuration.display_only_configuration
+    if ff_enabled and revamped_hyperparameters:
+        # Remove advanced_model_configuration if it exists
+        revamped_hyperparameters.pop("advanced_model_configuration", None)
+        hyper_parameter_dict = revamped_hyperparameters
+    else:
+        legacy_hyper_parameters = model_configuration.configurable_parameters
+        hyperparameters = forward_legacy_hyperparameters(legacy_hyper_parameters)
+        hyper_parameter_dict = hyperparameters.model_dump()
 
     adapter = MLArtifactsAdapter(
         project_identifier=project_identifier,

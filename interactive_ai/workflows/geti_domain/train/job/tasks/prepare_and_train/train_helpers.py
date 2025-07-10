@@ -28,6 +28,7 @@ from jobs_common.exceptions import CommandInitializationFailedException, Trainin
 from jobs_common.features.feature_flag_provider import FeatureFlag, FeatureFlagProvider
 from jobs_common.tasks.utils.secrets import JobMetadata
 from jobs_common_extras.experiments.adapters.ml_artifacts import MLArtifactsAdapter
+from jobs_common_extras.experiments.utils.legacy_configuration_converter import forward_legacy_hyperparameters
 from jobs_common_extras.experiments.utils.train_output_models import TrainOutputModelIds, TrainOutputModels
 
 from job.utils.train_workflow_data import TrainWorkflowData
@@ -217,7 +218,7 @@ def prepare_train(train_data: TrainWorkflowData, dataset: Dataset) -> TrainOutpu
     label_schema = train_data.get_label_schema()
     model_storage = train_data.get_model_storage()
     input_model = train_data.get_input_model()
-    hyper_parameters = train_data.get_hyper_parameters()
+    legacy_hyper_parameters = train_data.get_hyper_parameters()
 
     model_repo = ModelRepo(model_storage.identifier)
     model_version = model_repo.get_latest_successful_version() + 1
@@ -227,7 +228,7 @@ def prepare_train(train_data: TrainWorkflowData, dataset: Dataset) -> TrainOutpu
         model_storage=model_storage,
         dataset=dataset,
         label_schema=label_schema,
-        hyper_parameters=hyper_parameters,
+        hyper_parameters=legacy_hyper_parameters,
         model_version=model_version,
         revamped_hyperparameters=train_data.hyperparameters,
     )
@@ -274,17 +275,16 @@ def prepare_train(train_data: TrainWorkflowData, dataset: Dataset) -> TrainOutpu
         ),
     )
 
-    model_configuration = ModelConfiguration(
-        configurable_parameters=hyper_parameters.data,
-        label_schema=label_schema,
-    )
-
-    hyper_parameter_dict = otx_config_helper.convert(
-        model_configuration.configurable_parameters,
-        target=dict,
-        enum_to_str=True,
-        id_to_str=True,
-    )
+    ff_enabled = FeatureFlagProvider.is_enabled(FeatureFlag.FEATURE_FLAG_NEW_CONFIGURABLE_PARAMETERS)
+    model_configuration = output_base_model.configuration
+    revamped_hyperparameters = model_configuration.display_only_configuration
+    if ff_enabled and revamped_hyperparameters:
+        # Remove advanced_model_configuration if it exists
+        revamped_hyperparameters.pop("advanced_model_configuration", None)
+        hyper_parameter_dict = revamped_hyperparameters
+    else:
+        hyperparameters = forward_legacy_hyperparameters(legacy_hyper_parameters)
+        hyper_parameter_dict = hyperparameters.model_dump()
 
     _prepare_s3_bucket(
         project=project,
