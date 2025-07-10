@@ -9,7 +9,6 @@ from unittest.mock import MagicMock, call, patch
 
 import pytest
 from iai_core.adapters.model_adapter import DataSource
-from iai_core.configuration.helper import convert
 from iai_core.entities.metrics import CurveMetric, LineChartInfo, LineMetricsGroup, Performance, ScoreMetric
 from iai_core.entities.model import Model, ModelFormat, ModelOptimizationType, ModelPrecision, ModelStatus
 from iai_core.repos.model_repo import ModelRepo
@@ -408,6 +407,14 @@ class TestMLArtifactsAdapter:
         fxt_organization_id,
     ) -> None:
         # Arrange
+        dummy_advanced_configuration = [
+            {
+                "key": "optimum_confidence_threshold",
+                "name": "Optimum confidence threshold",
+                "description": "The confidence threshold for ideal predictions",
+                "value": 0.65,
+            }
+        ]
         mock_project_repo.return_value.get_by_id.return_value = fxt_project
         mock_repo.return_value.organization_id = fxt_organization_id
         mock_repo.return_value.get_by_filename.return_value = json.dumps(dummy_advanced_configuration).encode()
@@ -432,14 +439,6 @@ class TestMLArtifactsAdapter:
         fxt_performance: Performance,
     ) -> None:
         # Arrange
-        dummy_advanced_configuration = [
-            {
-                "key": "optimum_confidence_threshold",
-                "name": "Optimum confidence threshold",
-                "description": "The confidence threshold for ideal predictions",
-                "value": 0.65
-            }
-        ]
         mock_project_repo.return_value.get_by_id.return_value = fxt_project
         mock_repo.return_value.organization_id = fxt_organization_id
         performance_dict = {"dummy": [1.0, 2.0, 3.0]}

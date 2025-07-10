@@ -22,8 +22,11 @@ from iai_core.repos.base.model_storage_based_repo import ModelStorageBasedSessio
 from iai_core.repos.base.session_repo import QueryAccessMode
 from iai_core.repos.mappers.cursor_iterator import CursorIterator
 from iai_core.repos.mappers.mongodb_mappers.id_mapper import IDToMongo
-from iai_core.repos.mappers.mongodb_mappers.model_mapper import ModelPurgeInfoToMongo, ModelToMongo, \
-    ModelConfigurationToMongo
+from iai_core.repos.mappers.mongodb_mappers.model_mapper import (
+    ModelConfigurationToMongo,
+    ModelPurgeInfoToMongo,
+    ModelToMongo,
+)
 from iai_core.repos.storage.binary_repos import ModelBinaryRepo
 from iai_core.utils.feature_flags import FeatureFlagProvider
 

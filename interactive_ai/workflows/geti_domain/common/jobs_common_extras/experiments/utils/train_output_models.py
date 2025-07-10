@@ -139,9 +139,9 @@ class TrainOutputModels:
 
     @classmethod
     def from_train_output_model_ids(
-            cls,
-            train_output_model_ids: TrainOutputModelIds,
-            model_storage_identifier: ModelStorageIdentifier,
+        cls,
+        train_output_model_ids: TrainOutputModelIds,
+        model_storage_identifier: ModelStorageIdentifier,
     ) -> "TrainOutputModels":
         model_repo = ModelRepo(model_storage_identifier)
 

@@ -741,4 +741,3 @@ class TestModelRepo:
         # Assert
         config_dict = model_reloaded.configuration.display_only_configuration
         assert config_dict["advanced_configuration"] == advanced_configuration
-
