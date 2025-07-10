@@ -4,8 +4,6 @@
 import logging
 from typing import Optional
 
-from features.feature_flag import FeatureFlag
-from geti_feature_tools import FeatureFlagProvider
 from geti_telemetry_tools.tracing.common import unified_tracing
 from geti_types import ID, ProjectIdentifier
 from iai_core.entities.model import (
@@ -19,6 +17,7 @@ from iai_core.entities.model import (
 )
 from iai_core.entities.model_storage import ModelStorageIdentifier
 from iai_core.repos import CompiledDatasetShardsRepo, ModelRepo, ProjectRepo
+from jobs_common.features.feature_flag_provider import FeatureFlag, FeatureFlagProvider
 from jobs_common.jobs.helpers.project_helpers import lock_project
 from jobs_common.tasks.utils.progress import publish_metadata_update
 from jobs_common.tasks.utils.secrets import JobMetadata
