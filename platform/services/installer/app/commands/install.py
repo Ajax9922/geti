@@ -210,7 +210,7 @@ def monitor_installation_progress(config: InstallationConfig) -> tuple[str, str]
     return status, message
 
 
-def execute_installation(config: InstallationConfig) -> None:  # noqa: C901, RUF100
+def execute_installation(config: InstallationConfig) -> None:  # noqa: C901, RUF100, PLR0915
     """
     Execute platform installation with passed configuration.
     """
