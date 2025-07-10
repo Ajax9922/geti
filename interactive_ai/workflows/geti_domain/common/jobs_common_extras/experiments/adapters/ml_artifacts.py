@@ -12,13 +12,10 @@ from typing import Any
 
 import numpy as np
 import yaml
-
 from geti_telemetry_tools import unified_tracing
 from geti_types import ProjectIdentifier
 from iai_core.adapters.binary_interpreters import RAWBinaryInterpreter
 from iai_core.adapters.model_adapter import DataSource
-from iai_core.configuration.elements.configurable_parameters import ConfigurableParameters
-from iai_core.configuration.helper import create
 from iai_core.entities.label_schema import LabelSchema
 from iai_core.entities.metrics import CurveMetric, LineChartInfo, MetricsGroup, Performance, ScoreMetric
 from iai_core.entities.model import Model, ModelFormat, ModelOptimizationType, ModelStatus

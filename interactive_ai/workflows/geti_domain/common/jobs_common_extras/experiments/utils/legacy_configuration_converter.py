@@ -14,6 +14,7 @@ from geti_configuration_tools.hyperparameters import (
 from iai_core.configuration.elements.configurable_parameters import ConfigurableParameters
 from iai_core.configuration.interfaces import IConfigurableParameterContainer
 
+
 def forward_legacy_hyperparameters(  # noqa: C901
     legacy_hyperparams: Hyperparameters | IConfigurableParameterContainer | ConfigurableParameters,
 ) -> Hyperparameters:

@@ -28,7 +28,6 @@ from jobs_common_extras.experiments.utils.legacy_configuration_converter import 
 
 from job.models import OptimizationConfig, OptimizationTrainerContext
 
-
 logger = logging.getLogger(__name__)
 
 

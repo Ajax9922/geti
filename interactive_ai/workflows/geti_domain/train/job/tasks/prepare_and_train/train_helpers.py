@@ -5,7 +5,6 @@
 
 import logging
 
-import iai_core.configuration.helper as otx_config_helper
 from geti_telemetry_tools import unified_tracing
 from iai_core.configuration.elements.hyper_parameters import HyperParameters
 from iai_core.entities.datasets import Dataset
