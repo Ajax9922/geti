@@ -8,6 +8,7 @@ from pathlib import Path
 from unittest.mock import MagicMock, call, patch
 
 import pytest
+import yaml
 from iai_core.adapters.model_adapter import DataSource
 from iai_core.entities.metrics import CurveMetric, LineChartInfo, LineMetricsGroup, Performance, ScoreMetric
 from iai_core.entities.model import Model, ModelFormat, ModelOptimizationType, ModelPrecision, ModelStatus
@@ -239,12 +240,12 @@ class TestMLArtifactsAdapter:
 
         # Assert
         mock_repo.return_value.save_group.assert_called_once_with(source_directory=str(tmp_path))
-        saved_file_names = set(tmp_path.glob("**/*.json"))
-        expected_path = Path(tmp_path) / "jobs" / fxt_job_metadata.id / "inputs" / "config.json"
+        saved_file_names = set(tmp_path.glob("**/*.yaml"))
+        expected_path = Path(tmp_path) / "jobs" / fxt_job_metadata.id / "inputs" / "config.yaml"
         assert saved_file_names == {expected_path}
 
         with expected_path.open("r") as fp:
-            config_dict = json.load(fp)
+            config_dict = yaml.safe_load(fp)
 
         assert config_dict["sub_task_type"] == ClsSubTaskType.MULTI_CLASS_CLS
 
