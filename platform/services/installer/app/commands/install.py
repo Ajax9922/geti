@@ -292,7 +292,7 @@ def execute_installation(config: InstallationConfig) -> None:  # noqa: C901, RUF
     click.secho("\n" + InstallCmdTexts.installation_succeeded.format(platform_address=platform_address), fg="green")
 
 
-def display_final_confirmation(config: InstallationConfig) -> None:
+def display_final_confirmation(config: InstallationConfig, skip_confirmation_message: bool = False) -> None:
     """
     Display the gathered data and asks for the confirmation.
     """
@@ -317,11 +317,13 @@ def display_final_confirmation(config: InstallationConfig) -> None:
     else:
         click.echo(InstallCmdConfirmationTexts.confirm_data_creation_message.format(path=config.data_folder.value))
 
-    click.echo()
-    click.echo(InstallCmdConfirmationTexts.change_config_message)
+    if not skip_confirmation_message:
+        click.echo()
+        click.echo(InstallCmdConfirmationTexts.change_config_message)
 
-    click.echo()
-    click.confirm(InstallCmdConfirmationTexts.accept_config_prompt, default=True, abort=True)
+        click.echo()
+        click.confirm(InstallCmdConfirmationTexts.accept_config_prompt, default=True, abort=True)
+
 
 @click.command()
 @click.option(
@@ -340,12 +342,16 @@ def display_final_confirmation(config: InstallationConfig) -> None:
 @click.option("--password", callback=is_password_valid, help=InstallCmdTexts.password_help)
 @click.option("--tls-cert-file", type=click.Path(), callback=is_filepath_valid, help=InstallCmdTexts.tls_cert_file_help)
 @click.option("--tls-key-file", type=click.Path(), callback=is_filepath_valid, help=InstallCmdTexts.tls_key_file_help)
+@click.option("--accept-third-party-licenses", is_flag=True, help=InstallCmdTexts.third_party_licenses_help)
+@click.option("--skip-confirmation-message", is_flag=True, help=InstallCmdTexts.skip_confirmation_help)
 def install(
     data_folder: str | None,
     username: str,
     password: str,
     tls_cert_file: str | None = None,
     tls_key_file: str | None = None,
+    accept_third_party_licenses: bool = False,
+    skip_confirmation_message: bool = False,
 ) -> None:
     """
     Install platform.
@@ -362,6 +368,8 @@ def install(
     config.tls_cert_file.value = tls_cert_file
     config.tls_key_file.value = tls_key_file
     run_initial_checks(config=config)
+    if not accept_third_party_licenses:
+        click.confirm(InstallCmdTexts.third_party_licenses_prompt, default=True, abort=True)
     run_installation_checks(config=config)
-    display_final_confirmation(config=config)
+    display_final_confirmation(config=config, skip_confirmation_message=skip_confirmation_message)
     execute_installation(config=config)
