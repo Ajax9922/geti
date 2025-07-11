@@ -1,7 +1,7 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
-import { ComponentProps, MutableRefObject, ReactNode, useEffect } from 'react';
+import { MutableRefObject, useEffect } from 'react';
 
 import { OverlayTriggerState } from 'react-stately';
 
