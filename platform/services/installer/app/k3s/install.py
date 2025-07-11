@@ -24,6 +24,7 @@ import subprocess
 import tempfile
 import time
 from typing import IO
+from urllib.parse import urlparse
 
 import requests
 import yaml
@@ -77,14 +78,25 @@ def _set_local_registry(external_registry_address: str):
     Function called only when the EXTERNAL_REGISTRY_ADDRESS env variable is set.
     :param external_registry_address: Address of the external registry to be used as a replacement for docker.io
     """
+    if not external_registry_address.startswith("http"):
+        external_registry_address = "https://" + external_registry_address
+    parsed_url = urlparse(external_registry_address)
+
     content = f"""mirrors:
   docker.io:
     endpoint:
-      - "{external_registry_address}"
-    configs:
-      "{external_registry_address}":
-         tls:
-           insecure_skip_verify: true """
+      - "{parsed_url.scheme}://{parsed_url.netloc}" """
+
+    if parsed_url.path.strip('/'):
+        content += f"""
+    rewrite:
+      "(.*)" "{parsed_url.path.strip('/')}" """
+
+    content += f"""
+configs:
+  "{parsed_url.scheme}://{parsed_url.netloc}":
+    tls:
+      insecure_skip_verify: true """
 
     os.makedirs(os.path.dirname(K3S_REGISTRIES_FILE_PATH), exist_ok=True)
 
