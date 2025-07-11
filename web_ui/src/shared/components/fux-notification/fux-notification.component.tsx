@@ -9,9 +9,10 @@ import { isFunction } from 'lodash-es';
 
 import { FUX_NOTIFICATION_KEYS } from '../../../core/user-settings/dtos/user-settings.interface';
 import { useDocsUrl } from '../../../hooks/use-docs-url/use-docs-url.hook';
+import { useTutorialEnablement } from '../../hooks/use-tutorial-enablement.hook';
 import { openNewTab } from '../../utils';
 import { onPressLearnMore } from '../tutorials/utils';
-import { getFuxNotificationData } from './utils';
+import { getFuxNotificationData, getStepInfo } from './utils';
 
 import classes from './fux-notification.module.scss';
 
@@ -32,7 +33,9 @@ export const FuxNotification = ({
     onClose,
     children,
 }: CustomPopoverProps) => {
-    const { description, showDismissAll, docUrl } = getFuxNotificationData(settingsKey);
+    const { header, description, docUrl, nextStepId, previousStepId, showDismissAll } =
+        getFuxNotificationData(settingsKey);
+    const { dismissAll, changeTutorial } = useTutorialEnablement(settingsKey);
     const message = children ? children : description;
     const url = useDocsUrl();
     const newDocUrl = customDocUrl ?? (docUrl && `${url}${docUrl}`) ?? undefined;
@@ -78,7 +81,17 @@ export const FuxNotification = ({
             </CustomPopover>
         );
     }
-    // todo: not implemented anywhere yet, to do in next PR
+
+    const onPressNext = () => {
+        nextStepId && changeTutorial(settingsKey, nextStepId);
+    };
+
+    const onPressPrevious = () => {
+        previousStepId && changeTutorial(settingsKey, previousStepId);
+    };
+
+    const stepInfo = getStepInfo(settingsKey);
+
     return (
         <CustomPopover
             ref={triggerRef}

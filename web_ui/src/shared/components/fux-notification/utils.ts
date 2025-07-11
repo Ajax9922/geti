@@ -113,3 +113,33 @@ export const getFuxNotificationData = (fuxNotificationId: string): FuxNotificati
             };
     }
 };
+
+export const getStepInfo = (fuxNotificationId: FUX_NOTIFICATION_KEYS) => {
+    switch (fuxNotificationId) {
+        case FUX_NOTIFICATION_KEYS.ANNOTATOR_TOOLS:
+            return {
+                stepNumber: 1,
+                totalCount: 2,
+            };
+        case FUX_NOTIFICATION_KEYS.ANNOTATOR_ACTIVE_SET:
+            return {
+                stepNumber: 2,
+                totalCount: 2,
+            };
+        case FUX_NOTIFICATION_KEYS.ANNOTATOR_SUCCESSFULLY_TRAINED:
+            return {
+                stepNumber: 1,
+                totalCount: 2,
+            };
+        case FUX_NOTIFICATION_KEYS.ANNOTATOR_CHECK_PREDICTIONS:
+            return {
+                stepNumber: 2,
+                totalCount: 2,
+            };
+        default:
+            return {
+                stepNumber: undefined,
+                totalCount: undefined,
+            };
+    }
+};
