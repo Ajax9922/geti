@@ -90,7 +90,7 @@ def _set_local_registry(external_registry_address: str):
     if parsed_url.path.strip('/'):
         content += f"""
     rewrite:
-      "(.*)" "{parsed_url.path.strip('/')}" """
+      "(.*)": "{parsed_url.path.strip('/')}/$1" """
 
     content += f"""
 configs:
