@@ -13,7 +13,7 @@ interface FuxNotificationData {
     showDismissAll: boolean;
 }
 
-export const getFuxNotificationData = (fuxNotificationId: string): FuxNotificationData => {
+export const getFuxNotificationData = (fuxNotificationId: FUX_NOTIFICATION_KEYS): FuxNotificationData => {
     switch (fuxNotificationId) {
         case FUX_NOTIFICATION_KEYS.ANNOTATE_INTERACTIVELY:
             return {
