@@ -1,7 +1,7 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
-import { Key, useEffect, useRef } from 'react';
+import { Key, useRef } from 'react';
 
 import { useNavigateToAnnotatorRoute } from '@geti/core/src/services/use-navigate-to-annotator-route.hook';
 import { Button, Flex, Item, TabList, TabPanels, Tabs, View } from '@geti/ui';
@@ -11,11 +11,8 @@ import { useOverlayTriggerState } from 'react-stately';
 
 import { Dataset } from '../../../../core/projects/dataset.interface';
 import { isAnomalyDomain } from '../../../../core/projects/domains';
-import { FUX_NOTIFICATION_KEYS } from '../../../../core/user-settings/dtos/user-settings.interface';
-import { useUserGlobalSettings } from '../../../../core/user-settings/hooks/use-global-settings.hook';
-import { usePrevious } from '../../../../hooks/use-previous/use-previous.hook';
 import { TooltipWithDisableButton } from '../../../../shared/components/custom-tooltip/tooltip-with-disable-button';
-import { FuxNotification } from '../../../../shared/components/fux-notification/fux-notification.component';
+import { AnnotateInteractivelyNotification } from '../../../../shared/components/fux-notification/notifications/annotate-interactively-notification.component';
 import { TabItem } from '../../../../shared/components/tabs/tabs.interface';
 import { TruncatedText } from '../../../../shared/components/truncated-text/truncated-text.component';
 import { useActiveTab } from '../../../../shared/hooks/use-active-tab.hook';
@@ -33,7 +30,6 @@ import { DATASET_TABS_TO_PATH, DatasetChapters, NO_MEDIA_MESSAGE } from './utils
 import classes from './project-dataset.module.scss';
 
 export const DatasetTabPanel = ({ dataset }: { dataset: Dataset }) => {
-    const settings = useUserGlobalSettings();
     const navigate = useNavigate();
     const { media } = useMedia();
     const selectedDataset = dataset;
@@ -67,24 +63,6 @@ export const DatasetTabPanel = ({ dataset }: { dataset: Dataset }) => {
 
     const triggerRef = useRef(null);
     const fuxState = useOverlayTriggerState({});
-    const isFuxNotificationEnabled = settings.config[FUX_NOTIFICATION_KEYS.ANNOTATE_INTERACTIVELY]?.isEnabled;
-    const prevFuxEnabled = usePrevious(isFuxNotificationEnabled);
-
-    useEffect(() => {
-        if (isFuxNotificationEnabled && prevFuxEnabled !== isFuxNotificationEnabled) {
-            fuxState.open();
-        } else if (!isFuxNotificationEnabled && prevFuxEnabled !== isFuxNotificationEnabled) {
-            fuxState.close();
-        }
-    }, [fuxState, isFuxNotificationEnabled, prevFuxEnabled]);
-
-    const handleCloseNotification = () => {
-        isFuxNotificationEnabled &&
-            settings.saveConfig({
-                ...settings.config,
-                [FUX_NOTIFICATION_KEYS.ANNOTATE_INTERACTIVELY]: { isEnabled: false },
-            });
-    };
 
     useOpenNotificationToast();
 
@@ -136,13 +114,7 @@ export const DatasetTabPanel = ({ dataset }: { dataset: Dataset }) => {
                                     </Button>
                                 </TooltipWithDisableButton>
                                 {annotateButtonText === 'Annotate interactively' && !isAnnotatorDisabled && (
-                                    <FuxNotification
-                                        settingsKey={FUX_NOTIFICATION_KEYS.ANNOTATE_INTERACTIVELY}
-                                        triggerRef={triggerRef}
-                                        state={fuxState}
-                                        placement={'top right'}
-                                        onClose={handleCloseNotification}
-                                    />
+                                    <AnnotateInteractivelyNotification triggerRef={triggerRef} state={fuxState} />
                                 )}
                             </View>
                         </Flex>
