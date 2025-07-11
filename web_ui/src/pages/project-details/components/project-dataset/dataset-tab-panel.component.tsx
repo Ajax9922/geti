@@ -1,7 +1,7 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
-import { Key } from 'react';
+import { Key, useEffect, useRef } from 'react';
 
 import { useNavigateToAnnotatorRoute } from '@geti/core/src/services/use-navigate-to-annotator-route.hook';
 import { Button, Flex, Item, TabList, TabPanels, Tabs, View } from '@geti/ui';
@@ -12,8 +12,10 @@ import { useOverlayTriggerState } from 'react-stately';
 import { Dataset } from '../../../../core/projects/dataset.interface';
 import { isAnomalyDomain } from '../../../../core/projects/domains';
 import { FUX_NOTIFICATION_KEYS } from '../../../../core/user-settings/dtos/user-settings.interface';
-import { CoachMark } from '../../../../shared/components/coach-mark/coach-mark.component';
+import { useUserGlobalSettings } from '../../../../core/user-settings/hooks/use-global-settings.hook';
+import { usePrevious } from '../../../../hooks/use-previous/use-previous.hook';
 import { TooltipWithDisableButton } from '../../../../shared/components/custom-tooltip/tooltip-with-disable-button';
+import { FuxNotification } from '../../../../shared/components/fux-notification/fux-notification.component';
 import { TabItem } from '../../../../shared/components/tabs/tabs.interface';
 import { TruncatedText } from '../../../../shared/components/truncated-text/truncated-text.component';
 import { useActiveTab } from '../../../../shared/hooks/use-active-tab.hook';
@@ -31,6 +33,7 @@ import { DATASET_TABS_TO_PATH, DatasetChapters, NO_MEDIA_MESSAGE } from './utils
 import classes from './project-dataset.module.scss';
 
 export const DatasetTabPanel = ({ dataset }: { dataset: Dataset }) => {
+    const settings = useUserGlobalSettings();
     const navigate = useNavigate();
     const { media } = useMedia();
     const selectedDataset = dataset;
@@ -60,6 +63,27 @@ export const DatasetTabPanel = ({ dataset }: { dataset: Dataset }) => {
             datasetIdentifier: { ...projectIdentifier, datasetId: selectedDataset.id },
             active: selectedDataset.useForTraining && !isAnomalyProject,
         });
+    };
+
+    const triggerRef = useRef(null);
+    const fuxState = useOverlayTriggerState({});
+    const isFuxNotificationEnabled = settings.config[FUX_NOTIFICATION_KEYS.ANNOTATE_INTERACTIVELY]?.isEnabled;
+    const prevFuxEnabled = usePrevious(isFuxNotificationEnabled);
+
+    useEffect(() => {
+        if (isFuxNotificationEnabled && prevFuxEnabled !== isFuxNotificationEnabled) {
+            fuxState.open();
+        } else if (!isFuxNotificationEnabled && prevFuxEnabled !== isFuxNotificationEnabled) {
+            fuxState.close();
+        }
+    }, [fuxState, isFuxNotificationEnabled, prevFuxEnabled]);
+
+    const handleCloseNotification = () => {
+        isFuxNotificationEnabled &&
+            settings.saveConfig({
+                ...settings.config,
+                [FUX_NOTIFICATION_KEYS.ANNOTATE_INTERACTIVELY]: { isEnabled: false },
+            });
     };
 
     useOpenNotificationToast();
@@ -99,21 +123,9 @@ export const DatasetTabPanel = ({ dataset }: { dataset: Dataset }) => {
                         <Flex gap='size-100'>
                             {isAnomalyProject && <ExportImportDatasetButtons hasMediaItems={hasMediaItems} />}
                             <View>
-                                {annotateButtonText === 'Annotate interactively' && !isAnnotatorDisabled && (
-                                    <CoachMark
-                                        settingsKey={FUX_NOTIFICATION_KEYS.ANNOTATE_INTERACTIVELY}
-                                        styles={{
-                                            position: 'absolute',
-                                            zIndex: '5',
-                                            top: '-58px',
-                                            right: '55px',
-                                            maxWidth: '100%',
-                                        }}
-                                    />
-                                )}
-
                                 <TooltipWithDisableButton activeTooltip={tooltipText} disabledTooltip={tooltipText}>
                                     <Button
+                                        ref={triggerRef}
                                         id={'annotate-button-id'}
                                         variant={'accent'}
                                         onPress={handleGoToAnnotator}
@@ -123,6 +135,15 @@ export const DatasetTabPanel = ({ dataset }: { dataset: Dataset }) => {
                                         <TruncatedText>{annotateButtonText}</TruncatedText>
                                     </Button>
                                 </TooltipWithDisableButton>
+                                {annotateButtonText === 'Annotate interactively' && !isAnnotatorDisabled && (
+                                    <FuxNotification
+                                        settingsKey={FUX_NOTIFICATION_KEYS.ANNOTATE_INTERACTIVELY}
+                                        triggerRef={triggerRef}
+                                        state={fuxState}
+                                        placement={'top right'}
+                                        onClose={handleCloseNotification}
+                                    />
+                                )}
                             </View>
                         </Flex>
                     </Flex>
