@@ -3,14 +3,27 @@
 
 import { ComponentProps, MutableRefObject, ReactNode } from 'react';
 
-import { ActionButton, Button, CustomPopover, Divider, Flex, Popover, Text, View } from '@geti/ui';
-import { Close } from '@geti/ui/icons';
-import { isFunction } from 'lodash-es';
+import {
+    ActionButton,
+    Button,
+    ButtonGroup,
+    CustomPopover,
+    Divider,
+    Flex,
+    Item,
+    Menu,
+    MenuTrigger,
+    Popover,
+    Text,
+    View,
+} from '@geti/ui';
+import { ChevronLeft, Close, MoreMenu } from '@geti/ui/icons';
+import { isEmpty, isFunction } from 'lodash-es';
 
 import { FUX_NOTIFICATION_KEYS } from '../../../core/user-settings/dtos/user-settings.interface';
+import { useUserGlobalSettings } from '../../../core/user-settings/hooks/use-global-settings.hook';
 import { useDocsUrl } from '../../../hooks/use-docs-url/use-docs-url.hook';
 import { useTutorialEnablement } from '../../hooks/use-tutorial-enablement.hook';
-import { openNewTab } from '../../utils';
 import { onPressLearnMore } from '../tutorials/utils';
 import { getFuxNotificationData, getStepInfo } from './utils';
 
@@ -33,12 +46,18 @@ export const FuxNotification = ({
     onClose,
     children,
 }: CustomPopoverProps) => {
+    const settings = useUserGlobalSettings();
     const { header, description, docUrl, nextStepId, previousStepId, showDismissAll } =
         getFuxNotificationData(settingsKey);
     const { dismissAll, changeTutorial } = useTutorialEnablement(settingsKey);
     const message = children ? children : description;
     const url = useDocsUrl();
     const newDocUrl = customDocUrl ?? (docUrl && `${url}${docUrl}`) ?? undefined;
+
+    if (isEmpty(message)) {
+        return <></>;
+    }
+
     if (!showDismissAll) {
         return (
             <CustomPopover
@@ -101,35 +120,77 @@ export const FuxNotification = ({
             UNSAFE_className={classes.container}
             isKeyboardDismissDisabled
         >
-            <Flex direction={'row'} gap={'size-200'} alignItems={'center'}>
-                <Text order={1}>{children}</Text>
+            <View UNSAFE_className={classes.dialogWrapper}>
+                <Flex UNSAFE_className={classes.coachMarkHeader}>
+                    {header && <View UNSAFE_className={classes.header}>{header}</View>}
+                    {stepInfo.stepNumber && stepInfo.totalCount && (
+                        <Text UNSAFE_className={classes.steps}>
+                            {stepInfo.stepNumber} of {stepInfo.totalCount}
+                        </Text>
+                    )}
+                </Flex>
 
-                {newDocUrl && (
-                    <Button
-                        order={2}
-                        variant='primary'
-                        UNSAFE_style={{ border: 'none' }}
-                        onPress={() => openNewTab(newDocUrl)}
-                    >
-                        Learn more
-                    </Button>
-                )}
+                <Text UNSAFE_className={classes.dialogDescription}>{message}</Text>
 
-                <Divider order={3} orientation='vertical' size='S' UNSAFE_className={classes.divider} />
+                <ButtonGroup UNSAFE_className={classes.dialogButtonGroup}>
+                    <Flex gap={'size-100'}>
+                        {previousStepId && (
+                            <Button
+                                variant='primary'
+                                aria-label='Back button'
+                                id={`${settingsKey}-previous-button-id`}
+                                onPress={onPressPrevious}
+                                UNSAFE_className={classes.backButton}
+                            >
+                                <ChevronLeft />
+                            </Button>
+                        )}
+                        {docUrl && (
+                            <Button
+                                variant='primary'
+                                id={`${settingsKey}-learn-more-button-id`}
+                                onPress={() => {
+                                    onPressLearnMore(newDocUrl);
+                                }}
+                            >
+                                Learn more
+                            </Button>
+                        )}
+                        {nextStepId ? (
+                            <Button variant='primary' id='next-button-id' onPress={onPressNext}>
+                                Next
+                            </Button>
+                        ) : (
+                            <Button
+                                variant='primary'
+                                isPending={settings.isSavingConfig}
+                                id='dismiss-button-id'
+                                onPress={close}
+                                aria-label='Dismiss help dialog'
+                            >
+                                Dismiss
+                            </Button>
+                        )}
+                    </Flex>
 
-                <ActionButton
-                    isQuiet
-                    order={4}
-                    onPress={() => {
-                        state.close();
-                        isFunction(onClose) && onClose();
-                    }}
-                    aria-label={'close first user experience notification'}
-                    UNSAFE_className={classes.close}
-                >
-                    <Close />
-                </ActionButton>
-            </Flex>
+                    <MenuTrigger>
+                        <ActionButton
+                            isQuiet
+                            id={`${settingsKey}-more-btn-id`}
+                            aria-label='Open to dismiss all help dialogs'
+                            data-testid={`${settingsKey}-more-btn-id`}
+                            UNSAFE_className={classes.moreMenu}
+                        >
+                            <MoreMenu />
+                        </ActionButton>
+                        <Menu id={`${settingsKey}-tutorial-card-menu-id`} onAction={dismissAll}>
+                            <Item key={settingsKey} test-id={`${settingsKey}-dismiss-all-id`} textValue='Dismiss all'>
+                                Dismiss all
+                            </Item>
+                        </Menu>
+                    </MenuTrigger>
+                </ButtonGroup>
+            </View>
         </CustomPopover>
     );
 };
