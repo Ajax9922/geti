@@ -5,9 +5,9 @@ from pathlib import Path
 from unittest.mock import patch
 
 import pytest
-from otx.algo.classification.vit import VisionTransformerForMulticlassCls
-from otx.core.types.export import OTXExportFormatType
-from otx.core.types.label import LabelInfo
+from otx.models import VisionTransformer
+from otx.types.export import OTXExportFormatType
+from otx.types.label import LabelInfo
 from scripts.optimize import optimize
 from scripts.utils import OTXConfig
 
@@ -20,7 +20,7 @@ def fxt_config(fxt_dir_assets):
 
 @pytest.fixture()
 def fxt_openvino_model(tmpdir):
-    model = VisionTransformerForMulticlassCls(LabelInfo.from_num_classes(3))
+    model = VisionTransformer(LabelInfo.from_num_classes(3), task="multi_class")
 
     export_dir = Path(tmpdir)
     checkpoint_path = model.export(
@@ -38,7 +38,7 @@ def fxt_openvino_model(tmpdir):
 @pytest.fixture()
 def fxt_exportable_code_side_effect(tmpdir):
     def side_effect(*args, **kwargs):
-        model = VisionTransformerForMulticlassCls(LabelInfo.from_num_classes(3))
+        model = VisionTransformer(LabelInfo.from_num_classes(3), task="multi_class")
 
         export_dir = Path(tmpdir) / "export"
         checkpoint_path = model.export(

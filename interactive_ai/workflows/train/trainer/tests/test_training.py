@@ -6,8 +6,8 @@ from unittest.mock import patch
 
 import pytest
 from lightning import Trainer
-from otx.algo.classification.vit import VisionTransformerForMulticlassCls
-from otx.core.types.label import LabelInfo
+from otx.models import VisionTransformer
+from otx.types.label import LabelInfo
 from scripts.train import train
 from scripts.utils import OTXConfig
 
@@ -23,7 +23,7 @@ def fxt_checkpoint(request, tmpdir, monkeypatch: pytest.MonkeyPatch):
     if not request.param:
         return None
 
-    model = VisionTransformerForMulticlassCls(LabelInfo.from_num_classes(3))
+    model = VisionTransformer(LabelInfo.from_num_classes(3), task="multi_class")
     trainer = Trainer(max_steps=0)
 
     monkeypatch.setattr(trainer.strategy, "_lightning_module", model)

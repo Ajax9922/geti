@@ -12,9 +12,9 @@ from enum import Enum
 from functools import wraps
 from typing import TYPE_CHECKING
 
-from otx.core.types.export import OTXExportFormatType
-from otx.core.types.precision import OTXPrecisionType
-from otx.core.types.task import OTXTaskType
+from otx.types.export import OTXExportFormatType
+from otx.types.precision import OTXPrecisionType
+from otx.types.task import OTXTaskType
 from otx.tools.converter import TEMPLATE_ID_DICT, ConfigConverter
 
 if TYPE_CHECKING:
