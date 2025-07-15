@@ -9,7 +9,7 @@ dependencies = [
     "numpy==1.26.4",
     "requests==2.32.3",
     "tqdm==4.67.1",
-    "otx[base]==2.4.6",
+    "otx@git+https://github.com/open-edge-platform/training_extensions@4b7313476a870e99632d6a254850880708fa7764",
     "geti-kafka-tools",
     "geti-telemetry-tools[telemetry,kafka]",
 ]
@@ -44,6 +44,8 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["trainer"]
 
+[tool.hatch.metadata]
+allow-direct-references = true
 
 [tool.ruff]
 target-version = "py310"

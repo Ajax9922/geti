@@ -35,6 +35,10 @@ RUN apt-get purge -y --auto-remove gpg wget && \
     /tmp/* \
     /usr/share/man/* /usr/share/doc/*
 
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    git
+
 # Copy the service dependencies
 COPY --link --from=libs . libs
 
