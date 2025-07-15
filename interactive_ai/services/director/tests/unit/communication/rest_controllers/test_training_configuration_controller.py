@@ -179,6 +179,16 @@ class TestTrainingConfigurationController:
         expected_rest_view = TrainingConfigurationRESTViews.training_configuration_to_rest(
             fxt_partial_training_configuration_manifest_level
         )
+        advanced_model_configs = [
+            {
+                "key": "optimum_confidence_threshold",
+                "name": "Optimum confidence threshold",
+                "description": "The confidence threshold for ideal predictions",
+                "value": 0.65,
+            }
+        ]
+        expected_rest_view["advanced_configuration"] = advanced_model_configs
+        model_hyperparams_dict["advanced_model_configuration"] = advanced_model_configs
 
         # Act
         with patch.object(
