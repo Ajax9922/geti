@@ -7,6 +7,7 @@ from unittest.mock import patch
 import pytest
 from lightning import Trainer
 from otx.models import VisionTransformer
+from otx.backend.native.models.base import DataInputParams
 from otx.types.label import LabelInfo
 from scripts.train import train
 from scripts.utils import OTXConfig
@@ -14,8 +15,8 @@ from scripts.utils import OTXConfig
 
 @pytest.fixture()
 def fxt_config(fxt_dir_assets):
-    config_file_path = fxt_dir_assets / "training_config.json"
-    return OTXConfig.from_json_file(config_file_path)
+    config_file_path = fxt_dir_assets / "training_config.yaml"
+    return OTXConfig.from_yaml_file(config_file_path)
 
 
 @pytest.fixture(params=[True, False], ids=["has_ckpt", "no_ckpt"])
@@ -23,7 +24,11 @@ def fxt_checkpoint(request, tmpdir, monkeypatch: pytest.MonkeyPatch):
     if not request.param:
         return None
 
-    model = VisionTransformer(LabelInfo.from_num_classes(3), task="multi_class")
+    model = VisionTransformer(label_info=LabelInfo.from_num_classes(3),
+                              task="multi_class",
+                              data_input_params=DataInputParams(input_size=[224, 224],
+                                                                mean=[123.675, 116.28, 103.53],
+                                                                std=[58.395, 57.12, 57.375]))
     trainer = Trainer(max_steps=0)
 
     monkeypatch.setattr(trainer.strategy, "_lightning_module", model)
@@ -35,8 +40,8 @@ def fxt_checkpoint(request, tmpdir, monkeypatch: pytest.MonkeyPatch):
     return checkpoint_path
 
 
-@patch("metrics.upload_model_artifact")
-@patch("otx_io.upload_model_artifact")
+@patch("scripts.metrics.upload_model_artifact")
+@patch("scripts.otx_io.upload_model_artifact")
 @patch("scripts.train.load_trained_model_weights")
 def test_train(
     mock_load_trained_model_weights,

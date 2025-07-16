@@ -6,10 +6,10 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
-from otx.tools.converter import ConfigConverter
-from otx_io import load_trained_model_weights, save_openvino_exported_model
-from progress_updater import ProgressUpdater, TrainingStage
-from utils import OptimizationType, OTXConfig, PrecisionType, logging_elapsed_time
+from otx.backend.openvino.engine import OVEngine
+from .otx_io import load_trained_model_weights, save_openvino_exported_model
+from .progress_updater import ProgressUpdater, TrainingStage
+from .utils import OptimizationType, OTXConfig, PrecisionType, logging_elapsed_time
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -45,12 +45,7 @@ def optimize(
     )
     progress_updater.update_progress(0.0)
 
-    otx2_config = config.to_otx2_config(work_dir=work_dir)
-    engine, _ = ConfigConverter.instantiate(
-        config=otx2_config,
-        work_dir=str(work_dir / "otx-workspace"),
-        data_root=str(dataset_dir),
-    )
+    ov_engine = OVEngine()
 
     checkpoint = load_trained_model_weights(work_dir=work_dir, optimize=True)
     if checkpoint is None:

@@ -6,16 +6,16 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 
-from metrics import OTXMetricsLogger
-from otx.tools.converter import ConfigConverter
-from otx_io import (
+from .metrics import OTXMetricsLogger
+from otx.tools.converter import GetiConfigConverter
+from .otx_io import (
     load_trained_model_weights,
     save_exported_model,
     save_openvino_exported_model,
     save_trained_model_weights,
 )
-from progress_updater import ProgressUpdater, ProgressUpdaterCallback, TrainingStage
-from utils import ExportFormat, OTXConfig, logging_elapsed_time
+from .progress_updater import ProgressUpdater, ProgressUpdaterCallback, TrainingStage
+from .utils import ExportFormat, OTXConfig, logging_elapsed_time
 
 logger = logging.getLogger("otx_job")
 
@@ -28,8 +28,8 @@ def train(
     resume: bool = False,
 ) -> None:
     """Execute OTX model training."""
-    otx2_config = config.to_otx2_config(work_dir=work_dir)
-    engine, train_kwargs = ConfigConverter.instantiate(
+    otx2_config = config.to_otx2_config()
+    engine, train_kwargs = GetiConfigConverter.instantiate(
         config=otx2_config,
         work_dir=str(work_dir / "otx-workspace"),
         data_root=str(dataset_dir),
