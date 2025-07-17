@@ -1,0 +1,36 @@
+name: Spectral OpenAPI Validation
+
+on:
+  push:
+    branches:
+      - main
+      - release**
+    paths:
+      - 'docs/rest_api/**'
+      - '.github/workflows/spectral-openapi-validation.yml'
+  pull_request:
+    branches:
+      - main
+      - release**
+    paths:
+      - 'docs/rest_api/**'
+      - '.github/workflows/spectral-openapi-validation.yml'
+
+jobs:
+  validate:
+    name: Validate OpenAPI with Spectral
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Spectral
+        run: npm install -g @stoplight/spectral-cli
+
+      - name: Validate OpenAPI with Spectral
+        run: |
+          find docs/rest_api -type f \( -name "*.yaml" -o -name "*.yml" -o -name "*.json" \) -exec spectral lint {} --ruleset .spectral.json --verbose \;
