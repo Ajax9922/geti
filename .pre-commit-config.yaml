@@ -35,3 +35,14 @@ repos:
   - id: swagger-validation
     args: ["validate", "docs/rest_api/openapi.yaml"]
     files: "docs\/rest_api\/.*(json|yaml|yml)|interactive_ai\/services\/api\/schemas\/.*(json|yaml|yml)"
+
+- repo: local
+  hooks:
+  - id: spectral-lint
+    name: Spectral OpenAPI linting
+    language: node
+    additional_dependencies: ["@stoplight/spectral-cli@6.11.0"]
+    entry: spectral lint
+    args: ["--ruleset", ".spectral.json", "--verbose"]
+    files: "docs\/rest_api\/.*(json|yaml|yml)"
+    types: [file]
