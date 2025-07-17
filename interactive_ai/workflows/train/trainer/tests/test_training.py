@@ -80,10 +80,6 @@ def test_train(
         "model_fp16_non-xai.bin",
         # ONNX FP32
         "model_fp32_non-xai.onnx",
-        # Exportable codes
-        "exportable-code_fp32_xai.whl",
-        "exportable-code_fp32_non-xai.whl",
-        "exportable-code_fp16_non-xai.whl",
     }
     mock_metrics_upload_model_artifact.assert_called_once_with(
         src_filepath=Path(tmpdir) / "metrics.json", dst_filepath=Path("live_metrics/metrics.json")

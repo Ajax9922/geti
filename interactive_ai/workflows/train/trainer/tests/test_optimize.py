@@ -94,6 +94,4 @@ def test_optimize(
         # OPENVINO INT8
         "model_int8-pot_non-xai.xml",
         "model_int8-pot_non-xai.bin",
-        # Exportable codes
-        "exportable-code_int8-pot_non-xai.whl",
     }

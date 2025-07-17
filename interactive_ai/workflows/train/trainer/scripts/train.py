@@ -71,7 +71,6 @@ def train(
                 export_format=export_param.to_otx2_export_format(),
                 export_precision=export_param.to_otx2_precision(),
                 explain=export_param.with_xai,
-                export_demo_package=True,
             )
             export_dir = exported_path.parent
 
