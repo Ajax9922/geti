@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 
 from otx.backend.openvino.engine import OVEngine
 from otx.tools.converter import GetiConfigConverter
-from otx_io import load_trained_model_weights, save_openvino_exported_model
+from otx_io import load_trained_model_weights, save_exported_model
 from progress_updater import ProgressUpdater, TrainingStage
 from utils import OptimizationType, OTXConfig, PrecisionType, logging_elapsed_time
 
@@ -56,11 +56,9 @@ def optimize(
     optimized_path = ov_engine.optimize()
 
     logger.debug("Optimization is completed. Saving optimized models.")
-    save_openvino_exported_model(
-        work_dir=work_dir,
-        export_param=export_param,
-        exported_path=optimized_path,
+    save_exported_model(
         export_dir=optimized_path.parent,
+        export_param=export_param,
     )
 
     logger.debug("Optimized model is saved.")

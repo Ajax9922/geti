@@ -11,7 +11,6 @@ from otx_io import (
     load_trained_model_weights,
     save_checkpoint_sync,
     save_exported_model,
-    save_openvino_exported_model,
     save_trained_model_weights,
     upload_error_log,
     upload_full_log,
@@ -293,27 +292,6 @@ def test_download_model_artifact_not_presigned(
     mock_get_object_name_base.assert_called()
     client.download_file.assert_called_once_with(
         bucket_name="bucket", relative_path=Path("object_name_base/artifact_name"), file_path=Path("destination_path")
-    )
-
-
-@patch("otx_io.save_exported_model")
-def test_save_openvino_exported_model(
-    mock_save_exported_model,
-) -> None:
-    # Arrange
-    export_param = MagicMock()
-
-    # Act
-    save_openvino_exported_model(
-        work_dir=Path("work_dir"),
-        export_param=export_param,
-        exported_path=Path("exported_path"),
-        export_dir=Path("export_dir"),
-    )
-
-    mock_save_exported_model.assert_called_once_with(
-        export_dir=Path("export_dir"),
-        export_param=export_param,
     )
 
 

@@ -240,20 +240,6 @@ def download_model_artifact(
     return Path(file_path)
 
 
-def save_openvino_exported_model(
-    work_dir: Path,
-    export_param: ExportParameter,
-    exported_path: Path,
-    export_dir: Path,
-) -> None:
-    """Save OpenVINO exported model and exportable code at the same time."""
-
-    save_exported_model(
-        export_dir=export_dir,
-        export_param=export_param,
-    )
-
-
 def save_trained_model_weights(
     best_checkpoint: Path,
     force_non_xai: bool = False,
