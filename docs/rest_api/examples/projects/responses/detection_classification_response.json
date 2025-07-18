@@ -107,7 +107,7 @@
                         "hotkey": "",
                         "id": "62946c62003ddb3967f14763",
                         "is_empty": false,
-                        "is_anomolous": false,
+                        "is_anomalous": false,
                         "name": "Spades",
                         "parent_id": "62946c62003ddb3967f1475b"
                     },
@@ -117,7 +117,7 @@
                         "hotkey": "",
                         "id": "62946c62003ddb3967f14764",
                         "is_empty": false,
-                        "is_anomolous": false,
+                        "is_anomalous": false,
                         "name": "Clubs",
                         "parent_id": "62946c62003ddb3967f1475b"
                     },
@@ -127,7 +127,7 @@
                         "hotkey": "",
                         "id": "62946c62003ddb3967f14765",
                         "is_empty": false,
-                        "is_anomolous": false,
+                        "is_anomalous": false,
                         "name": "Seven",
                         "parent_id": "62946c62003ddb3967f1475b"
                     },
@@ -137,7 +137,7 @@
                         "hotkey": "",
                         "id": "62946c62003ddb3967f14767",
                         "is_empty": false,
-                        "is_anomolous": false,
+                        "is_anomalous": false,
                         "name": "Eight",
                         "parent_id": "62946c62003ddb3967f1475b"
                     },
@@ -147,7 +147,7 @@
                         "hotkey": "",
                         "id": "62946c62003ddb3967f14768",
                         "is_empty": false,
-                        "is_anomolous": false,
+                        "is_anomalous": false,
                         "name": "Nine",
                         "parent_id": "62946c62003ddb3967f1475b"
                     },
@@ -157,7 +157,7 @@
                         "hotkey": "",
                         "id": "62946c62003ddb3967f14769",
                         "is_empty": false,
-                        "is_anomolous": false,
+                        "is_anomalous": false,
                         "name": "Ten",
                         "parent_id": "62946c62003ddb3967f1475b"
                     },
@@ -167,7 +167,7 @@
                         "hotkey": "",
                         "id": "62946c62003ddb3967f1476a",
                         "is_empty": false,
-                        "is_anomolous": false,
+                        "is_anomalous": false,
                         "name": "Jack",
                         "parent_id": "62946c62003ddb3967f1475b"
                     },
@@ -177,7 +177,7 @@
                         "hotkey": "",
                         "id": "62946c62003ddb3967f1476b",
                         "is_empty": false,
-                        "is_anomolous": false,
+                        "is_anomalous": false,
                         "name": "Queen",
                         "parent_id": "62946c62003ddb3967f1475b"
                     },
@@ -187,7 +187,7 @@
                         "hotkey": "",
                         "id": "62946c62003ddb3967f1476c",
                         "is_empty": false,
-                        "is_anomolous": false,
+                        "is_anomalous": false,
                         "name": "King",
                         "parent_id": "62946c62003ddb3967f1475b"
                     },
@@ -197,7 +197,7 @@
                         "hotkey": "",
                         "id": "62946c62003ddb3967f1476d",
                         "is_empty": false,
-                        "is_anomolous": false,
+                        "is_anomalous": false,
                         "name": "Ace",
                         "parent_id": "62946c62003ddb3967f1475b"
                     },
@@ -207,7 +207,7 @@
                         "hotkey": "",
                         "id": "62946c62003ddb3967f1476e",
                         "is_empty": true,
-                        "is_anomolous": false,
+                        "is_anomalous": false,
                         "name": "No class",
                         "parent_id": "62946c62003ddb3967f1475b"
                     }

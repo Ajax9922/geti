@@ -65,8 +65,8 @@ delete:
           examples:
             Successful delete:
               value:
-                http_status: 200,
-                message: "Test deleted successfully"
+                http_status: 200
+                message: "success"
     '404':
       description: Object not found. See the examples for details.
       content:

@@ -65,7 +65,9 @@ delete:
             $ref: "../../../../interactive_ai/services/api/schemas/generic_responses/success_response.yaml"
           examples:
             Image deleted successfully:
-              value: { "http_status": 200, "message": "Image deleted successfully" }
+              value:
+                http_status: 200
+                message: "success"
     '404':
       description: Object not found. See the examples for details.
       content:
