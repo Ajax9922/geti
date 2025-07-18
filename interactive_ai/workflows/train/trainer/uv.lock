@@ -1847,7 +1847,7 @@ wheels = [
 [[package]]
 name = "otx"
 version = "2.5.0.dev0"
-source = { git = "https://github.com/open-edge-platform/training_extensions?rev=e1027aa7837b7a4e83bb1c7b9762ccb4e496e297#e1027aa7837b7a4e83bb1c7b9762ccb4e496e297" }
+source = { git = "https://github.com/open-edge-platform/training_extensions?rev=4107731720f53fc61c51d287a79a23d221c52e84#4107731720f53fc61c51d287a79a23d221c52e84" }
 dependencies = [
     { name = "anomalib", extra = ["core"] },
     { name = "datumaro" },
@@ -1909,7 +1909,7 @@ requires-dist = [
     { name = "geti-telemetry-tools", extras = ["telemetry", "kafka"], directory = "../../../../libs/telemetry_tools" },
     { name = "minio", specifier = "~=7.1.0" },
     { name = "numpy", specifier = "==1.26.4" },
-    { name = "otx", git = "https://github.com/open-edge-platform/training_extensions?rev=e1027aa7837b7a4e83bb1c7b9762ccb4e496e297" },
+    { name = "otx", git = "https://github.com/open-edge-platform/training_extensions?rev=4107731720f53fc61c51d287a79a23d221c52e84" },
     { name = "requests", specifier = "==2.32.3" },
     { name = "tqdm", specifier = "==4.67.1" },
 ]

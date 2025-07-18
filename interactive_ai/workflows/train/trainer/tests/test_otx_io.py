@@ -297,9 +297,7 @@ def test_download_model_artifact_not_presigned(
 
 
 @patch("otx_io.save_exported_model")
-@patch("otx_io.unzip_exportable_code")
 def test_save_openvino_exported_model(
-    mock_unzip_exportable_code,
     mock_save_exported_model,
 ) -> None:
     # Arrange
@@ -313,12 +311,6 @@ def test_save_openvino_exported_model(
         export_dir=Path("export_dir"),
     )
 
-    # Assert
-    mock_unzip_exportable_code.assert_called_once_with(
-        work_dir=Path("work_dir"),
-        exported_path=Path("exported_path"),
-        dst_dir=Path("export_dir"),
-    )
     mock_save_exported_model.assert_called_once_with(
         export_dir=Path("export_dir"),
         export_param=export_param,
@@ -391,10 +383,6 @@ def test_save_exported_model_openvino(
     mock_upload_model_artifact.assert_has_calls(
         [
             call(
-                src_filepath=Path("export_dir/exportable_code.zip"),
-                dst_filepath=Path("outputs/exportable_codes") / export_param.to_exportable_code_artifact_fname(),
-            ),
-            call(
                 src_filepath=Path("export_dir/exported_model.bin"),
                 dst_filepath=Path("outputs/models") / export_param.to_artifact_fnames()[0],
             ),
@@ -408,7 +396,6 @@ def test_save_exported_model_openvino(
     assert mock_remove.call_count == 3
     mock_remove.assert_has_calls(
         [
-            call(Path("export_dir/exportable_code.zip")),
             call(Path("export_dir/exported_model.bin")),
             call(Path("export_dir/exported_model.xml")),
         ]
