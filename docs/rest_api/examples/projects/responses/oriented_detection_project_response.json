@@ -5,7 +5,8 @@
         {
             "id": "62adc3caa4002f5a6757534a",
             "name": "Boat detection",
-            "creation_time": "2022-06-18T12:20:38.616000+00:00"
+            "creation_time": "2022-06-18T12:20:38.616000+00:00",
+            "use_for_training": true
         }
     ],
     "id": "62adc3caa4002f5a67575349",

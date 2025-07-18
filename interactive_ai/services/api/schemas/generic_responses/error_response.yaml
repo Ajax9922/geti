@@ -1,7 +1,6 @@
 required:
   - http_status
   - message
-  - error_code
 properties:
   http_status:
     type: integer

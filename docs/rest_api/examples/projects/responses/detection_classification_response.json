@@ -4,7 +4,9 @@
     "datasets": [
         {
             "id": "62946c61003ddb3967f14751",
-            "name": "Card detection"
+            "name": "Card detection",
+            "creation_time": "2022-05-30T07:04:01.917000+00:00",
+            "use_for_training": true
         }
     ],
     "id": "62946c61003ddb3967f14750",

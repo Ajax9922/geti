@@ -4,7 +4,9 @@
     "datasets": [
         {
             "id": "6101254defba22ca453f11cc",
-            "name": "Example chain project"
+            "name": "Example chain project",
+            "creation_time": "2021-06-29T16:24:30.928000+00:00",
+            "use_for_training": true
         }
     ],
     "id": "60db493ed20945a0046f56ce",
