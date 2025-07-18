@@ -152,7 +152,7 @@ def str2bool(value: str | bool) -> bool:
 class OTXConfig:
     job_type: JobType
     model_manifest_id: str
-    hyper_parameters: dict
+    hyper_parameters: dict | None
     export_parameters: list[ExportParameter]
     optimization_type: OptimizationType | None
     sub_task_type: str | None = None
@@ -164,7 +164,7 @@ class OTXConfig:
 
         return OTXConfig(
             job_type=JobType(config["job_type"]),
-            model_manifest_id=config.get("model_manifest_id"),
+            model_manifest_id=config["model_manifest_id"],
             hyper_parameters=config.get("hyperparameters"),
             export_parameters=[
                 ExportParameter(
