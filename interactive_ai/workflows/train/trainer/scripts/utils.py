@@ -4,15 +4,15 @@ from __future__ import annotations
 
 import logging
 import time
-import yaml
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from enum import Enum
 from functools import wraps
 from typing import TYPE_CHECKING
 
+import yaml
+from otx.tools.converter import GetiConfigConverter
 from otx.types.export import OTXExportFormatType
 from otx.types.precision import OTXPrecisionType
-from otx.tools.converter import GetiConfigConverter
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -164,8 +164,8 @@ class OTXConfig:
 
         return OTXConfig(
             job_type=JobType(config["job_type"]),
-            model_manifest_id=config.get("model_manifest_id", None),
-            hyper_parameters=config.get("hyperparameters", None),
+            model_manifest_id=config.get("model_manifest_id"),
+            hyper_parameters=config.get("hyperparameters"),
             export_parameters=[
                 ExportParameter(
                     export_format=ExportFormat(cfg["format"].upper()),
@@ -174,8 +174,8 @@ class OTXConfig:
                 )
                 for cfg in config.get("export_models", [])
             ],
-            optimization_type= OptimizationType.POT if config["job_type"] == "optimize_pot" else None,
-            sub_task_type = config.get("sub_task_type", None)
+            optimization_type=OptimizationType.POT if config["job_type"] == "optimize_pot" else None,
+            sub_task_type=config.get("sub_task_type"),
         )
 
     def to_otx2_config(self) -> dict[str, dict]:

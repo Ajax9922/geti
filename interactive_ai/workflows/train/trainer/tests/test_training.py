@@ -6,9 +6,10 @@ from unittest.mock import patch
 
 import pytest
 from lightning import Trainer
-from otx.models import EfficientNet
 from otx.backend.native.models.base import DataInputParams
+from otx.models import EfficientNet
 from otx.types.label import LabelInfo
+
 from scripts.train import train
 from scripts.utils import OTXConfig
 
@@ -24,11 +25,13 @@ def fxt_checkpoint(request, tmpdir, monkeypatch: pytest.MonkeyPatch):
     if not request.param:
         return None
 
-    model = EfficientNet(label_info=LabelInfo.from_num_classes(2),
-                              task="multi_class",
-                              data_input_params=DataInputParams(input_size=[64, 32],
-                                                                mean=[123.675, 116.28, 103.53],
-                                                                std=[58.395, 57.12, 57.375]))
+    model = EfficientNet(
+        label_info=LabelInfo.from_num_classes(2),
+        task="multi_class",
+        data_input_params=DataInputParams(
+            input_size=[64, 32], mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375]
+        ),
+    )
     trainer = Trainer(max_steps=0)
 
     monkeypatch.setattr(trainer.strategy, "_lightning_module", model)

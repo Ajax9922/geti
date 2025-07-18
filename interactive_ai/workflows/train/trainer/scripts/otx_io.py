@@ -18,7 +18,7 @@ from typing import TYPE_CHECKING, ClassVar
 import requests
 from s3_client import S3ClientSingleton
 from tqdm import tqdm
-from utils import BASE_MODEL_FILENAME, ExportFormat, ExportParameter, logging_elapsed_time, PrecisionType
+from utils import BASE_MODEL_FILENAME, ExportFormat, ExportParameter, PrecisionType, logging_elapsed_time
 
 if TYPE_CHECKING:
     import io
@@ -270,9 +270,11 @@ def save_trained_model_weights(
 def save_exported_model(export_dir: Path, export_param: ExportParameter) -> None:
     """Utility function to save exported format according to `ExportParameter`."""
     if export_param.export_format == ExportFormat.OPENVINO:
-        target_names = (["optimized_model.bin", "optimized_model.xml"]
-                        if export_param.precision == PrecisionType.INT8
-                        else ["exported_model.bin", "exported_model.xml"])
+        target_names = (
+            ["optimized_model.bin", "optimized_model.xml"]
+            if export_param.precision == PrecisionType.INT8
+            else ["exported_model.bin", "exported_model.xml"]
+        )
 
         for src_filename, dst_filename in zip(
             target_names,

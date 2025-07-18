@@ -9,6 +9,7 @@ from otx.backend.native.models.base import DataInputParams
 from otx.models import VisionTransformer
 from otx.types.export import OTXExportFormatType
 from otx.types.label import LabelInfo
+
 from scripts.optimize import optimize
 from scripts.utils import OTXConfig
 
@@ -21,11 +22,13 @@ def fxt_config(fxt_dir_assets):
 
 @pytest.fixture()
 def fxt_openvino_model(tmpdir):
-    model = VisionTransformer(label_info=LabelInfo.from_num_classes(3),
-                              task="multi_class",
-                              data_input_params=DataInputParams(input_size=[224, 224],
-                                                                mean=[123.675, 116.28, 103.53],
-                                                                std=[58.395, 57.12, 57.375]))
+    model = VisionTransformer(
+        label_info=LabelInfo.from_num_classes(3),
+        task="multi_class",
+        data_input_params=DataInputParams(
+            input_size=[224, 224], mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375]
+        ),
+    )
 
     export_dir = Path(tmpdir)
     checkpoint_path = model.export(
@@ -43,11 +46,13 @@ def fxt_openvino_model(tmpdir):
 @pytest.fixture()
 def fxt_exportable_code_side_effect(tmpdir):
     def side_effect(*args, **kwargs):
-        model = VisionTransformer(label_info=LabelInfo.from_num_classes(3),
-                              task="multi_class",
-                              data_input_params=DataInputParams(input_size=[224, 224],
-                                                                mean=[123.675, 116.28, 103.53],
-                                                                std=[58.395, 57.12, 57.375]))
+        model = VisionTransformer(
+            label_info=LabelInfo.from_num_classes(3),
+            task="multi_class",
+            data_input_params=DataInputParams(
+                input_size=[224, 224], mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375]
+            ),
+        )
 
         export_dir = Path(tmpdir) / "export"
         checkpoint_path = model.export(
