@@ -9,7 +9,6 @@ from lightning import Trainer
 from otx.backend.native.models.base import DataInputParams
 from otx.models import EfficientNet
 from otx.types.label import LabelInfo
-
 from scripts.train import train
 from scripts.utils import OTXConfig
 
