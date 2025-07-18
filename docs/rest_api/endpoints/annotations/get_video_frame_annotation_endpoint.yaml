@@ -5,7 +5,7 @@ get:
   description: "Get the user annotation of a video frame."
   operationId: GetVideoFrameAnnotation
   parameters:
-    - $ref: '../parameters/path/organization_id.yaml'
+    - $ref: '../../parameters/path/organization_id.yaml'
     - $ref: '../../parameters/path/workspace_id.yaml'
     - $ref: '../../parameters/path/project_id.yaml'
     - $ref: '../../parameters/path/dataset_id.yaml'

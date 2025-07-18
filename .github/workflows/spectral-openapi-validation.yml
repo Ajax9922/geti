@@ -1,5 +1,6 @@
 name: Spectral OpenAPI Validation
-
+permissions:
+  contents: read
 on:
   push:
     branches:
