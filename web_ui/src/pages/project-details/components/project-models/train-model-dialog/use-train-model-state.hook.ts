@@ -109,7 +109,7 @@ export const useTrainModelState = () => {
     const [task] = tasks;
     const { tasksWithSupportedAlgorithms } = useTasksWithSupportedAlgorithms();
     const [selectedTask, setSelectedTask] = useState<Task>(task);
-    const algorithms = tasksWithSupportedAlgorithms[selectedTask.id] ?? [];
+    const algorithms = (tasksWithSupportedAlgorithms[selectedTask.id] ?? []) as SupportedAlgorithm[];
 
     const [selectedModelTemplateId, setSelectedModelTemplateId, activeModelTemplateId] = useSelectedModelTemplateId({
         algorithms,
@@ -145,17 +145,27 @@ export const useTrainModelState = () => {
         });
     };
 
-    const changeTask = (newTask: Task): void => {
-        setSelectedTask(newTask);
-        setSelectedModelTemplateId(getActiveModelTemplateId(models, algorithms, newTask.id));
-    };
-
     const handleTrainFromScratchChange = (newTrainFromScratch: boolean): void => {
         setTrainFromScratch(newTrainFromScratch);
 
         if (newTrainFromScratch === false) {
             setIsReshufflingSubsetsEnabled(false);
         }
+    };
+
+    const changeSelectedModelTemplateId = (newModelTemplateId: string | null): void => {
+        setSelectedModelTemplateId(newModelTemplateId);
+
+        handleTrainFromScratchChange(false);
+    };
+
+    const changeTask = (newTask: Task): void => {
+        setSelectedTask(newTask);
+
+        const newAlgorithms = (tasksWithSupportedAlgorithms[newTask.id] ?? []) as SupportedAlgorithm[];
+        const newActiveModelTemplateId = getActiveModelTemplateId(models, newAlgorithms, newTask.id);
+
+        changeSelectedModelTemplateId(newActiveModelTemplateId);
     };
 
     const useTrainModel = () => {
@@ -238,7 +248,7 @@ export const useTrainModelState = () => {
         selectedModelTemplateId,
         algorithms,
         changeTask,
-        changeSelectedTemplateId: setSelectedModelTemplateId,
+        changeSelectedTemplateId: changeSelectedModelTemplateId,
         isTaskChainProject,
         isReshufflingSubsetsEnabled,
         changeReshufflingSubsetsEnabled: setIsReshufflingSubsetsEnabled,
