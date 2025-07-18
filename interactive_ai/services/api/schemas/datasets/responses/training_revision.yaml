@@ -1,9 +1,7 @@
 type: object
 properties:
   id:
-    description: Number of images in the dataset
-    type: number
-    format: int32
+    $ref: "../../mongo_id.yaml"
   creation_time:
     type: string
     description: Creation time of the project
