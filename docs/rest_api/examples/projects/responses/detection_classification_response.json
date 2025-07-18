@@ -54,7 +54,7 @@
                         "hotkey": "",
                         "id": "62946c62003ddb3967f1475b",
                         "is_empty": false,
-                        "is_anomolous": false,
+                        "is_anomalous": false,
                         "name": "Card",
                         "parent_id": null
                     },
@@ -64,7 +64,7 @@
                         "hotkey": "",
                         "id": "62946c62003ddb3967f1475d",
                         "is_empty": true,
-                        "is_anomolous": false,
+                        "is_anomalous": false,
                         "name": "No object",
                         "parent_id": null
                     }
@@ -87,7 +87,7 @@
                         "hotkey": "",
                         "id": "62946c62003ddb3967f14760",
                         "is_empty": false,
-                        "is_anomolous": false,
+                        "is_anomalous": false,
                         "name": "Hearts",
                         "parent_id": "62946c62003ddb3967f1475b"
                     },
@@ -97,7 +97,7 @@
                         "hotkey": "",
                         "id": "62946c62003ddb3967f14762",
                         "is_empty": false,
-                        "is_anomolous": false,
+                        "is_anomalous": false,
                         "name": "Diamonds",
                         "parent_id": "62946c62003ddb3967f1475b"
                     },

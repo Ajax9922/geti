@@ -4,7 +4,8 @@
     "datasets": [
         {
             "id": "6290a8f9003ddb3967f14386",
-            "name": "Anomaly Detection Example"
+            "name": "Anomaly Detection Example",
+            "creation_time": "2022-06-17T10:30:29.896000+00:00"
         }
     ],
     "id": "6290a8f9003ddb3967f14385",
