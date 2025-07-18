@@ -128,10 +128,10 @@ def download_shard_files() -> Path:
 @logging_elapsed_time(logger=logger, log_level=logging.INFO)
 def download_config_file() -> Path:
     """Download the configuration file."""
-    file_path = _get_shard_files_dir() / "config.json"
+    file_path = _get_shard_files_dir() / "config.yaml"
     S3ClientSingleton.instance().download_file(
         bucket_name=_get_bucket_name(),
-        relative_path=_get_object_name_base() / "inputs/config.json",
+        relative_path=_get_object_name_base() / "inputs/config.yaml",
         file_path=file_path,
     )
     return file_path

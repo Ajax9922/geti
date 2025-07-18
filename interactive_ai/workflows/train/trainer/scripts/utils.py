@@ -71,7 +71,7 @@ class PrecisionType(str, Enum):
 @dataclass
 class ExportParameter:
     """
-    config.json's export_parameters item model.
+    config.yaml's export_parameters item model.
     """
 
     export_format: ExportFormat
