@@ -27,7 +27,7 @@ RUN wget -qO /tmp/intel-graphics.key https://repositories.intel.com/gpu/intel-gr
 RUN echo "deb [arch=amd64,i386 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy unified" | tee /etc/apt/sources.list.d/intel-gpu-jammy.list
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-    libze-intel-gpu1 libze1 intel-opencl-icd clinfo libze-dev intel-ocloc
+    git libze-intel-gpu1 libze1 intel-opencl-icd clinfo libze-dev intel-ocloc
 # Remove unnecessary packages and files to reduce the final image size
 RUN apt-get purge -y --auto-remove gpg wget && \
     rm -rf /root/.cache \
