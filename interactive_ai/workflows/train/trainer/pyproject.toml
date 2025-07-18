@@ -9,7 +9,7 @@ dependencies = [
     "numpy==1.26.4",
     "requests==2.32.3",
     "tqdm==4.67.1",
-    "otx[base]==2.4.6",
+    "otx@git+https://github.com/open-edge-platform/training_extensions@4107731720f53fc61c51d287a79a23d221c52e84",
     "geti-kafka-tools",
     "geti-telemetry-tools[telemetry,kafka]",
 ]
