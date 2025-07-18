@@ -43,7 +43,8 @@
                         "id": "6290a8f9003ddb3967f1438c",
                         "is_empty": false,
                         "name": "Normal",
-                        "parent_id": null
+                        "parent_id": null,
+                        "is_anomalous": false
                     },
                     {
                         "color": "#ff5662ff",
@@ -52,7 +53,8 @@
                         "id": "6290a8f9003ddb3967f1438d",
                         "is_empty": false,
                         "name": "Anomalous",
-                        "parent_id": null
+                        "parent_id": null,
+                        "is_anomalous": true
                     }
                 ],
                 "task_type": "anomaly",
