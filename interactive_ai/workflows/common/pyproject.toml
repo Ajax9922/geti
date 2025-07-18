@@ -38,14 +38,14 @@ datumaro-conversion = [
 
 
 [tool.uv.sources]
-geti-kafka-tools = { path = "../../../../libs/kafka_tools", editable = true }
-geti-telemetry-tools = { path = "../../../../libs/telemetry_tools", editable = true }
-geti-k8s-tools = { path = "../../../../libs/k8s_tools", editable = true }
-geti-types = { path = "../../../../libs/types", editable = true }
-iai-core = { path = "../../../libs/iai_core_py", editable = true }
-media-utils = { path = "../../../libs/media_utils", editable = true }
-grpc_interfaces = { path = "../../../../libs/grpc_interfaces", editable = true }
-geti-configuration-tools = { path = "../../../../libs/configuration_tools", editable = true }
+geti-kafka-tools = { path = "../../../libs/kafka_tools", editable = true }
+geti-telemetry-tools = { path = "../../../libs/telemetry_tools", editable = true }
+geti-k8s-tools = { path = "../../../libs/k8s_tools", editable = true }
+geti-types = { path = "../../../libs/types", editable = true }
+iai-core = { path = "../../libs/iai_core_py", editable = true }
+media-utils = { path = "../../libs/media_utils", editable = true }
+grpc_interfaces = { path = "../../../libs/grpc_interfaces", editable = true }
+geti-configuration-tools = { path = "../../../libs/configuration_tools", editable = true }
 
 [dependency-groups]
 dev = [

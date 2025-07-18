@@ -164,7 +164,7 @@ wheels = [
 
 [[package]]
 name = "authzed"
-version = "0.13.0"
+version = "0.14.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "google-api" },
@@ -173,9 +173,9 @@ dependencies = [
     { name = "protobuf" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ac/6e/3dddc7cee0db151e8f88b7dd3acb351df77794db414986598e3db60b3db2/authzed-0.13.0.tar.gz", hash = "sha256:3fcf21592a167e4d4aad32e22f49537f483f28f8efb49cf6f9f5f31ad25c0073", size = 62267, upload-time = "2023-10-16T17:12:47.341Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/24/28/0dbfc96f7ecd6a64914ddd1885e05884da32b346ca4a177d038fc9f47fac/authzed-0.14.2.tar.gz", hash = "sha256:e5dc640a0a0b5a44f6036c127c1898c45ab2485f5712bc09486edea281dc795c", size = 81695, upload-time = "2025-01-07T21:56:58.816Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/02/ee/d02f8ecb485cbaef147dee2ace2061330f22f0e4996a75cccbd5785130d9/authzed-0.13.0-py3-none-any.whl", hash = "sha256:45b6b261deb7e7b9402dc1b3be113f11bd7a5880fc34adb9b6389b9815a27e8e", size = 86797, upload-time = "2023-10-16T17:12:45.611Z" },
+    { url = "https://files.pythonhosted.org/packages/55/a6/210ba295c1441e2d1047f7d659349d482fab03d40985b7051e426c8bab2e/authzed-0.14.2-py3-none-any.whl", hash = "sha256:93cdcb70d62fe951550ff29e709bf2de27b2e25c78fc2099c70f1b05f0497c12", size = 112237, upload-time = "2025-01-07T21:56:56.238Z" },
 ]
 
 [[package]]
@@ -629,11 +629,11 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "boto3", specifier = "==1.28.17" },
-    { name = "geti-k8s-tools", editable = "../../../../libs/k8s_tools" },
-    { name = "geti-kafka-tools", editable = "../../../../libs/kafka_tools" },
-    { name = "geti-spicedb-tools", editable = "../../../../libs/spicedb_tools" },
-    { name = "geti-telemetry-tools", extras = ["telemetry", "grpc", "kafka", "logger"], editable = "../../../../libs/telemetry_tools" },
-    { name = "geti-types", editable = "../../../../libs/types" },
+    { name = "geti-k8s-tools", editable = "../../../libs/k8s_tools" },
+    { name = "geti-kafka-tools", editable = "../../../libs/kafka_tools" },
+    { name = "geti-spicedb-tools", editable = "../../../libs/spicedb_tools" },
+    { name = "geti-telemetry-tools", extras = ["telemetry", "grpc", "kafka", "logger"], editable = "../../../libs/telemetry_tools" },
+    { name = "geti-types", editable = "../../../libs/types" },
     { name = "jsonschema", specifier = "==4.17.3" },
     { name = "pillow", specifier = "==10.3.0" },
     { name = "python-dateutil", specifier = "==2.8.2" },
@@ -964,7 +964,7 @@ wheels = [
 [[package]]
 name = "geti-configuration-tools"
 version = "1.0.0"
-source = { editable = "../../../../libs/configuration_tools" }
+source = { editable = "../../../libs/configuration_tools" }
 dependencies = [
     { name = "geti-types" },
     { name = "pydantic" },
@@ -972,14 +972,14 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "geti-types", editable = "../../../../libs/types" },
+    { name = "geti-types", editable = "../../../libs/types" },
     { name = "pydantic", specifier = "==2.5.3" },
 ]
 
 [package.metadata.requires-dev]
 dev = [
     { name = "geti-configuration-tools" },
-    { name = "geti-types", extras = ["bson"], editable = "../../../../libs/types" },
+    { name = "geti-types", extras = ["bson"], editable = "../../../libs/types" },
     { name = "mypy", specifier = "~=1.15" },
     { name = "pre-commit", specifier = "~=4.1" },
     { name = "pytest", specifier = "~=8.3" },
@@ -989,7 +989,7 @@ dev = [
 [[package]]
 name = "geti-feature-tools"
 version = "1.0.0"
-source = { editable = "../../../../libs/feature_tools" }
+source = { editable = "../../../libs/feature_tools" }
 
 [package.metadata]
 
@@ -1004,7 +1004,7 @@ dev = [
 [[package]]
 name = "geti-k8s-tools"
 version = "1.0.1"
-source = { editable = "../../../../libs/k8s_tools" }
+source = { editable = "../../../libs/k8s_tools" }
 dependencies = [
     { name = "kubernetes-asyncio" },
 ]
@@ -1023,7 +1023,7 @@ dev = [
 [[package]]
 name = "geti-kafka-tools"
 version = "1.0.1"
-source = { editable = "../../../../libs/kafka_tools" }
+source = { editable = "../../../libs/kafka_tools" }
 dependencies = [
     { name = "confluent-kafka" },
 ]
@@ -1042,7 +1042,7 @@ dev = [
 [[package]]
 name = "geti-spicedb-tools"
 version = "1.0.1"
-source = { editable = "../../../../libs/spicedb_tools" }
+source = { editable = "../../../libs/spicedb_tools" }
 dependencies = [
     { name = "authzed" },
     { name = "cryptography" },
@@ -1050,7 +1050,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "authzed", specifier = "~=0.13.0" },
+    { name = "authzed", specifier = "~=0.14.0" },
     { name = "cryptography", specifier = "~=44.0" },
 ]
 
@@ -1065,7 +1065,7 @@ dev = [
 [[package]]
 name = "geti-telemetry-tools"
 version = "1.0.3"
-source = { editable = "../../../../libs/telemetry_tools" }
+source = { editable = "../../../libs/telemetry_tools" }
 
 [package.optional-dependencies]
 grpc = [
@@ -1120,7 +1120,7 @@ dev = [
 [[package]]
 name = "geti-types"
 version = "1.0.2"
-source = { editable = "../../../../libs/types" }
+source = { editable = "../../../libs/types" }
 
 [package.metadata]
 requires-dist = [{ name = "bson", marker = "extra == 'bson'", specifier = "~=0.5" }]
@@ -1328,14 +1328,14 @@ wheels = [
 [[package]]
 name = "grpc-interfaces"
 version = "1.0.0"
-source = { editable = "../../../../libs/grpc_interfaces" }
+source = { editable = "../../../libs/grpc_interfaces" }
 dependencies = [
     { name = "grpcio" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "geti-types", marker = "extra == 'job-submission'", editable = "../../../../libs/types" },
+    { name = "geti-types", marker = "extra == 'job-submission'", editable = "../../../libs/types" },
     { name = "google-api-python-client", marker = "extra == 'account-service'", specifier = "==2.90.0" },
     { name = "grpc-interfaces", extras = ["account-service", "credit-system", "job-submission", "job-update", "model-registration"], marker = "extra == 'all'" },
     { name = "grpcio", specifier = "==1.62.*" },
@@ -1440,7 +1440,7 @@ wheels = [
 [[package]]
 name = "iai-core"
 version = "1.0.0"
-source = { editable = "../../../libs/iai_core_py" }
+source = { editable = "../../libs/iai_core_py" }
 dependencies = [
     { name = "attrs" },
     { name = "cachetools" },
@@ -1462,8 +1462,8 @@ dependencies = [
 requires-dist = [
     { name = "attrs", specifier = "~=24.3" },
     { name = "cachetools", specifier = "~=5.5" },
-    { name = "geti-feature-tools", editable = "../../../../libs/feature_tools" },
-    { name = "geti-types", editable = "../../../../libs/types" },
+    { name = "geti-feature-tools", editable = "../../../libs/feature_tools" },
+    { name = "geti-types", editable = "../../../libs/types" },
     { name = "minio", specifier = "~=7.1.0" },
     { name = "networkx", specifier = ">=2.6,<=2.8" },
     { name = "numpy", specifier = ">=1.23.1,<=1.26.4" },
@@ -1923,7 +1923,7 @@ wheels = [
 [[package]]
 name = "media-utils"
 version = "1.0.0"
-source = { editable = "../../../libs/media_utils" }
+source = { editable = "../../libs/media_utils" }
 dependencies = [
     { name = "cachetools" },
     { name = "geti-feature-tools" },
@@ -1935,9 +1935,9 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "cachetools", specifier = "~=5.5" },
-    { name = "geti-feature-tools", editable = "../../../../libs/feature_tools" },
-    { name = "geti-types", editable = "../../../../libs/types" },
-    { name = "iai-core", editable = "../../../libs/iai_core_py" },
+    { name = "geti-feature-tools", editable = "../../../libs/feature_tools" },
+    { name = "geti-types", editable = "../../../libs/types" },
+    { name = "iai-core", editable = "../../libs/iai_core_py" },
     { name = "opencv-python-headless", specifier = "==4.10.0.84" },
 ]
 
@@ -3489,16 +3489,16 @@ requires-dist = [
     { name = "datumaro", marker = "extra == 'shard-dataset'", specifier = "==1.10.0" },
     { name = "flytekit", specifier = "==1.10.2" },
     { name = "flytekitplugins-pod", specifier = "==1.2.4" },
-    { name = "geti-configuration-tools", editable = "../../../../libs/configuration_tools" },
-    { name = "geti-k8s-tools", editable = "../../../../libs/k8s_tools" },
-    { name = "geti-kafka-tools", editable = "../../../../libs/kafka_tools" },
-    { name = "geti-telemetry-tools", extras = ["telemetry", "grpc", "kafka", "logger"], editable = "../../../../libs/telemetry_tools" },
-    { name = "geti-types", editable = "../../../../libs/types" },
-    { name = "grpc-interfaces", editable = "../../../../libs/grpc_interfaces" },
-    { name = "iai-core", editable = "../../../libs/iai_core_py" },
+    { name = "geti-configuration-tools", editable = "../../../libs/configuration_tools" },
+    { name = "geti-k8s-tools", editable = "../../../libs/k8s_tools" },
+    { name = "geti-kafka-tools", editable = "../../../libs/kafka_tools" },
+    { name = "geti-telemetry-tools", extras = ["telemetry", "grpc", "kafka", "logger"], editable = "../../../libs/telemetry_tools" },
+    { name = "geti-types", editable = "../../../libs/types" },
+    { name = "grpc-interfaces", editable = "../../../libs/grpc_interfaces" },
+    { name = "iai-core", editable = "../../libs/iai_core_py" },
     { name = "kubernetes-asyncio", specifier = "==29.0.0" },
-    { name = "media-utils", marker = "extra == 'datumaro-conversion'", editable = "../../../libs/media_utils" },
-    { name = "media-utils", marker = "extra == 'evaluation'", editable = "../../../libs/media_utils" },
+    { name = "media-utils", marker = "extra == 'datumaro-conversion'", editable = "../../libs/media_utils" },
+    { name = "media-utils", marker = "extra == 'evaluation'", editable = "../../libs/media_utils" },
     { name = "openvino-model-api", marker = "extra == 'evaluation'", specifier = "==0.2.5.2" },
     { name = "s3fs", specifier = "==2023.9.2" },
     { name = "scikit-learn", marker = "extra == 'evaluation'", specifier = "==1.6.1" },

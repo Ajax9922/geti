@@ -166,7 +166,8 @@ class TrainTaskJobData:
                 self.training_configuration.hyperparameters.model_dump(
                     exclude={"training": {"allowed_values_input_size"}}
                 )
-                if self.training_configuration else None
+                if self.training_configuration
+                else None
             )
         return payload
 
