@@ -19,3 +19,7 @@ properties:
       - "array"
       - "string"
       - "integer"
+    items:
+      oneOf:
+        - type: "string"
+        - type: "integer"

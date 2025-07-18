@@ -6,4 +6,4 @@ description: Number indicating for how many frames in the video an annotation sh
   to the video fps.
 schema:
   type: string
-  example: 50
+  example: "50"

@@ -16,7 +16,7 @@ required:
   - points
 example:
   type: POLYGON
-  point:
+  points:
     - x: 10
       y: 10
     - x: 20
