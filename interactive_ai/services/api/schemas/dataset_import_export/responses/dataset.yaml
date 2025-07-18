@@ -1,8 +1,7 @@
 type: object
 properties:
   id:
-    type: string
-    description: ID of the dataset storage
+    $ref: "../../mongo_id.yaml"
   name:
     type: string
     description: Name of the dataset storage

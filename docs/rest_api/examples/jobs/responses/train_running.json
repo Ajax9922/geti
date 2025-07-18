@@ -1,5 +1,5 @@
 {
-  "$id": "60ed88029e7651b7da565005",
+  "id": "60ed88029e7651b7da565005",
   "creation_time": "2022-07-04T12:19:58.836000+00:00",
   "name": "Train job",
   "type": "train",
@@ -39,7 +39,7 @@
         "dataset_storage_id": "60ec6bbfb98caeb87e3821b4"
     },
     "project":{
-        "$id":"60ec6bbfb98caeb87e34306e",
+        "id":"60ec6bbfb98caeb87e34306e",
         "name": "Example project"
     }
   }

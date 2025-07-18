@@ -1,5 +1,5 @@
 {
-    "$id": "65e6c11ab4cf636589777700",
+    "id": "65e6c11ab4cf636589777700",
     "type": "export_dataset",
     "creation_time": "2024-03-05T06:52:10.257000+00:00",
     "start_time": "2024-03-05T06:52:16.473000+00:00",
@@ -24,12 +24,12 @@
     },
     "metadata": {
         "project": {
-            "$id": "65e6bcf4c6ada55c64630357",
+            "id": "65e6bcf4c6ada55c64630357",
             "name": "Project",
             "type": "detection"
         },
         "dataset": {
-            "$id": "65e6bcf8c6ada55c6463035f",
+            "id": "65e6bcf8c6ada55c6463035f",
             "name": "Dataset"
         },
         "export_format": "datumaro",

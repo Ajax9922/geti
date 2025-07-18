@@ -12,4 +12,6 @@ properties:
       and it can be retrieved from the response body of [video detail](#Media/GetVideoDetail) endpoint. 
     type: integer
 required:
+  - dataset_id
+  - video_id
   - frame_index

@@ -2,6 +2,7 @@ post:
   tags:
   - Jobs
   summary: Cancel a job
+  description: Cancel a running or scheduled job. This operation marks the job as cancelled and prevents it from starting or continuing execution.
   operationId: CancelJob
   parameters:
     - $ref: '../../parameters/path/organization_id.yaml'

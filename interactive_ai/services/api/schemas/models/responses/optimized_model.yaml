@@ -1,8 +1,7 @@
 type: object
 properties:
   id:
-    type: string
-    description: ID of the optimized model
+    $ref: "../../mongo_id.yaml"
   size:
     type: number
     format: int32

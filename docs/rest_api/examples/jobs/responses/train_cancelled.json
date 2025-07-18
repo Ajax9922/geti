@@ -1,5 +1,5 @@
 {
-  "$id": "66056d9b93ae9dd902d2bc72",
+  "id": "66056d9b93ae9dd902d2bc72",
   "type": "train",
   "creation_time": "2024-03-28T13:16:11.164000+00:00",
   "start_time": "2024-03-28T13:16:17.155000+00:00",
@@ -39,7 +39,7 @@
   },
   "metadata": {
     "project": {
-      "$id": "660287b420d4f3a4595c3133",
+      "id": "660287b420d4f3a4595c3133",
       "name": "MyProject"
     },
     "task": {

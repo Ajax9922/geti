@@ -29,13 +29,6 @@ repos:
     args: ["dev_tools/pre_commit_scripts/find_py_projects_and_run_make_target.py", "mypy"]
     language: python
 
-- repo: https://github.com/APIDevTools/swagger-cli
-  rev: v4.0.4
-  hooks:
-  - id: swagger-validation
-    args: ["validate", "docs/rest_api/openapi.yaml"]
-    files: "docs\/rest_api\/.*(json|yaml|yml)|interactive_ai\/services\/api\/schemas\/.*(json|yaml|yml)"
-
 - repo: local
   hooks:
   - id: spectral-lint
