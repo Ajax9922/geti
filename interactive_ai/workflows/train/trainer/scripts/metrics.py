@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from lightning.pytorch.loggers.logger import Logger
-from .otx_io import upload_model_artifact
+from otx_io import upload_model_artifact
 
 logger = logging.getLogger(__name__)
 

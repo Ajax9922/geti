@@ -7,9 +7,7 @@ import json
 import logging
 import os
 import re
-import shutil
 import traceback
-import zipfile
 from functools import partial, wraps
 from pathlib import Path
 from queue import Queue
@@ -18,9 +16,9 @@ from threading import Thread
 from typing import TYPE_CHECKING, ClassVar
 
 import requests
-from .s3_client import S3ClientSingleton
+from s3_client import S3ClientSingleton
 from tqdm import tqdm
-from .utils import BASE_MODEL_FILENAME, ExportFormat, ExportParameter, logging_elapsed_time, PrecisionType
+from utils import BASE_MODEL_FILENAME, ExportFormat, ExportParameter, logging_elapsed_time, PrecisionType
 
 if TYPE_CHECKING:
     import io

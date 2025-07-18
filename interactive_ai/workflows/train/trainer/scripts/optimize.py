@@ -8,9 +8,9 @@ from typing import TYPE_CHECKING
 
 from otx.backend.openvino.engine import OVEngine
 from otx.tools.converter import GetiConfigConverter
-from .otx_io import load_trained_model_weights, save_openvino_exported_model
-from .progress_updater import ProgressUpdater, TrainingStage
-from .utils import OptimizationType, OTXConfig, PrecisionType, logging_elapsed_time
+from otx_io import load_trained_model_weights, save_openvino_exported_model
+from progress_updater import ProgressUpdater, TrainingStage
+from utils import OptimizationType, OTXConfig, PrecisionType, logging_elapsed_time
 
 if TYPE_CHECKING:
     from pathlib import Path
