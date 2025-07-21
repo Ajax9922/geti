@@ -101,21 +101,6 @@ class ExportParameter:
 
         raise ValueError(f"Unsupported export format {self.export_format}")
 
-    def to_exportable_code_artifact_fname(self) -> str:
-        fname = "exportable-code_"
-        precision_name = (
-            self.precision.name.lower() + "-pot"
-            if self.precision == PrecisionType.INT8
-            else self.precision.name.lower()
-        )
-        fname += precision_name + "_"
-        if self.with_xai:
-            fname += "xai"
-        else:
-            fname += "non-xai"
-
-        return fname + ".whl"
-
     def to_otx2_export_format(self) -> OTXExportFormatType:
         if self.export_format == ExportFormat.OPENVINO:
             return OTXExportFormatType.OPENVINO

@@ -61,13 +61,6 @@ class TestMLArtifactsAdapter:
             os.path.join("jobs", fxt_job_metadata.id, "inputs", ".placeholder"),
             os.path.join("jobs", fxt_job_metadata.id, "live_metrics", ".placeholder"),
             os.path.join("jobs", fxt_job_metadata.id, "outputs", "models", ".placeholder"),
-            os.path.join(
-                "jobs",
-                fxt_job_metadata.id,
-                "outputs",
-                "exportable_codes",
-                ".placeholder",
-            ),
             os.path.join("jobs", fxt_job_metadata.id, "outputs", "configurations", ".placeholder"),
             os.path.join("jobs", fxt_job_metadata.id, "outputs", "logs", ".placeholder"),
         }
@@ -364,7 +357,6 @@ class TestMLArtifactsAdapter:
             )
         else:
             assert expected_set_data_keys == called_set_data_keys
-        assert "exportable-code" in mock_ov_model.exportable_code.binary_filename
 
         assert mock_base_model.model_status == ModelStatus.SUCCESS
         assert mock_ov_model.model_status == ModelStatus.SUCCESS
@@ -378,7 +370,6 @@ class TestMLArtifactsAdapter:
             "model_fp32_xai.pth",
             "model_fp16_non-xai.xml",
             "model_fp16_non-xai.bin",
-            "exportable-code_fp16_non-xai.whl",
             "model_fp32_non-xai.onnx",
         }
 

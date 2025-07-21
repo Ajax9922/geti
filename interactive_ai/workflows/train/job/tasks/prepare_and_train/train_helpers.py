@@ -152,7 +152,6 @@ def _prepare_s3_bucket(
     - <root>/inputs: .placeholder, config.yaml, model.pth
     - <root>/live_metrics: .placeholder
     - <root>/outputs/models: .placeholder
-    - <root>/outputs/exportable-codes: .placeholder
     - <root>/outputs/configurations: .placeholder
 
     :param project: Project owning this job

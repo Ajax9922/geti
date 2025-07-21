@@ -82,7 +82,6 @@ class MLArtifactsAdapter:
         - <root>/inputs
         - <root>/live_metrics
         - <root>/outputs/models
-        - <root>/outputs/exportable_codes
         - <root>/outputs/configurations
         - <root>/outputs/logs
         """
@@ -94,7 +93,7 @@ class MLArtifactsAdapter:
                 with open(os.path.join(prefix, ".placeholder"), "w") as fp:
                     fp.write("")
 
-            for dir in ["models", "exportable_codes", "configurations", "logs"]:
+            for dir in ["models", "configurations", "logs"]:
                 prefix = os.path.join(root, self.dst_path_prefix, "outputs", dir)
                 os.makedirs(prefix)
                 with open(os.path.join(prefix, ".placeholder"), "w") as fp:
@@ -288,20 +287,17 @@ class MLArtifactsAdapter:
         )
 
     @unified_tracing
-    def _update_model(self, model: Model, key: str, filepath: str, is_exportable_code: bool = False) -> None:
+    def _update_model(self, model: Model, key: str, filepath: str) -> None:
         try:
             model_repo = ModelRepo(model.model_storage_identifier)
             binary_filename = self.binary_repo.copy_to(model_binary_repo=model_repo.binary_repo, src_filepath=filepath)
             data_source = DataSource(repository=model_repo.binary_repo, binary_filename=binary_filename)
 
-            if is_exportable_code:
-                model.exportable_code = data_source  # type: ignore[assignment]
-            else:
-                model.set_data(
-                    key=key,
-                    data=data_source,
-                    skip_deletion=False,
-                )
+            model.set_data(
+                key=key,
+                data=data_source,
+                skip_deletion=False,
+            )
             # TODO move out of the loop
             logger.info(
                 "Model with ID '%s' update its weights %s with binary file %s: Model status after the update: %s.",
@@ -334,7 +330,6 @@ class MLArtifactsAdapter:
     @unified_tracing
     def _update_ov_model(self, model: Model, precision: str, xai_suffix: str):
         model_prefix = os.path.join(self.dst_path_prefix, "outputs", "models")
-        exportable_code_prefix = os.path.join(self.dst_path_prefix, "outputs", "exportable_codes")
 
         # Update OpenVINO XML
         self._update_model(
@@ -347,16 +342,6 @@ class MLArtifactsAdapter:
             model=model,
             key=OPENVINO_BIN_KEY,
             filepath=os.path.join(model_prefix, f"model_{precision}_{xai_suffix}.bin"),
-        )
-        # Update Exportable code
-        self._update_model(
-            model=model,
-            key="",
-            filepath=os.path.join(
-                exportable_code_prefix,
-                f"exportable-code_{precision}_{xai_suffix}.whl",
-            ),
-            is_exportable_code=True,
         )
 
         # Update detection model only artifacts
