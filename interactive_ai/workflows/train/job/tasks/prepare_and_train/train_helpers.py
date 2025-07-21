@@ -336,7 +336,8 @@ def finalize_train(
         )
 
         advanced_model_configuration = adapter.pull_output_configuration()
-        train_output_models.set_advanced_configuration(advanced_model_configuration)
+        if advanced_model_configuration:
+            train_output_models.set_advanced_configuration(advanced_model_configuration)
 
         # If succeeded, clean the directory under the  mlflowexperiments bucket
         if retain_training_artifacts:

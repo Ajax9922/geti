@@ -410,8 +410,16 @@ class MLArtifactsAdapter:
         )
 
     @unified_tracing
-    def pull_output_configuration(self) -> dict:
+    def pull_output_configuration(self) -> dict | None:
         # advanced_config.json contains extra configuration used by OTX that were NOT included in the input config.yaml
+        filename = os.path.join(self.dst_path_prefix, "outputs", "configurations", "advanced_config.json")
+        if not self.binary_repo.exists(filename):
+            logger.warning(
+                "Cannot find advanced_config.json file to extract advanced configuration; "
+                "`%s` is missing.", filename,
+            )
+            return None
+
         data = _check_bytes_type(
             self.binary_repo.get_by_filename(
                 filename=os.path.join(
