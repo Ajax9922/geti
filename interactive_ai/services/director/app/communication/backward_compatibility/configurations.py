@@ -8,7 +8,6 @@ from geti_configuration_tools.hyperparameters import (
     EarlyStopping,
     EvaluationParameters,
     Hyperparameters,
-    MaxDetectionPerImage,
     Tiling,
     TrainingHyperParameters,
 )
@@ -141,7 +140,7 @@ class ConfigurationsBackwardCompatibility:
                 setattr(tiling_params, "enable_tiling", tiling.enable)
                 setattr(tiling_params, "enable_adaptive_tiling", tiling.adaptive_tiling)
                 setattr(tiling_params, "tile_size", tiling.tile_size)
-                setattr(tiling_params, "tile_overlap", tiling.tile_overlap / tiling.tile_size)
+                setattr(tiling_params, "tile_overlap", tiling.tile_overlap)
                 setattr(tiling_params, "object_tile_ratio", 0.05)
                 setattr(tiling_params, "tile_max_number", 1500)
                 setattr(legacy_hyper_parameters, "tile_sampling_ratio", 1.0)
@@ -428,15 +427,14 @@ class ConfigurationsBackwardCompatibility:
         # Create tiling parameters if enabled
         tiling = None
         if legacy_tiling := getattr(legacy_hyperparams, "tiling_parameters", None):
-            tile_size = legacy_tiling.tile_size
             adaptive = getattr(legacy_tiling, "enable_adaptive_tiling", None) or getattr(
                 legacy_tiling, "enable_adaptive_params", None
             )
             tiling = Tiling(
                 enable=legacy_tiling.enable_tiling,
                 adaptive_tiling=adaptive,
-                tile_size=tile_size,
-                tile_overlap=int(legacy_tiling.tile_overlap * tile_size) if tile_size > 0 else 0,
+                tile_size=legacy_tiling.tile_size,
+                tile_overlap=legacy_tiling.tile_overlap,
             )
 
         # Create augmentation parameters
@@ -474,7 +472,6 @@ class ConfigurationsBackwardCompatibility:
             max_epochs=max_epochs,
             learning_rate=learning_rate,
             early_stopping=(EarlyStopping(enable=True, patience=early_stopping) if early_stopping else EarlyStopping()),
-            max_detection_per_image=MaxDetectionPerImage(),
         )
 
         return Hyperparameters(
