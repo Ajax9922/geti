@@ -81,7 +81,7 @@ class TestDeploymentPackageManager:
             ),
             patch.object(
                 DeploymentPackageManager,
-                "_extract_config_json_from_xml",
+                "extract_config_json_from_xml",
                 return_value=mock_config,
             ),
             patch("builtins.open", mock_open()) as mock_file,
@@ -129,7 +129,7 @@ class TestDeploymentPackageManager:
         </net>
         """
 
-        result = DeploymentPackageManager._extract_config_json_from_xml(sample_xml)
+        result = DeploymentPackageManager.extract_config_json_from_xml(sample_xml)
 
         # Verify the result
         assert result["model_type"] == "object_detection"
@@ -148,7 +148,7 @@ class TestDeploymentPackageManager:
         </net>
         """
 
-        minimal_result = DeploymentPackageManager._extract_config_json_from_xml(minimal_xml)
+        minimal_result = DeploymentPackageManager.extract_config_json_from_xml(minimal_xml)
 
         # Verify the minimal result has default values for missing fields
         assert "model_type" not in minimal_result

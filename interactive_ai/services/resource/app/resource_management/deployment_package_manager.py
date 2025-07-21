@@ -121,7 +121,7 @@ class DeploymentPackageManager:
 
             # generate config.json
             xml_data = model.model_adapters[OVWeightsKey.OPENVINO_XML.value].data
-            config_json = DeploymentPackageManager._extract_config_json_from_xml(xml_data)
+            config_json = DeploymentPackageManager.extract_config_json_from_xml(xml_data)
 
             with open(os.path.join(model_folder, "config.json"), "w") as f:
                 json.dump(config_json, f, indent=3)
@@ -200,7 +200,7 @@ class DeploymentPackageManager:
         return cv2.cvtColor(raw_image, cv2.COLOR_RGB2BGR)
 
     @staticmethod
-    def _extract_config_json_from_xml(xml_data: bytes) -> dict:
+    def extract_config_json_from_xml(xml_data: bytes) -> dict:
         """
         Extracts the config.json from the OpenVINO XML data.
 
