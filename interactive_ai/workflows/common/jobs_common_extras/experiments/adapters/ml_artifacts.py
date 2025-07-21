@@ -421,15 +421,7 @@ class MLArtifactsAdapter:
             return None
 
         data = _check_bytes_type(
-            self.binary_repo.get_by_filename(
-                filename=os.path.join(
-                    self.dst_path_prefix,
-                    "outputs",
-                    "configurations",
-                    "advanced_config.json",
-                ),
-                binary_interpreter=RAWBinaryInterpreter(),
-            )
+            self.binary_repo.get_by_filename(filename=filename, binary_interpreter=RAWBinaryInterpreter())
         )
         return json.loads(data)
 
