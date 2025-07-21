@@ -162,9 +162,10 @@ class TrainTaskJobData:
             "retain_training_artifacts": self.retain_training_artifacts,
         }
         if FeatureFlagProvider.is_enabled(FeatureFlag.FEATURE_FLAG_NEW_CONFIGURABLE_PARAMETERS):
-            payload["hyperparameters"] = (
-                self.training_configuration.hyperparameters.model_dump(
-                    exclude={"training": {"allowed_values_input_size"}}
+            payload["hyperparameters_json"] = (
+                # Use model_dump_json to avoid int casting into floats
+                self.training_configuration.hyperparameters.model_dump_json(
+                    exclude={"training": {"allowed_values_input_size"}}, exclude_none=True
                 )
                 if self.training_configuration
                 else None

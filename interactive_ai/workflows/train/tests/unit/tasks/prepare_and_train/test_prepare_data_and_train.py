@@ -1,6 +1,7 @@
 # Copyright (C) 2022-2025 Intel Corporation
 # LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 """This module tests train task"""
+import json
 
 import asyncio
 import os
@@ -112,7 +113,7 @@ class TestPrepareTrainingDataTask:
             max_training_dataset_size=100,
             command=["bash", "-c", "run"],
             reshuffle_subsets=reshuffle_subsets,
-            hyperparameters=hyperparameters,
+            hyperparameters_json=json.dumps(hyperparameters),
         )
 
         # Assert

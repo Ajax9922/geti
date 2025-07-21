@@ -15,7 +15,7 @@ from iai_core.configuration.interfaces import IConfigurableParameterContainer
 
 
 def forward_legacy_hyperparameters(  # noqa: C901
-    legacy_hyperparams: Hyperparameters | IConfigurableParameterContainer | ConfigurableParameters,
+    legacy_hyperparams:  IConfigurableParameterContainer | ConfigurableParameters,
 ) -> Hyperparameters:
     """Convert legacy hyperparameters to new format"""
     # Create tiling parameters if enabled

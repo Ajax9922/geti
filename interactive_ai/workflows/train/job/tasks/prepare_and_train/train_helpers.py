@@ -2,7 +2,7 @@
 # LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
 """This module contains the FlyteTaskTrainCommands"""
-
+import json
 import logging
 
 from geti_telemetry_tools import unified_tracing
@@ -229,7 +229,7 @@ def prepare_train(train_data: TrainWorkflowData, dataset: Dataset) -> TrainOutpu
         label_schema=label_schema,
         hyper_parameters=legacy_hyper_parameters,
         model_version=model_version,
-        revamped_hyperparameters=train_data.hyperparameters,
+        revamped_hyperparameters=json.loads(train_data.hyperparameters_json),
     )
 
     output_base_model = model_builder.create_model(
@@ -283,7 +283,7 @@ def prepare_train(train_data: TrainWorkflowData, dataset: Dataset) -> TrainOutpu
         hyper_parameter_dict = revamped_hyperparameters
     else:
         hyperparameters = forward_legacy_hyperparameters(legacy_hyper_parameters)
-        hyper_parameter_dict = hyperparameters.model_dump()
+        hyper_parameter_dict = hyperparameters.model_dump(exclude_none=True)
 
     _prepare_s3_bucket(
         project=project,

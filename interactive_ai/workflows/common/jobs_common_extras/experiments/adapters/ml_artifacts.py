@@ -226,7 +226,7 @@ class MLArtifactsAdapter:
 
         config_dict["job_type"] = self.job_metadata.type
         config_dict["model_manifest_id"] = model_manifest_id
-        config_dict["export_parameters"] = export_parameters
+        config_dict["export_models"] = export_parameters
         config_dict["hyperparameters"] = hyper_parameters
 
         if label_schema:
