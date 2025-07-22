@@ -18,7 +18,8 @@ dependencies = [
     "geti-types",
     "iai_core",
     "media_utils",
-    "grpc_interfaces"
+    "grpc_interfaces",
+    "defusedxml~=0.7.1",
 ]
 
 [tool.uv.sources]
