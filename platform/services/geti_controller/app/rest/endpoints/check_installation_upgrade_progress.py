@@ -1,6 +1,5 @@
 # Copyright (C) 2022-2025 Intel Corporation
 # LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
-
 import logging
 import time
 
@@ -8,12 +7,8 @@ import requests
 from fastapi import BackgroundTasks, status
 
 from constants.platform import MAX_RETRIES, NAMESPACE, RETRY_INTERVAL, SERVICE_NAME
-from platform_operations.cluster import (
-    is_job_completed_or_failed,
-    is_job_running,
-    load_kube_config,
-    wait_for_job_creation,
-)
+from platform_operations.cluster import is_job_completed_or_failed, is_job_running, load_kube_config
+from platform_operations.version_change import get_version_change_progress, update_progress
 from rest.schema.check_installation_upgrade_progress import InstallationUpgradeProgressResponse, OperationStatus
 from routers import platform_router
 
@@ -24,13 +19,11 @@ logger = logging.getLogger(__name__)
 
 class ProgressManager:
     def __init__(self):
-        self.progress_data = InstallationUpgradeProgressResponse(
-            progress_percentage=0, status=OperationStatus.NOT_RUNNING, message="Progress not started."
-        )
+        self.progress_data = InstallationUpgradeProgressResponse(**get_version_change_progress())
         self.task_started = False
 
     def update_progress(self, data: dict) -> None:
-        self.progress_data = InstallationUpgradeProgressResponse(**data)
+        self.progress_data = InstallationUpgradeProgressResponse(**update_progress(data))
 
     def get_progress(self) -> InstallationUpgradeProgressResponse:
         return self.progress_data
@@ -100,11 +93,11 @@ def wait_for_service_ready(service_endpoint: str, timeout: int = 300, interval: 
 
 def periodic_progress_check(progress_manager: ProgressManager, interval: int = 10) -> None:
     """Periodically calls the progress endpoint."""
-    logger.info("Starting periodic progress check.")
     service_endpoint = f"http://{SERVICE_NAME}.{NAMESPACE}.svc.cluster.local:8000"
     service_ready = False
 
     while True:
+        logger.info("Starting periodic progress check.")
         is_finished, status_message = is_job_completed_or_failed(NAMESPACE)
 
         if is_finished:
@@ -138,17 +131,13 @@ def periodic_progress_check(progress_manager: ProgressManager, interval: int = 1
 
             call_progress_endpoint(progress_manager)
         else:
-            logger.info("Job is not running")
-            progress_manager.update_progress(
-                {
-                    "progress_percentage": 0,
-                    "status": OperationStatus.NOT_RUNNING,
-                    "message": "Installation/upgrade job is not running.",
-                }
-            )
+            logger.info("Job is not running, exiting")
             break
 
         time.sleep(interval)
+
+    logger.info("Periodic progress check completed.")
+    progress_manager.task_started = False
 
 
 @platform_router.get(
@@ -160,7 +149,11 @@ def periodic_progress_check(progress_manager: ProgressManager, interval: int = 1
             "content": {
                 "application/json": {
                     "example": InstallationUpgradeProgressResponse(
-                        progress_percentage=42, status=OperationStatus.RUNNING, message="Installation is in progress."
+                        source_version="1.0.0",
+                        target_version="1.1.0",
+                        progress_percentage=42,
+                        status=OperationStatus.RUNNING,
+                        message="Installation is in progress.",
                     )
                 }
             },
@@ -178,11 +171,9 @@ def check_installation_upgrade_progress(background_tasks: BackgroundTasks) -> In
     logger.info("GET check_installation_upgrade_progress request received.")
     load_kube_config()
 
-    if not is_job_running(NAMESPACE):
-        logger.info("Job not found, waiting for its creation.")
-        wait_for_job_creation(NAMESPACE)
-
     if not progress_manager.task_started:
+        logger.info("Starting periodic progress check task.")
+        progress_manager.update_progress({})  # force re-read of progress data from file
         background_tasks.add_task(periodic_progress_check, progress_manager)
         progress_manager.task_started = True
 

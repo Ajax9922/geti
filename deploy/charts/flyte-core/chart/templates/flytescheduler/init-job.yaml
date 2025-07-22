@@ -9,6 +9,7 @@ metadata:
     job_type: init
     app: {{ template "flytescheduler.name" . }}
 spec:
+  ttlSecondsAfterFinished: 600
   backoffLimit: 10
   template:
     metadata:
