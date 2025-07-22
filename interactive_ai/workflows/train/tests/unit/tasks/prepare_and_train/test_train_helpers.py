@@ -2,9 +2,9 @@
 # LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 """This module tests commands to create task train dataset"""
 
+import json
 from unittest.mock import MagicMock, patch
 
-import json
 import pytest
 from geti_types import ID
 from iai_core.entities.model import ModelPrecision, ModelStatus
