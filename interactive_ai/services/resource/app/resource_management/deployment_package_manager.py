@@ -14,9 +14,12 @@ from typing import TYPE_CHECKING
 import cv2
 import numpy
 from defusedxml import ElementTree
-from interactive_ai.services.resource.app.communication.exceptions import CannotFindModelWeightsException
 
-from communication.exceptions import IncompatibleModelFormatException, NoMediaInProjectException
+from communication.exceptions import (
+    CannotFindModelWeightsException,
+    IncompatibleModelFormatException,
+    NoMediaInProjectException,
+)
 from communication.rest_views.model_rest_views import ModelRESTViews
 from entities.deployment import ModelIdentifier
 from resource_management.media_manager import MediaManager

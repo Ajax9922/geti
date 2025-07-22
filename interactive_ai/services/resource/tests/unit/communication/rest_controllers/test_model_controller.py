@@ -64,10 +64,6 @@ class TestModelRESTController:
         model_storage_id = fxt_model.model_storage.id_
         model_id = fxt_model.id_
         config_json = {"dummy_key": "dummy_value"}
-        model_adapters = fxt_model.model_adapters
-        if not model_only:
-            model_adapters["openvino.xml"] = MagicMock(data=b"xml_data_2")
-        type(fxt_model).model_adapters = PropertyMock(return_value=model_adapters)
 
         with (
             patch.object(ProjectRepo, "get_by_id", return_value=fxt_project) as mock_get_project,
@@ -101,10 +97,6 @@ class TestModelRESTController:
         model_only,
     ) -> None:
         config_json = {"dummy_key": "dummy_value"}
-        model_adapters = fxt_optimized_openvino_model.model_adapters
-        if not model_only:
-            model_adapters["openvino.xml"] = MagicMock(data=b"xml_data_2")
-        type(fxt_optimized_openvino_model).model_adapters = PropertyMock(return_value=model_adapters)
 
         with (
             patch.object(ProjectRepo, "get_by_id", return_value=fxt_project) as mock_get_project,

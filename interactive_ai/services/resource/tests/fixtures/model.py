@@ -351,7 +351,7 @@ def fxt_model(
             0,
             tzinfo=datetime.timezone.utc,
         ),
-        data_source_dict={"dummy.file": b"DUMMY_DATA"},
+        data_source_dict={"dummy.file": b"DUMMY_DATA", "openvino.xml": b"xml_data"},
         model_status=ModelStatus.NOT_IMPROVED,
     )
 
@@ -587,7 +587,7 @@ def fxt_optimized_openvino_model(
         train_dataset=fxt_dataset_non_empty,
         configuration=ModelConfiguration(fxt_configuration.data, fxt_label_schema),
         id_=ModelRepo.generate_id(),
-        data_source_dict={"dummy.file": b"DUMMY_DATA"},
+        data_source_dict={"dummy.file": b"DUMMY_DATA", "openvino.xml": b"xml_data"},
         exportable_code_adapter=ExportableCodeAdapter(data_source=b"DUMMY_EXPORTABLE_CODE_DATA"),
     )
 
@@ -794,6 +794,8 @@ def fxt_zip_file_data():
     with ZipFile(output_bytes, "w") as zf:
         info = ZipInfo("dummy.file")
         zf.writestr(info, b"DUMMY_DATA")
+        info = ZipInfo("openvino.xml")
+        zf.writestr(info, b"xml_data")
     output_bytes.seek(0)
     return output_bytes
 
