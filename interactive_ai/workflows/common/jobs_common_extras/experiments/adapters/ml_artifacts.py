@@ -210,15 +210,15 @@ class MLArtifactsAdapter:
     def push_input_configuration(
         self,
         model_manifest_id: str,
-        hyper_parameters: dict[str, Any],
         export_parameters: dict[str, str] | list[dict[str, str]],
+        hyper_parameters: dict[str, Any] | None = None,
         label_schema: LabelSchema | None = None,
     ) -> None:
         """Push the configuration file to the input directory.
 
         :param model_manifest_id: ID of model manifest for this job (obtained from CRD)
-        :param hyper_parameters: Hyperparameters for this job (obtained from CRD)
         :param export_parameters: Exportparameters for this job (obtained from CRD)
+        :param hyper_parameters: Hyperparameters for this job (obtained from CRD)
         :param label_schema: label schema of the project. Used to determined classification subtask if available.
         """
         config_dict: dict[str, Any] = {}
@@ -226,7 +226,9 @@ class MLArtifactsAdapter:
         config_dict["job_type"] = self.job_metadata.type
         config_dict["model_manifest_id"] = model_manifest_id
         config_dict["export_models"] = export_parameters
-        config_dict["hyperparameters"] = hyper_parameters
+
+        if hyper_parameters:
+            config_dict["hyperparameters"] = hyper_parameters
 
         if label_schema:
             config_dict["sub_task_type"] = ClsSubTaskType.create_from_label_schema(label_schema=label_schema).value

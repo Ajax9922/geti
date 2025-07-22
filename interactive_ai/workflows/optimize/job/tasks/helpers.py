@@ -56,11 +56,10 @@ def _prepare_s3_bucket(
     adapter.push_metadata()
     adapter.push_input_configuration(
         model_manifest_id=input_model.model_storage.model_manifest_id,
-        hyper_parameters=hyper_parameter_dict,
         export_parameters=[
             {
                 "format": "openvino",
-                "output_model_id": input_model.id_,
+                "output_model_id": str(input_model.id_),
                 "precision": ModelPrecision.INT8.name,
                 "with_xai": False,
             },
