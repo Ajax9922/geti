@@ -130,7 +130,9 @@ class DeploymentPackageManager:
                 json.dump(config_json, f, indent=3)
 
             # put deployment/<TASK_TYPE>/python/requirements.txt
-            with open(os.path.join(model_folder, "python", "requirements.txt"), "w") as f:
+            python_folder = os.path.join(per_model_path, "python")
+            os.makedirs(python_folder, exist_ok=True)
+            with open(os.path.join(python_folder, "requirements.txt"), "w") as f:
                 f.write(REQUIREMENTS_TXT)
 
             # put model REST representation to the model directory
