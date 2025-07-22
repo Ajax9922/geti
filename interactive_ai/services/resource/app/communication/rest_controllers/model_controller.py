@@ -380,7 +380,7 @@ class ModelRESTController:
                 zf.writestr(info, adapter.data)
             if not model_only:
                 config = DeploymentPackageManager.extract_config_json_from_xml(
-                    model.model_adapters[OVWeightsKey.OPENVINO_XML.value]
+                    model.model_adapters[OVWeightsKey.OPENVINO_XML.value].data
                 )
                 info = ZipInfo("config.json")
                 zf.writestr(info, json.dumps(config))

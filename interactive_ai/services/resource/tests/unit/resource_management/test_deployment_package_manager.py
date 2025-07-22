@@ -134,8 +134,8 @@ class TestDeploymentPackageManager:
         # Verify the result
         assert result["model_type"] == "object_detection"
         assert result["task_type"] == "detection"
-        assert result["model_parameters"]["labels"] == ["person", "car", "bicycle"]
-        assert result["model_parameters"]["label_ids"] == ["1", "2", "3"]
+        assert result["model_parameters"]["labels"] == "person car bicycle"
+        assert result["model_parameters"]["label_ids"] == "1 2 3"
 
         # Test with missing optional fields
         minimal_xml = b"""

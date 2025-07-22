@@ -233,12 +233,12 @@ class DeploymentPackageManager:
         labels_elem = model_info.find("./labels")
         if labels_elem is not None:
             labels_value = labels_elem.get("value", "")
-            config["model_parameters"]["labels"] = labels_value.split() if labels_value else []
+            config["model_parameters"]["labels"] = labels_value
 
         # Extract label_ids
         label_ids_elem = model_info.find("./label_ids")
         if label_ids_elem is not None:
             label_ids_value = label_ids_elem.get("value", "")
-            config["model_parameters"]["label_ids"] = label_ids_value.split() if label_ids_value else []
+            config["model_parameters"]["label_ids"] = label_ids_value
 
         return config
