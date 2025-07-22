@@ -44,6 +44,7 @@ def _cleanup_deployment_package_from_temp(package_path: pathlib.Path) -> None:
     except Exception:
         logger.exception(f"Failed to cleanup deployment package temporary directory {package_path}")
 
+
 @deployment_package_router.post("/deployment_package:download")
 def download_deployment_package(
     request_json: Annotated[dict, Depends(get_request_json)],
