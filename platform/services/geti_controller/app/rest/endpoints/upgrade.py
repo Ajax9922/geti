@@ -9,7 +9,8 @@ from packaging.version import Version
 
 from constants.platform import GETI_REGISTRY, PLATFORM_VERSION
 from platform_operations.backup import _get_used_storage, is_backup_possible
-from platform_operations.cluster import deploy_service_job, is_job_running
+from platform_operations.cluster import is_job_running
+from platform_operations.version_change import commence_version_change
 from rest.schema.upgrade import UpgradeRequest, UpgradeResponse
 from routers import platform_router
 
@@ -90,9 +91,12 @@ def upgrade_platform(payload: UpgradeRequest) -> UpgradeResponse:
             detail="Upgrade is already in progress. Please wait until the current upgrade is completed.",
         )
 
-    deploy_service_job(
+    commence_version_change(
+        source_version=str(current_version),
+        target_version=str(selected_version),
         registry=GETI_REGISTRY,
-        image_tag=payload.version_number,
+        source_image_tag=PLATFORM_VERSION,
+        target_image_tag=payload.version_number,
         manifest_version=payload.version_number,
         direction="upgrade",
     )
