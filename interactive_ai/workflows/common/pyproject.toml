@@ -50,7 +50,7 @@ geti-configuration-tools = { path = "../../../libs/configuration_tools", editabl
 [dependency-groups]
 dev = [
     "pytest~=8.3",
-    "ruff~=0.11",
+    "ruff~=0.11.2",
     "pre-commit~=4.1",
     "testfixtures==7.0.0",
     "mypy~=1.15",
@@ -69,7 +69,7 @@ dev = [
     "pytest-freezegun==0.4.2",
     "scikit-image==0.20.0",
     "scikit-learn~=1.6",
-    
+
     # For Datumaro Arrow data format export
     "pyarrow==15.0.0",
 
