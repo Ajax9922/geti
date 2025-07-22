@@ -17,13 +17,11 @@ from iai_core.entities.model import (
 )
 from iai_core.entities.model_storage import ModelStorageIdentifier
 from iai_core.repos import CompiledDatasetShardsRepo, ModelRepo, ProjectRepo
-from jobs_common.features.feature_flag_provider import FeatureFlag, FeatureFlagProvider
 from jobs_common.jobs.helpers.project_helpers import lock_project
 from jobs_common.tasks.utils.progress import publish_metadata_update
 from jobs_common.tasks.utils.secrets import JobMetadata
 from jobs_common.utils.annotation_filter import AnnotationFilter
 from jobs_common_extras.experiments.adapters.ml_artifacts import MLArtifactsAdapter
-from jobs_common_extras.experiments.utils.legacy_configuration_converter import forward_legacy_hyperparameters
 
 from job.models import OptimizationConfig, OptimizationTrainerContext
 
@@ -35,18 +33,6 @@ def _prepare_s3_bucket(
     optimization_cfg: OptimizationConfig,
 ) -> None:
     input_model = optimization_cfg.input_model
-
-    ff_enabled = FeatureFlagProvider.is_enabled(FeatureFlag.FEATURE_FLAG_NEW_CONFIGURABLE_PARAMETERS)
-    model_configuration = input_model.get_previous_trained_revision().configuration
-    revamped_hyperparameters = model_configuration.display_only_configuration
-    if ff_enabled and revamped_hyperparameters:
-        # Remove advanced_model_configuration if it exists
-        revamped_hyperparameters.pop("advanced_model_configuration", None)
-        hyper_parameter_dict = revamped_hyperparameters
-    else:
-        legacy_hyper_parameters = model_configuration.configurable_parameters
-        hyperparameters = forward_legacy_hyperparameters(legacy_hyper_parameters)
-        hyper_parameter_dict = hyperparameters.model_dump()
 
     adapter = MLArtifactsAdapter(
         project_identifier=project_identifier,
