@@ -2,6 +2,7 @@
 # LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
 """This module contains the FlyteTaskTrainCommands"""
+
 import json
 import logging
 
@@ -220,6 +221,7 @@ def prepare_train(train_data: TrainWorkflowData, dataset: Dataset) -> TrainOutpu
 
     model_repo = ModelRepo(model_storage.identifier)
     model_version = model_repo.get_latest_successful_version() + 1
+    revamped_hyperparameters = json.loads(train_data.hyperparameters_json) if train_data.hyperparameters_json else None
     model_builder = _ModelBuilder(
         model_repo=model_repo,
         project=project,
@@ -228,7 +230,7 @@ def prepare_train(train_data: TrainWorkflowData, dataset: Dataset) -> TrainOutpu
         label_schema=label_schema,
         hyper_parameters=legacy_hyper_parameters,
         model_version=model_version,
-        revamped_hyperparameters=json.loads(train_data.hyperparameters_json),
+        revamped_hyperparameters=revamped_hyperparameters,
     )
 
     output_base_model = model_builder.create_model(

@@ -1,9 +1,9 @@
 # Copyright (C) 2022-2025 Intel Corporation
 # LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 """This module tests train task"""
-import json
 
 import asyncio
+import json
 import os
 from asyncio import AbstractEventLoop
 from collections.abc import Generator

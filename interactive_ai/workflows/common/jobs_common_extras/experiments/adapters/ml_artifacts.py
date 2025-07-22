@@ -400,8 +400,8 @@ class MLArtifactsAdapter:
         filename = os.path.join(self.dst_path_prefix, "outputs", "configurations", "advanced_config.json")
         if not self.binary_repo.exists(filename):
             logger.warning(
-                "Cannot find advanced_config.json file to extract advanced configuration; "
-                "`%s` is missing.", filename,
+                "Cannot find advanced_config.json file to extract advanced configuration; `%s` is missing.",
+                filename,
             )
             return None
 
