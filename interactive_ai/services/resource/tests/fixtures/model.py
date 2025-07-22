@@ -794,7 +794,7 @@ def fxt_zip_file_data():
     with ZipFile(output_bytes, "w") as zf:
         info = ZipInfo("dummy.file")
         zf.writestr(info, b"DUMMY_DATA")
-        info = ZipInfo("openvino.xml")
+        info = ZipInfo("model.xml")
         zf.writestr(info, b"xml_data")
     output_bytes.seek(0)
     return output_bytes
