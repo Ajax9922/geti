@@ -376,7 +376,13 @@ class ModelRESTController:
         with ZipFile(output_bytes, "w") as zf:
             files_to_export = model.model_adapters.items()
             for filename, adapter in files_to_export:
-                info = ZipInfo(filename)
+                _filename = filename
+                match filename:
+                    case OVWeightsKey.OPENVINO_XML.value:
+                        _filename = "model.xml"
+                    case OVWeightsKey.OPENVINO_BIN.value:
+                        _filename = "model.bin"
+                info = ZipInfo(_filename)
                 zf.writestr(info, adapter.data)
             if not model_only:
                 config = DeploymentPackageManager.extract_config_json_from_xml(
