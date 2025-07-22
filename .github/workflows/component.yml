@@ -19,12 +19,18 @@ on:
         description: 'The branch, tag or SHA to checkout'
         type: string
         default: ""
+      manifest_registry:
+        description: 'The registry to use for the manifest'
+        type: string
+        default: ""
     secrets:
       AWS_ROLE:
         required: true
       AWS_REGION:
         required: true
       REGISTRY:
+        required: true
+      MANIFEST_REGISTRY:
         required: true
   workflow_dispatch:
     inputs:
@@ -52,6 +58,7 @@ jobs:
     env:
       TAG: ${{ inputs.build_version || github.sha }}
       REGISTRY: ${{ secrets.REGISTRY }}
+      MANIFEST_REGISTRY: ${{ inputs.manifest_registry || secrets.MANIFEST_REGISTRY }}
       PYTHON_BUILDER_IMAGE: builder-images/python-builder:v0.1
       GO_BUILDER_IMAGE: builder-images/go-builder:v0.1
     steps:
@@ -134,5 +141,7 @@ jobs:
         run: make -C "${COMPONENT_DIR}" lint-chart
 
       - name: Publish chart
+        env:
+          VERSION: ${{ env.TAG }}
         if: steps.build-image.outputs.SKIP_IMAGE != 'true' && inputs.publish_binaries
         run: make -C "${COMPONENT_DIR}" publish-chart

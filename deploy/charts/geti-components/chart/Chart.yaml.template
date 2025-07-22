@@ -110,6 +110,10 @@ dependencies:
     repository: "file://../../../../../platform/services/config/.build/chart"
     version: ${TAG}
     condition: enabled.configuration
+  - name: geti-controller
+    version: ${TAG}
+    repository: "file://../../../../../platform/services/geti_controller/.build/chart"
+    condition: enabled.geti_controller
   - name: jobs-execution-namespace
     version: v0.1.15
     condition: enabled.jobs_execution_namespace
