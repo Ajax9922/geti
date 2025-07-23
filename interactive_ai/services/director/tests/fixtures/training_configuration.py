@@ -35,7 +35,7 @@ def ftx_hyperparameters():
     yield Hyperparameters(
         dataset_preparation=DatasetPreparationParameters(
             augmentation=AugmentationParameters(
-                center_crop=CenterCrop(enable=True, ratio=0.6),
+                center_crop=CenterCrop(enable=True),
             )
         ),
         training=TrainingHyperParameters(
@@ -93,16 +93,6 @@ def fxt_training_configuration_task_level_rest_view(fxt_training_configuration_t
                         "name": "Enable center crop",
                         "type": "bool",
                         "value": True,
-                    },
-                    {
-                        "default_value": 1.0,
-                        "description": "Ratio of original dimensions to keep when cropping",
-                        "key": "ratio",
-                        "max_value": None,
-                        "min_value": 0.0,
-                        "name": "Crop ratio",
-                        "type": "float",
-                        "value": 0.6,
                     },
                 ]
             },
@@ -318,7 +308,6 @@ def fxt_partial_training_configuration_manifest_level(fxt_mongo_id, fxt_active_m
                 "augmentation": {
                     "random_affine": {
                         "enable": True,
-                        "degrees": 15,
                     },
                     "tiling": {
                         "enable": True,
@@ -359,16 +348,6 @@ def fxt_training_configuration_full_rest_view(
                         "type": "bool",
                         "value": True,
                     },
-                    {
-                        "default_value": 1.0,
-                        "description": "Ratio of original dimensions to keep when cropping",
-                        "key": "ratio",
-                        "max_value": None,
-                        "min_value": 0.0,
-                        "name": "Crop ratio",
-                        "type": "float",
-                        "value": 0.6,
-                    },
                 ],
                 "random_affine": [
                     {
@@ -378,47 +357,7 @@ def fxt_training_configuration_full_rest_view(
                         "name": "Enable random affine",
                         "type": "bool",
                         "value": True,
-                    },
-                    {
-                        "default_value": 0.0,
-                        "description": "Maximum rotation angle in degrees",
-                        "key": "degrees",
-                        "max_value": None,
-                        "min_value": 0.0,
-                        "name": "Rotation degrees",
-                        "type": "float",
-                        "value": 15.0,
-                    },
-                    {
-                        "default_value": 0.0,
-                        "description": "Maximum horizontal translation as a fraction of image width",
-                        "key": "translate_x",
-                        "max_value": None,
-                        "min_value": None,
-                        "name": "Horizontal translation",
-                        "type": "float",
-                        "value": 0.0,
-                    },
-                    {
-                        "default_value": 0.0,
-                        "description": "Maximum vertical translation as a fraction of image height",
-                        "key": "translate_y",
-                        "max_value": None,
-                        "min_value": None,
-                        "name": "Vertical translation",
-                        "type": "float",
-                        "value": 0.0,
-                    },
-                    {
-                        "default_value": 1.0,
-                        "description": "Scaling factor for the image during affine transformation",
-                        "key": "scale",
-                        "max_value": None,
-                        "min_value": None,
-                        "name": "Scale factor",
-                        "type": "float",
-                        "value": 1.0,
-                    },
+                    }
                 ],
                 "tiling": [
                     {
