@@ -110,10 +110,14 @@ class PartialTrainingConfigurationRepo(ProjectBasedSessionRepo[PartialTrainingCo
             min_annotation_objects=MinAnnotationObjects(),
             max_annotation_objects=MaxAnnotationObjects(),
         )
+        empty_filtering_params = Filtering()
         default_global_parameters = GlobalParameters(
             dataset_preparation=GlobalDatasetPreparationParameters(
                 subset_split=SubsetSplit(),
-                filtering=default_filtering_params if task.task_properties.is_annotation_filtering_supported else None,
+                filtering=(
+                    default_filtering_params
+                    if task.task_properties.is_annotation_filtering_supported else empty_filtering_params
+                ),
             )
         )
         default_configuration_dict = {

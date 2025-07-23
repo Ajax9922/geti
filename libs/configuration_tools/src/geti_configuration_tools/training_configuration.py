@@ -117,17 +117,17 @@ class MaxAnnotationObjects(BaseModel):
 class Filtering(BaseModel):
     """Parameters for filtering annotations in the dataset."""
 
-    min_annotation_pixels: MinAnnotationPixels = Field(
-        title="Minimum annotation pixels", description="Minimum number of pixels in an annotation"
+    min_annotation_pixels: MinAnnotationPixels | None = Field(
+        default=None, title="Minimum annotation pixels", description="Minimum number of pixels in an annotation"
     )
-    max_annotation_pixels: MaxAnnotationPixels = Field(
-        title="Maximum annotation pixels", description="Maximum number of pixels in an annotation"
+    max_annotation_pixels: MaxAnnotationPixels | None = Field(
+        default=None, title="Maximum annotation pixels", description="Maximum number of pixels in an annotation"
     )
-    min_annotation_objects: MinAnnotationObjects = Field(
-        title="Minimum annotation objects", description="Minimum number of objects in an annotation"
+    min_annotation_objects: MinAnnotationObjects | None = Field(
+        default=None, title="Minimum annotation objects", description="Minimum number of objects in an annotation"
     )
-    max_annotation_objects: MaxAnnotationObjects = Field(
-        title="Maximum annotation objects", description="Maximum number of objects in an annotation"
+    max_annotation_objects: MaxAnnotationObjects | None = Field(
+        default=None, title="Maximum annotation objects", description="Maximum number of objects in an annotation"
     )
 
 
@@ -138,8 +138,8 @@ class GlobalDatasetPreparationParameters(BaseModel):
     """
 
     subset_split: SubsetSplit = Field(title="Subset split", description="Configuration for splitting data into subsets")
-    filtering: Filtering | None = Field(
-        default=None, title="Filtering", description="Configuration for filtering annotations"
+    filtering: Filtering = Field(
+        default_factory=Filtering, title="Filtering", description="Configuration for filtering annotations"
     )
 
 
