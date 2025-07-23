@@ -7,6 +7,7 @@ import logging
 from dataclasses import dataclass
 
 from iai_core.entities.model_template import ModelTemplate, TaskFamily, TaskType
+from iai_core.entities.label import Domain
 
 from geti_types import ID, PersistentEntity
 
@@ -49,6 +50,11 @@ class TaskProperties:
             is_global=model_template.task_type.is_global,
             is_anomaly=model_template.task_type.is_anomaly,
         )
+
+    @property
+    def is_annotation_filtering_supported(self) -> bool:
+        """Check if annotation filtering is supported for this task type."""
+        return self.task_type.domain not in {Domain.CLASSIFICATION, Domain.KEYPOINT_DETECTION, Domain.ANOMALY}
 
 
 class TaskNode(PersistentEntity):

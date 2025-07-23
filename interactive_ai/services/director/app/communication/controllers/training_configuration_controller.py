@@ -6,7 +6,11 @@ from geti_configuration_tools import ConfigurationOverlayTools
 from geti_configuration_tools.training_configuration import NullTrainingConfiguration, PartialTrainingConfiguration
 
 from communication.backward_compatibility.configurations import ConfigurationsBackwardCompatibility
-from communication.exceptions import MissingTaskIDException, TaskNodeNotFoundException
+from communication.exceptions import (
+    MissingTaskIDException,
+    NotSupportedConfigurableParameterException,
+    TaskNodeNotFoundException,
+)
 from communication.views.training_configuration_rest_views import TrainingConfigurationRESTViews
 from service.configuration_service import ConfigurationService
 from storage.repos.partial_training_configuration_repo import PartialTrainingConfigurationRepo
@@ -14,6 +18,7 @@ from storage.repos.partial_training_configuration_repo import PartialTrainingCon
 from geti_telemetry_tools import unified_tracing
 from geti_types import ID, ProjectIdentifier
 from iai_core.entities.annotation_scene_state import AnnotationState
+from iai_core.entities.task_node import NullTaskNode
 from iai_core.repos import AnnotationSceneStateRepo, DatasetStorageRepo, ModelRepo, TaskNodeRepo
 
 
@@ -120,8 +125,20 @@ class TrainingConfigurationRESTController:
         training_configuration_repo = PartialTrainingConfigurationRepo(project_identifier)
 
         task_id = ID(update_configuration.task_id)
-        if not TaskNodeRepo(project_identifier).exists(task_id):
+        task = TaskNodeRepo(project_identifier).get_by_id(task_id)
+        if isinstance(task, NullTaskNode):
             raise TaskNodeNotFoundException(task_node_id=task_id)
+
+        try:
+            if (
+                update_configuration.global_parameters.dataset_preparation.filtering
+                and not task.task_properties.is_annotation_filtering_supported
+            ):
+                raise NotSupportedConfigurableParameterException(
+                    parameter_name="filtering", task_type=task.task_properties.task_type.name
+                )
+        except AttributeError:
+            pass  # if filtering is not set, no need to check if it is supported
 
         # configuration is saved as "task level"
         if not update_configuration.model_manifest_id:

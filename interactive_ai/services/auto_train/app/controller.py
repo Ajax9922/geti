@@ -166,12 +166,12 @@ class AutoTrainController:
                 filtering_parameters = global_parameters.dataset_preparation.filtering
                 min_annotation_size = (
                     filtering_parameters.min_annotation_pixels.min_annotation_pixels
-                    if filtering_parameters.min_annotation_pixels
+                    if filtering_parameters and filtering_parameters.min_annotation_pixels
                     else None
                 )
                 max_number_of_annotations = (
                     filtering_parameters.max_annotation_objects.max_annotation_objects
-                    if filtering_parameters.max_annotation_objects.enable
+                    if filtering_parameters and filtering_parameters.max_annotation_objects.enable
                     else None
                 )
             else:

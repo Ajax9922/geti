@@ -130,7 +130,9 @@ class GlobalDatasetPreparationParameters(BaseModel):
     """
 
     subset_split: SubsetSplit = Field(title="Subset split", description="Configuration for splitting data into subsets")
-    filtering: Filtering = Field(title="Filtering", description="Configuration for filtering annotations")
+    filtering: Filtering | None = Field(
+        default=None, title="Filtering", description="Configuration for filtering annotations"
+    )
 
 
 class GlobalParameters(BaseModel):
