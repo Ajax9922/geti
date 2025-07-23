@@ -1,5 +1,6 @@
 # Copyright (C) 2022-2025 Intel Corporation
 # LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
+import math
 from typing import Any
 
 from geti_types import ID, PersistentEntity
@@ -41,6 +42,13 @@ class SubsetSplit(BaseModel):
     def validate_subsets(self) -> "SubsetSplit":
         if (self.training + self.validation + self.test) != 100:
             raise ValueError("Sum of subsets should be equal to 100")
+        # check that all subsets have at least one item if dataset_size is provided
+        if self.dataset_size is not None:
+            validation_size = math.floor(self.dataset_size * self.validation / 100)
+            test_size = math.floor(self.dataset_size * self.test / 100)
+            train_size = self.dataset_size - validation_size - test_size
+            if train_size < 1 or validation_size < 1 or test_size < 1:
+                raise ValueError("Each subset must be at least contain one item")
         return self
 
 

@@ -228,3 +228,33 @@ class TestTrainingConfiguration:
         partial_global_params_full = PartialGlobalParameters.model_validate(full_global_params_dict)
 
         assert partial_global_params_full.model_dump() == fxt_global_parameters.model_dump()
+
+    def test_validate_subsets(self) -> None:
+        # subsets dont add app to 100
+        with pytest.raises(ValueError):
+            PartialGlobalParameters.model_validate(
+                {
+                    "dataset_preparation": {
+                        "subset_split": {
+                            "training": 1,
+                            "validation": 1,
+                            "test": 1,
+                        }
+                    }
+                }
+            )
+
+        # test doesn't have items
+        with pytest.raises(ValueError):
+            PartialGlobalParameters.model_validate(
+                {
+                    "dataset_preparation": {
+                        "subset_split": {
+                            "training": 50,
+                            "validation": 49,
+                            "test": 1,
+                            "dataset_size": 10,
+                        }
+                    }
+                }
+            )
