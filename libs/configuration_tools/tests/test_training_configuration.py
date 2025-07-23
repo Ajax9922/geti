@@ -167,7 +167,7 @@ class TestTrainingConfiguration:
         assert partial_training_config_incomplete.model_manifest_id == "test_manifest"
         assert partial_training_config_incomplete.id_ == ID("partial_config")
         assert partial_training_config_incomplete.task_id == ID("test_task")
-        assert global_parameters.dataset_preparation.filtering
+        assert global_parameters.dataset_preparation.filtering.min_annotation_pixels
         assert global_parameters.dataset_preparation.filtering.min_annotation_pixels.min_annotation_pixels == 42
         assert global_parameters.dataset_preparation.filtering.min_annotation_pixels.enable is None
         assert global_parameters.dataset_preparation.subset_split is None

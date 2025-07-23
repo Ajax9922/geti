@@ -208,8 +208,9 @@ class TestConfigurationService:
         assert full_config_dataset_preparation.subset_split.training == 60
         assert full_config_dataset_preparation.subset_split.validation == 30
         assert full_config_dataset_preparation.subset_split.remixing
-        assert full_config_dataset_preparation.filtering
+        assert full_config_dataset_preparation.filtering.max_annotation_pixels
         assert full_config_dataset_preparation.filtering.max_annotation_pixels.enable
+        assert full_config_dataset_preparation.filtering.min_annotation_pixels
         assert not full_config_dataset_preparation.filtering.min_annotation_pixels.enable
         assert full_config_dataset_preparation.filtering.min_annotation_pixels.min_annotation_pixels == 1
         assert full_config_overlay.hyperparameters.training
