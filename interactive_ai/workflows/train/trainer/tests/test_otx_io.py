@@ -47,7 +47,7 @@ def test_download_shard_files(
 
     client.get_presigned_url.return_value = "presigned_url"
 
-    # Act
+    # Act 
     result = download_shard_files()
 
     # Assert
@@ -358,24 +358,25 @@ def test_save_exported_model_openvino(
 
     # Assert
     assert mock_upload_model_artifact.call_count == 2
+    model_name = "optimized_model" if precision == PrecisionType.INT8 else "exported_model"
     mock_upload_model_artifact.assert_has_calls(
         [
             call(
-                src_filepath=Path("export_dir/exported_model.bin"),
+                src_filepath=Path(f"export_dir/{model_name}.bin"),
                 dst_filepath=Path("outputs/models") / export_param.to_artifact_fnames()[0],
             ),
             call(
-                src_filepath=Path("export_dir/exported_model.xml"),
+                src_filepath=Path(f"export_dir/{model_name}.xml"),
                 dst_filepath=Path("outputs/models") / export_param.to_artifact_fnames()[1],
             ),
         ]
     )
 
-    assert mock_remove.call_count == 3
+    assert mock_remove.call_count == 2
     mock_remove.assert_has_calls(
         [
-            call(Path("export_dir/exported_model.bin")),
-            call(Path("export_dir/exported_model.xml")),
+            call(Path(f"export_dir/{model_name}.bin")),
+            call(Path(f"export_dir/{model_name}.xml")),
         ]
     )
 
