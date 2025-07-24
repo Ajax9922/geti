@@ -83,6 +83,9 @@ class TestConfigurationService:
             ({}, {}),
             # Dict with no None values
             ({"a": 1, "b": "test"}, {"a": 1, "b": "test"}),
+            # Dict with only None Values
+            ({"a": 1, "b": {"b1": None}}, {"a": 1}),
+            ({"a": 1, "b": [{"b1": None}]}, {"a": 1}),
             # Dict with None values
             ({"a": 1, "b": None, "c": "test"}, {"a": 1, "c": "test"}),
             # Dict with nested dict containing None values

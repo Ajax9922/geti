@@ -16,12 +16,18 @@ class ConfigurationOverlayTools:
         for key, value in list(d.items()):
             if isinstance(value, dict):
                 cls.delete_none_from_dict(value)
+                if not value:
+                    del d[key]
             elif value is None:
                 del d[key]
             elif isinstance(value, list):
-                for v_i in value:
+                for i, v_i in enumerate(value):
                     if isinstance(v_i, dict):
                         cls.delete_none_from_dict(v_i)
+                        if not v_i:
+                            del value[i]
+                if not value:
+                    del d[key]
         return d
 
     @classmethod

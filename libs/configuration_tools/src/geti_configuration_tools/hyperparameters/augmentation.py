@@ -1,10 +1,12 @@
 # Copyright (C) 2022-2025 Intel Corporation
 # LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
-from pydantic import BaseModel, Field
+from pydantic import Field
+
+from .base_model_no_extra import BaseModelNoExtra
 
 
-class CenterCrop(BaseModel):
+class CenterCrop(BaseModelNoExtra):
     enable: bool = Field(
         default=False,
         title="Enable center crop",
@@ -20,7 +22,7 @@ class CenterCrop(BaseModel):
     )
 
 
-class RandomResizeCrop(BaseModel):
+class RandomResizeCrop(BaseModelNoExtra):
     enable: bool = Field(
         default=False,
         title="Enable random resize crop",
@@ -36,7 +38,7 @@ class RandomResizeCrop(BaseModel):
     )
 
 
-class RandomAffine(BaseModel):
+class RandomAffine(BaseModelNoExtra):
     enable: bool = Field(
         default=False,
         title="Enable random affine",
@@ -74,7 +76,7 @@ class RandomAffine(BaseModel):
     )
 
 
-class RandomHorizontalFlip(BaseModel):
+class RandomHorizontalFlip(BaseModelNoExtra):
     enable: bool = Field(
         default=False,
         title="Enable random horizontal flip",
@@ -82,7 +84,7 @@ class RandomHorizontalFlip(BaseModel):
     )
 
 
-class RandomVerticalFlip(BaseModel):
+class RandomVerticalFlip(BaseModelNoExtra):
     enable: bool = Field(
         default=False,
         title="Enable random vertical flip",
@@ -90,7 +92,7 @@ class RandomVerticalFlip(BaseModel):
     )
 
 
-class RandomIOUCrop(BaseModel):
+class RandomIOUCrop(BaseModelNoExtra):
     enable: bool = Field(
         default=False,
         title="Enable random IoU crop",
@@ -98,7 +100,7 @@ class RandomIOUCrop(BaseModel):
     )
 
 
-class ColorJitter(BaseModel):
+class ColorJitter(BaseModelNoExtra):
     enable: bool = Field(
         default=False,
         title="Enable color jitter",
@@ -106,7 +108,7 @@ class ColorJitter(BaseModel):
     )
 
 
-class GaussianBlur(BaseModel):
+class GaussianBlur(BaseModelNoExtra):
     enable: bool = Field(
         default=False,
         title="Enable Gaussian blur",
@@ -122,7 +124,7 @@ class GaussianBlur(BaseModel):
     )
 
 
-class Tiling(BaseModel):
+class Tiling(BaseModelNoExtra):
     enable: bool = Field(
         default=False,
         title="Enable tiling",
@@ -141,7 +143,7 @@ class Tiling(BaseModel):
     )
 
 
-class AugmentationParameters(BaseModel):
+class AugmentationParameters(BaseModelNoExtra):
     """Configuration parameters for data augmentation during training."""
 
     center_crop: CenterCrop | None = Field(
