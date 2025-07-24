@@ -16,9 +16,9 @@ from threading import Thread
 from typing import TYPE_CHECKING, ClassVar
 
 import requests
-from s3_client import S3ClientSingleton
+from .s3_client import S3ClientSingleton
 from tqdm import tqdm
-from utils import BASE_MODEL_FILENAME, ExportFormat, ExportParameter, PrecisionType, logging_elapsed_time
+from .utils import BASE_MODEL_FILENAME, ExportFormat, ExportParameter, PrecisionType, logging_elapsed_time
 
 if TYPE_CHECKING:
     import io
@@ -128,10 +128,10 @@ def download_shard_files() -> Path:
 @logging_elapsed_time(logger=logger, log_level=logging.INFO)
 def download_config_file() -> Path:
     """Download the configuration file."""
-    file_path = _get_shard_files_dir() / "config.json"
+    file_path = _get_shard_files_dir() / "config.yaml"
     S3ClientSingleton.instance().download_file(
         bucket_name=_get_bucket_name(),
-        relative_path=_get_object_name_base() / "inputs/config.json",
+        relative_path=_get_object_name_base() / "inputs/config.yaml",
         file_path=file_path,
     )
     return file_path
@@ -334,15 +334,3 @@ def load_trained_model_weights(
         )
 
     return downloaded[0]
-
-
-def _update_configurable_parameters(cur_hp: dict, optimized_hp: dict) -> dict:
-    for param_key, param_val in optimized_hp.items():
-        splited_param_key = param_key.split(".")
-
-        target = cur_hp
-        for val in splited_param_key[:-1]:
-            target = target[val]
-        target[splited_param_key[-1]] = param_val
-
-    return cur_hp

@@ -9,6 +9,7 @@ from otx.backend.native.models.base import DataInputParams
 from otx.models import VisionTransformer
 from otx.types.export import OTXExportFormatType
 from otx.types.label import LabelInfo
+
 from scripts.optimize import optimize
 from scripts.utils import OTXConfig
 
