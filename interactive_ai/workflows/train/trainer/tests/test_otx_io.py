@@ -4,6 +4,7 @@ from pathlib import Path
 from unittest.mock import MagicMock, call, patch
 
 import pytest
+
 from scripts.otx_io import (
     download_config_file,
     download_model_artifact,
