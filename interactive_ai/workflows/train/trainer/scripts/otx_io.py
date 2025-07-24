@@ -16,9 +16,9 @@ from threading import Thread
 from typing import TYPE_CHECKING, ClassVar
 
 import requests
-from .s3_client import S3ClientSingleton
+from s3_client import S3ClientSingleton
 from tqdm import tqdm
-from .utils import BASE_MODEL_FILENAME, ExportFormat, ExportParameter, PrecisionType, logging_elapsed_time
+from utils import BASE_MODEL_FILENAME, ExportFormat, ExportParameter, PrecisionType, logging_elapsed_time
 
 if TYPE_CHECKING:
     import io

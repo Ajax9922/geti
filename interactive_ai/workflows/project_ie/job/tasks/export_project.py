@@ -12,6 +12,7 @@ from jobs_common.tasks.utils.progress import report_progress, task_progress
 from jobs_common.tasks.utils.secrets import env_vars
 from jobs_common.tasks.utils.telemetry import task_telemetry
 
+from job.entities.include_models import IncludeModels
 from job.tasks import IMPORT_EXPORT_TASK_POD_SPEC
 from job.tasks.secrets import PROJECT_IE_SECRETS, signing_key_env_vars
 from job.usecases import ProjectExportUseCase
@@ -31,6 +32,7 @@ logger = logging.getLogger(__name__)
 )
 def export_project(
     project_id: str,
+    include_models: str = "all",
 ) -> None:
     """
     Export project from Geti to zipped project task
@@ -38,4 +40,12 @@ def export_project(
     :param project_id: ID of the project to export
     :return: id of the exported project
     """
-    ProjectExportUseCase.export_as_zip(project_id=ID(project_id), progress_callback=report_progress)
+    include_models_enum = IncludeModels(include_models)
+    if include_models_enum not in [IncludeModels.ALL, IncludeModels.NONE]:
+        raise NotImplementedError(
+            f"Exporting projects including models of type '{include_models_enum.value}' is not supported yet."
+        )
+
+    ProjectExportUseCase.export_as_zip(
+        project_id=ID(project_id), include_models=include_models_enum, progress_callback=report_progress
+    )

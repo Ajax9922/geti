@@ -137,20 +137,28 @@ class TestMediaUploadedUseCase:
     @patch("tempfile.NamedTemporaryFile")
     @patch("PIL.Image.open")
     @patch.object(ImageBinaryRepo, "__init__", new=mock_init)
-    def test_on_image_uploaded(self, mock_image_open, mock_temp_file_context) -> None:
+    @pytest.mark.parametrize("thumbnail_image_mode", ["RGBA", "P", "RGB"])
+    def test_on_image_uploaded(self, mock_image_open, mock_temp_file_context, thumbnail_image_mode) -> None:
         # Arrange
         mock_temp_file = MagicMock()
         mock_temp_file.name = "/tmp/file.jpg"
         mock_temp_file_context.return_value.__enter__.return_value = mock_temp_file
         data_stream = MagicMock()
 
-        resized_image = MagicMock()
+        thumbnail_image = MagicMock()
+        thumbnail_image.mode = thumbnail_image_mode
+
+        converted_thumbnail_image = MagicMock()
+        thumbnail_image.convert.return_value = converted_thumbnail_image
+
         pil_image = MagicMock()
-        pil_image.resize.return_value = resized_image
         mock_image_open.return_value = pil_image
 
         # Act
         with (
+            patch.object(
+                MediaUploadedUseCase, "crop_to_thumbnail", return_value=thumbnail_image
+            ) as mock_crop_to_thumbnail,
             patch.object(ImageBinaryRepo, "get_by_filename", return_value=data_stream) as mock_get_by_filename,
             patch.object(ThumbnailBinaryRepo, "save") as mock_save_thumbnail,
         ):
@@ -165,8 +173,12 @@ class TestMediaUploadedUseCase:
         data_stream.seek.assert_called_once_with(0)
         mock_image_open.assert_called_once_with(data_stream)
         mock_temp_file_context.assert_called_once_with(suffix="image_id_thumbnail.jpg")
-        pil_image.resize.assert_called_once_with((256, 256))
-        resized_image.save.assert_called_once_with("/tmp/file.jpg")
+        mock_crop_to_thumbnail.assert_called_once_with(pil_image=pil_image, target_width=256, target_height=256)
+        if thumbnail_image_mode == "RGB":
+            thumbnail_image.save.assert_called_once_with("/tmp/file.jpg")
+        else:
+            thumbnail_image.convert.assert_called_once_with("RGB")
+            converted_thumbnail_image.save.assert_called_once_with("/tmp/file.jpg")
         mock_save_thumbnail.assert_called_once_with(
             data_source="/tmp/file.jpg",
             dst_file_name="image_id_thumbnail.jpg",
