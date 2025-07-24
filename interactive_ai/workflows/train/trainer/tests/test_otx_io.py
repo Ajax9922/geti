@@ -85,8 +85,8 @@ def test_download_config_file(
     mock_get_shard_files_dir.assert_called()
     client.download_file.assert_called_once_with(
         bucket_name="bucket",
-        relative_path=Path("object_name_base/inputs/config.json"),
-        file_path=Path("shard_files/config.json"),
+        relative_path=Path("object_name_base/inputs/config.yaml"),
+        file_path=Path("shard_files/config.yaml"),
     )
 
 
@@ -357,7 +357,7 @@ def test_save_exported_model_openvino(
     save_exported_model(export_dir=Path("export_dir"), export_param=export_param)
 
     # Assert
-    assert mock_upload_model_artifact.call_count == 3
+    assert mock_upload_model_artifact.call_count == 2
     mock_upload_model_artifact.assert_has_calls(
         [
             call(
