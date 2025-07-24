@@ -4,7 +4,7 @@ from pathlib import Path
 from unittest.mock import MagicMock, call, patch
 
 import pytest
-from scripts.otx_io import (
+from otx_io import (
     download_config_file,
     download_model_artifact,
     download_shard_files,
@@ -16,8 +16,8 @@ from scripts.otx_io import (
     upload_full_log,
     upload_model_artifact,
 )
-from scripts.s3_client import S3ClientSingleton
-from scripts.utils import ExportFormat, ExportParameter, PrecisionType
+from s3_client import S3ClientSingleton
+from utils import ExportFormat, ExportParameter, PrecisionType
 
 
 def mock_client(self, *args, **kwargs) -> None:

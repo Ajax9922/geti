@@ -6,7 +6,7 @@ from unittest.mock import ANY, MagicMock, patch
 
 import pytest
 from minio.error import S3Error
-from scripts.s3_client import S3Client
+from s3_client import S3Client
 
 
 def mock_client(self, *args, **kwargs) -> None:

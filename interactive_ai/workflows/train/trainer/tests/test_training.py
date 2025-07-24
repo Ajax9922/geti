@@ -9,8 +9,8 @@ from lightning import Trainer
 from otx.backend.native.models.base import DataInputParams
 from otx.models import EfficientNet
 from otx.types.label import LabelInfo
-from scripts.train import train
-from scripts.utils import OTXConfig
+from train import train
+from utils import OTXConfig
 
 
 @pytest.fixture()
@@ -42,9 +42,9 @@ def fxt_checkpoint(request, tmpdir, monkeypatch: pytest.MonkeyPatch):
     return checkpoint_path
 
 
-@patch("scripts.metrics.upload_model_artifact")
-@patch("scripts.otx_io.upload_model_artifact")
-@patch("scripts.train.load_trained_model_weights")
+@patch("metrics.upload_model_artifact")
+@patch("otx_io.upload_model_artifact")
+@patch("train.load_trained_model_weights")
 def test_train(
     mock_load_trained_model_weights,
     mock_upload_model_artifact,

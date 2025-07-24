@@ -5,12 +5,12 @@ from pathlib import Path
 from unittest.mock import patch
 
 import pytest
+from optimize import optimize
 from otx.backend.native.models.base import DataInputParams
 from otx.models import VisionTransformer
 from otx.types.export import OTXExportFormatType
 from otx.types.label import LabelInfo
-from scripts.optimize import optimize
-from scripts.utils import OTXConfig
+from utils import OTXConfig
 
 
 @pytest.fixture()
@@ -66,9 +66,9 @@ def fxt_exportable_code_side_effect(tmpdir):
     return side_effect
 
 
-@patch("scripts.otx_io.upload_model_artifact")
+@patch("otx_io.upload_model_artifact")
 @patch("otx.engine.engine.Engine.export")
-@patch("scripts.optimize.load_trained_model_weights")
+@patch("optimize.load_trained_model_weights")
 def test_optimize(
     mock_load_trained_model_weights,
     mock_engine_export,
