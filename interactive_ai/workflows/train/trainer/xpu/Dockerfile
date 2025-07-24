@@ -49,6 +49,10 @@ COPY --link uv.lock uv.lock
 COPY --link pyproject.toml pyproject.toml
 COPY --link download_pretrained_weights.py download_pretrained_weights.py
 
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    git
+
 # For OTX to install torch with ipex support, else defaults to cpu version
 RUN --mount=type=cache,target=/root/.cache/uv uv sync --frozen --no-dev --no-editable
 RUN uv pip uninstall torch
