@@ -47,7 +47,7 @@ def test_download_shard_files(
 
     client.get_presigned_url.return_value = "presigned_url"
 
-    # Act 
+    # Act
     result = download_shard_files()
 
     # Assert
