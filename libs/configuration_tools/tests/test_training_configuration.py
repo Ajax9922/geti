@@ -87,6 +87,7 @@ class TestTrainingConfiguration:
         assert training_config.global_parameters.dataset_preparation.subset_split.test == 10
         assert training_config.hyperparameters.training is not None
         assert training_config.hyperparameters.training.max_epochs == 100
+        assert training_config.hyperparameters.training.early_stopping
         assert training_config.hyperparameters.training.early_stopping.enable
         assert training_config.hyperparameters.training.early_stopping.patience == 10
 
