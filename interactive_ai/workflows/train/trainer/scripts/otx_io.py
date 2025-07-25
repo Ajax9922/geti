@@ -334,15 +334,3 @@ def load_trained_model_weights(
         )
 
     return downloaded[0]
-
-
-def _update_configurable_parameters(cur_hp: dict, optimized_hp: dict) -> dict:
-    for param_key, param_val in optimized_hp.items():
-        splited_param_key = param_key.split(".")
-
-        target = cur_hp
-        for val in splited_param_key[:-1]:
-            target = target[val]
-        target[splited_param_key[-1]] = param_val
-
-    return cur_hp
