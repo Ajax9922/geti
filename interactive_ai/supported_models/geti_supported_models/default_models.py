@@ -51,8 +51,8 @@ class DefaultModels:
             DefaultCategory.BALANCE: "Custom_Object_Detection_Gen3_ATSS",
         },
         TaskType.ROTATED_DETECTION: {
-            DefaultCategory.DEFAULT: "Custom_Rotated_Detection_via_Instance_Segmentation_MaskRCNN_EfficientNetB2B",
-            DefaultCategory.ACCURACY: "Custom_Rotated_Detection_via_Instance_Segmentation_MaskRCNN_ResNet50",
+            DefaultCategory.DEFAULT: "Rotated_Detection_MaskRCNN_ResNet50_V2",
+            DefaultCategory.ACCURACY: "Rotated_Detection_MaskRCNN_ResNet50_V2",
             DefaultCategory.SPEED: "Custom_Rotated_Detection_via_Instance_Segmentation_MaskRCNN_EfficientNetB2B",
             DefaultCategory.BALANCE: None,
         },
