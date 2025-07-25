@@ -3,6 +3,7 @@
 
 from collections import defaultdict
 from typing import Any
+import logging
 
 from geti_configuration_tools.hyperparameters import (
     DatasetPreparationParameters as HyperparametersDatasetPreparationParameters,
@@ -22,6 +23,8 @@ from communication.views.configurable_parameters_to_rest import ConfigurablePara
 DATASET_PREPARATION = "dataset_preparation"
 TRAINING = "training"
 EVALUATION = "evaluation"
+
+logger = logging.getLogger(__name__)
 
 
 class TrainingConfigurationRESTViews(ConfigurableParametersRESTViews):
@@ -73,6 +76,7 @@ class TrainingConfigurationRESTViews(ConfigurableParametersRESTViews):
         default_config = (
             {} if isinstance(model_manifest, NullModelManifest) else model_manifest.hyperparameters.model_dump()
         )
+        logger.info(f"Rest view default config (`{model_manifest.id}`): {default_config}")
 
         training_params_rest = (
             cls.configurable_parameters_to_rest(
