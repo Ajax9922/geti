@@ -35,14 +35,14 @@ class EarlyStopping(BaseModelNoExtra):
 class TrainingHyperParameters(BaseModelNoExtra):
     """Hyperparameters for model training process."""
 
-    max_epochs: int = Field(
-        gt=0, default=1000, title="Maximum epochs", description="Maximum number of training epochs to run"
+    max_epochs: int | None = Field(
+        gt=0, default=None, title="Maximum epochs", description="Maximum number of training epochs to run"
     )
-    early_stopping: EarlyStopping = Field(
-        default_factory=EarlyStopping, title="Early stopping", description="Configuration for early stopping mechanism"
+    early_stopping: EarlyStopping | None = Field(
+        default=None, title="Early stopping", description="Configuration for early stopping mechanism"
     )
-    learning_rate: float = Field(
-        gt=0, lt=1, default=0.001, title="Learning rate", description="Base learning rate for the optimizer"
+    learning_rate: float | None = Field(
+        gt=0, lt=1, default=None, title="Learning rate", description="Base learning rate for the optimizer"
     )
     input_size_width: int | None = Field(
         default=None,

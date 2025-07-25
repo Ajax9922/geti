@@ -239,7 +239,7 @@ def fxt_training_configuration_task_level_rest_view(fxt_training_configuration_t
         },
         "training": [
             {
-                "default_value": 1000,
+                "default_value": None,
                 "description": "Maximum number of training epochs to run",
                 "key": "max_epochs",
                 "max_value": None,
@@ -249,7 +249,7 @@ def fxt_training_configuration_task_level_rest_view(fxt_training_configuration_t
                 "value": 100,
             },
             {
-                "default_value": 0.001,
+                "default_value": None,
                 "description": "Base learning rate for the optimizer",
                 "key": "learning_rate",
                 "max_value": 1.0,

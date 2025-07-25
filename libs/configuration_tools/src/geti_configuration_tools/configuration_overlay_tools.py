@@ -1,5 +1,6 @@
 # Copyright (C) 2022-2025 Intel Corporation
 # LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
+from copy import deepcopy
 
 from geti_configuration_tools.training_configuration import PartialTrainingConfiguration, TrainingConfiguration
 
@@ -31,7 +32,7 @@ class ConfigurationOverlayTools:
         return d
 
     @classmethod
-    def merge_deep_dict(cls, a: dict, b: dict) -> dict:
+    def merge_deep_dict(cls, a: dict, b: dict, common_parameters_only: bool = False) -> dict:
         """
         Recursively merge dictionaries 'b' into 'a' with deep dictionary support.
 
@@ -46,15 +47,16 @@ class ConfigurationOverlayTools:
 
         :param a: Target dictionary to merge into (modified in-place)
         :param b: Source dictionary whose values will be merged into 'a'
+        :param common_parameters_only: If True, only parameters present in both dictionaries will be updated
         :return: The modified dictionary 'a' containing merged values from 'b'
         """
         for key, val in b.items():
             if key in a:
                 if isinstance(a[key], dict) and isinstance(val, dict):
-                    cls.merge_deep_dict(a[key], val)
+                    cls.merge_deep_dict(a[key], val, common_parameters_only)
                 else:
                     a[key] = val
-            else:
+            elif not common_parameters_only:
                 a[key] = val
         return a
 
@@ -64,6 +66,7 @@ class ConfigurationOverlayTools:
         base_config: PartialTrainingConfiguration,
         *overlaying_configs: PartialTrainingConfiguration,
         validate_full_config: bool = True,
+        common_hyperparameters_only: bool = False,
     ) -> TrainingConfiguration | PartialTrainingConfiguration:
         """
         Overlays multiple training configurations on top of a base configuration.
@@ -76,14 +79,25 @@ class ConfigurationOverlayTools:
         :param overlaying_configs: Variable number of configurations to overlay on the base
         :param validate_full_config: If True, validates result as a full TrainingConfiguration,
                                      otherwise as a PartialTrainingConfiguration
+        :param common_hyperparameters_only: If True, only hyperparameters present in both the base and overlaying
+            configurations will be updated; parameters unique to the overlaying configs will be ignored.
+            If False, all parameters from overlaying configs are merged into the base.
         :return: The merged configuration, either as TrainingConfiguration or PartialTrainingConfiguration
         """
         base_config_dict = cls.delete_none_from_dict(base_config.model_dump())
 
-        overlay_config_dict = base_config_dict
+        overlay_config_dict = deepcopy(base_config_dict)
         for config in overlaying_configs:
             config_dict = cls.delete_none_from_dict(config.model_dump())
             overlay_config_dict = cls.merge_deep_dict(overlay_config_dict, config_dict)
+
+        # overlay hyperparameters separately to ensure that no extra hyperparameters are added
+        if common_hyperparameters_only and "hyperparameters" in base_config_dict:
+            overlay_config_dict["hyperparameters"] = cls.merge_deep_dict(
+                base_config_dict["hyperparameters"],
+                overlay_config_dict["hyperparameters"],
+                common_parameters_only=True,
+            )
 
         overlay_config_dict["id_"] = base_config.id_
 

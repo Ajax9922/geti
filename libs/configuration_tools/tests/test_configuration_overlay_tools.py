@@ -138,6 +138,39 @@ class TestConfigurationService:
         # Ensure the function modifies the first dict in-place
         assert result is a
 
+    @pytest.mark.parametrize(
+        "a, b, expected",
+        [
+            # Empty dicts
+            ({}, {}, {}),
+            # Empty target dict - nothing should be merged
+            ({}, {"x": 1}, {}),
+            # Empty source dict
+            ({"x": 1}, {}, {"x": 1}),
+            # Non-overlapping keys - nothing should be merged
+            ({"x": 1}, {"y": 2}, {"x": 1}),
+            # Overlapping keys (non-dict values)
+            ({"x": 1}, {"x": 2}, {"x": 2}),
+            # Simple nested dict - only common keys updated
+            ({"x": 1, "y": {"a": 2}}, {"y": {"a": 3, "b": 4}, "z": 5}, {"x": 1, "y": {"a": 3}}),
+            # Complex nested scenario - only common keys updated
+            (
+                {"a": 1, "b": {"c": 2, "d": {"e": 3}}},
+                {"b": {"c": 5, "d": {"e": 6, "f": 7}, "g": 8}, "h": 9},
+                {"a": 1, "b": {"c": 5, "d": {"e": 6}}},
+            ),
+            # Overwrite dict with non-dict
+            ({"a": {"b": 1}}, {"a": 2}, {"a": 2}),
+            # Overwrite non-dict with dict
+            ({"a": 1}, {"a": {"b": 2}}, {"a": {"b": 2}}),
+        ],
+    )
+    def test_merge_deep_dict_common_parameters_only(self, a, b, expected) -> None:
+        result = ConfigurationOverlayTools.merge_deep_dict(a, b, common_parameters_only=True)
+        assert result == expected
+        # Ensure the function modifies the first dict in-place
+        assert result is a
+
     def test_overlay_configurations(self, fxt_training_configuration_task_level) -> None:
         # Arrange
         # Create base configuration
@@ -219,3 +252,68 @@ class TestConfigurationService:
         assert full_config_overlay.hyperparameters.training
         assert full_config_overlay.hyperparameters.training.max_epochs == 32
         assert full_config_overlay.hyperparameters.training.learning_rate == 0.05
+
+    def test_overlay_configurations_common_hyperparameters_only(self) -> None:
+        # Arrange
+        # Create base configuration
+        base_partial_config = PartialTrainingConfiguration(
+            task_id="task_123",
+            hyperparameters={
+                "training": {
+                    "allowed_values_input_size": [224, 256],
+                    "input_size_width": 224,
+                    "input_size_height": 224,
+                }
+            },
+        )
+
+        # Create overlay configuration with some changes
+        overlay_config_1 = PartialTrainingConfiguration(
+            task_id="task_123",
+            global_parameters={
+                "dataset_preparation": {
+                    "subset_split": {"training": 60, "validation": 30, "test": 10, "remixing": True},
+                    "filtering": {"max_annotation_pixels": {"enable": True, "max_annotation_pixels": 5000}},
+                }
+            },
+            hyperparameters={
+                "training": {
+                    "input_size_width": 256,
+                    "max_epochs": 32,
+                }
+            },
+        )
+
+        overlay_config_2 = PartialTrainingConfiguration(
+            task_id="task_123", hyperparameters={"training": {"learning_rate": 0.05}}
+        )
+
+        expected_partial_overlay_config = TrainingConfiguration(
+            id_=ID("expected_training_config_id"),
+            task_id="task_123",
+            global_parameters={
+                "dataset_preparation": {
+                    "subset_split": {"training": 60, "validation": 30, "test": 10, "remixing": True},
+                    "filtering": {"max_annotation_pixels": {"enable": True, "max_annotation_pixels": 5000}},
+                },
+                "filtering": {},
+            },
+            hyperparameters={
+                "training": {
+                    "allowed_values_input_size": [224, 256],
+                    "input_size_width": 256,
+                    "input_size_height": 224,
+                }
+            },
+        )
+
+        # Act
+        full_config_overlay = ConfigurationOverlayTools.overlay_training_configurations(
+            base_partial_config,
+            overlay_config_1,
+            overlay_config_2,
+            common_hyperparameters_only=True,
+        )
+
+        # Assert
+        assert full_config_overlay.model_dump() == expected_partial_overlay_config.model_dump()
