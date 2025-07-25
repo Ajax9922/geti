@@ -9,3 +9,7 @@ stats:
     accuracy: 1
     training_time: 3
     inference_speed: 3
+
+hyperparameters:
+  training:
+    max_epochs: null
