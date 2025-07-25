@@ -327,7 +327,7 @@ class TestHyperparameters:
                 },
                 Tiling(enable=False, adaptive_tiling=True, tile_size=None, tile_overlap=None),
             ),
-        ]
+        ],
     )
     def test_tiling_validation(self, tiling_config, expected_tiling) -> None:
         assert Tiling.model_validate(tiling_config) == expected_tiling
