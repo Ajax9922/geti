@@ -1,7 +1,7 @@
 # Copyright (C) 2022-2025 Intel Corporation
 # LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
-from pydantic import Field, model_validator
+from pydantic import Field
 
 from .base_model_no_extra import BaseModelNoExtra
 
@@ -133,22 +133,14 @@ class Tiling(BaseModelNoExtra):
     adaptive_tiling: bool = Field(
         default=False, title="Adaptive tiling", description="Whether to use adaptive tiling based on image content"
     )
-    tile_size: int | None = Field(gt=0, default=128, title="Tile size", description="Size of each tile in pixels")
-    tile_overlap: float | None = Field(
+    tile_size: int = Field(gt=0, default=128, title="Tile size", description="Size of each tile in pixels")
+    tile_overlap: float = Field(
         ge=0.0,
         lt=1.0,
         default=0.5,
         title="Tile overlap",
         description="Overlap between adjacent tiles as a fraction of tile size",
     )
-
-    @model_validator(mode="after")
-    def validate_tiling(self) -> "Tiling":
-        # hide tile_size and tile_overlap if adaptive_tiling is enabled or tiling is disabled
-        if self.adaptive_tiling or not self.tile_size:
-            self.tile_size = None
-            self.tile_overlap = None
-        return self
 
 
 class AugmentationParameters(BaseModelNoExtra):

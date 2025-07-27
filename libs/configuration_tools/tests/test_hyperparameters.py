@@ -1,6 +1,5 @@
 # Copyright (C) 2022-2025 Intel Corporation
 # LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
-
 import pytest
 from pydantic import ValidationError
 
@@ -289,45 +288,3 @@ class TestHyperparameters:
                     }
                 }
             )
-
-    @pytest.mark.parametrize(
-        "tiling_config, expected_tiling",
-        [
-            (
-                {
-                    "enable": True,
-                    "adaptive_tiling": False,
-                    "tile_size": 128,
-                    "tile_overlap": 0.2,
-                },
-                Tiling(enable=True, adaptive_tiling=False, tile_size=128, tile_overlap=0.2),
-            ),
-            (
-                {
-                    "enable": True,
-                    "adaptive_tiling": True,
-                    "tile_size": 128,
-                    "tile_overlap": 0.2,
-                },
-                Tiling(enable=True, adaptive_tiling=True, tile_size=None, tile_overlap=None),
-            ),
-            (
-                {
-                    "enable": True,
-                    "adaptive_tiling": False,
-                },
-                Tiling(enable=True, adaptive_tiling=False, tile_size=128, tile_overlap=0.5),
-            ),
-            (
-                {
-                    "enable": False,
-                    "adaptive_tiling": True,
-                    "tile_size": 128,
-                    "tile_overlap": 0.2,
-                },
-                Tiling(enable=False, adaptive_tiling=True, tile_size=None, tile_overlap=None),
-            ),
-        ],
-    )
-    def test_tiling_validation(self, tiling_config, expected_tiling) -> None:
-        assert Tiling.model_validate(tiling_config) == expected_tiling

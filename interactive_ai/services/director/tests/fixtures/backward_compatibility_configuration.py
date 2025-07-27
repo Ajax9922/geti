@@ -4615,7 +4615,27 @@ def fxt_legacy_model_configuration_rest_view():
                         "description": "Whether to use adaptive tiling based on image content",
                         "value": True,
                         "default_value": False,
-                    }
+                    },
+                    {
+                        "key": "tile_size",
+                        "name": "Tile size",
+                        "type": "int",
+                        "description": "Size of each tile in pixels",
+                        "value": 400,
+                        "default_value": 128,
+                        "min_value": 0,
+                        "max_value": None,
+                    },
+                    {
+                        "key": "tile_overlap",
+                        "name": "Tile overlap",
+                        "type": "float",
+                        "description": "Overlap between adjacent tiles as a fraction of tile size",
+                        "value": 0.2,
+                        "default_value": 0.5,
+                        "min_value": 0.0,
+                        "max_value": 1.0,
+                    },
                 ]
             }
         },
