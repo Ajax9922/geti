@@ -81,6 +81,7 @@ platform/services/opa_bundle:
 interactive_ai/services/auto_train:
   - interactive_ai/services/auto_train/**
   - interactive_ai/libs/iai_core_py/**
+  - interactive_ai/supported_models/**
   - libs/types/**
   - libs/telemetry_tools/**
   - libs/feature_tools/**

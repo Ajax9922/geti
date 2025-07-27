@@ -2,4 +2,4 @@ task: anomaly
 
 hyperparameters:
   evaluation:
-    metric: f_measure
+    metric: accuracy

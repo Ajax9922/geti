@@ -11,7 +11,7 @@ stats:
     inference_speed: 3
 
 hyperparameters:
-  training:
+  training: # PADIM does not have use any training parameters
     max_epochs: null
     learning_rate: null
     early_stopping: null
