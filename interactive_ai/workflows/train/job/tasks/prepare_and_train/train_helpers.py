@@ -259,7 +259,9 @@ def prepare_train(train_data: TrainWorkflowData, dataset: Dataset) -> TrainOutpu
             model_optimization_type=ModelOptimizationType.MO,
             previous_revision=output_base_model,
             previous_trained_revision=output_base_model,
-        ) if model_manifest.capabilities.xai and not use_fp16 else None,
+        )
+        if model_manifest.capabilities.xai and not use_fp16
+        else None,
         mo_fp16_without_xai=model_builder.create_model(
             model_format=ModelFormat.OPENVINO,
             has_xai_head=False,
@@ -267,7 +269,9 @@ def prepare_train(train_data: TrainWorkflowData, dataset: Dataset) -> TrainOutpu
             model_optimization_type=ModelOptimizationType.MO,
             previous_revision=output_base_model,
             previous_trained_revision=output_base_model,
-        ) if model_manifest.capabilities.xai and use_fp16 else None,
+        )
+        if model_manifest.capabilities.xai and use_fp16
+        else None,
         onnx=model_builder.create_model(
             model_format=ModelFormat.ONNX,
             model_optimization_type=ModelOptimizationType.ONNX,
