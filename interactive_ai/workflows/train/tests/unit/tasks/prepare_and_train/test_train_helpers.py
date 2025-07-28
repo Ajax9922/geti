@@ -2,6 +2,7 @@
 # LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 """This module tests commands to create task train dataset"""
 
+import json
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -31,6 +32,8 @@ class TestTrainHelpers:
         # Arrange
         monkeypatch.setenv(FeatureFlag.FEATURE_FLAG_FP16_INFERENCE.name, str(feature_flag_setting).lower())
         mock_model_repo.generate_id.side_effect = [ID(str(i)) for i in range(5)]
+        dummy_config = {"dummy_key": "dummy_value"}
+        mock_train_data.hyperparameters_json = json.dumps(dummy_config)
 
         # Act
         train_output_models = prepare_train(
