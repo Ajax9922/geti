@@ -250,10 +250,9 @@ def prepare_train(train_data: TrainWorkflowData, dataset: Dataset) -> TrainOutpu
         previous_revision=output_base_model,
         previous_trained_revision=output_base_model,
     )
-    output_models = TrainOutputModels(
-        base=output_base_model,
-        mo_with_xai=mo_base_model,
-        mo_fp32_without_xai=model_builder.create_model(
+    mo_fp32_without_xai = None
+    if mo_base_model.has_xai_head or ModelPrecision.FP32 not in mo_base_model.precision:
+        mo_fp32_without_xai = model_builder.create_model(
             model_format=ModelFormat.OPENVINO,
             has_xai_head=False,
             precision=[ModelPrecision.FP32],
@@ -261,9 +260,9 @@ def prepare_train(train_data: TrainWorkflowData, dataset: Dataset) -> TrainOutpu
             previous_revision=output_base_model,
             previous_trained_revision=output_base_model,
         )
-        if not mo_base_model.has_xai_head and ModelPrecision.FP32 not in mo_base_model.precision
-        else None,
-        mo_fp16_without_xai=model_builder.create_model(
+    mo_fp16_without_xai = None
+    if mo_base_model.has_xai_head or ModelPrecision.FP16 not in mo_base_model.precision:
+        mo_fp16_without_xai = model_builder.create_model(
             model_format=ModelFormat.OPENVINO,
             has_xai_head=False,
             precision=[ModelPrecision.FP16],
@@ -271,8 +270,11 @@ def prepare_train(train_data: TrainWorkflowData, dataset: Dataset) -> TrainOutpu
             previous_revision=output_base_model,
             previous_trained_revision=output_base_model,
         )
-        if not mo_base_model.has_xai_head and ModelPrecision.FP16 not in mo_base_model.precision
-        else None,
+    output_models = TrainOutputModels(
+        base=output_base_model,
+        mo_with_xai=mo_base_model,
+        mo_fp32_without_xai=mo_fp32_without_xai,
+        mo_fp16_without_xai=mo_fp16_without_xai,
         onnx=model_builder.create_model(
             model_format=ModelFormat.ONNX,
             model_optimization_type=ModelOptimizationType.ONNX,

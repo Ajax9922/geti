@@ -6,6 +6,8 @@ import json
 from unittest.mock import MagicMock, patch
 
 import pytest
+from geti_supported_models import SupportedModels
+from geti_supported_models.model_manifest import Capabilities
 from geti_types import ID
 from iai_core.entities.model import ModelPrecision, ModelStatus
 from jobs_common.features.feature_flag_provider import FeatureFlag
@@ -18,12 +20,14 @@ class TestTrainHelpers:
     @pytest.mark.parametrize(
         "feature_flag_setting", [pytest.param(True, id="fp16-enabled"), pytest.param(False, id="fp16-disabled")]
     )
+    @pytest.mark.parametrize("has_xai", [True, False])
     @patch("job.tasks.prepare_and_train.train_helpers.MLArtifactsAdapter")
     @patch("job.tasks.prepare_and_train.train_helpers.ModelRepo")
     def test_prepare_train(
         self,
         mock_model_repo,
         mock_ml_artifacts_adapter,
+        has_xai,
         feature_flag_setting,
         mock_train_data,
         fxt_dataset_with_images,
@@ -34,13 +38,16 @@ class TestTrainHelpers:
         mock_model_repo.generate_id.side_effect = [ID(str(i)) for i in range(5)]
         dummy_config = {"dummy_key": "dummy_value"}
         mock_train_data.hyperparameters_json = json.dumps(dummy_config)
+        mock_model_manifest = MagicMock()
+        mock_model_manifest.capabilities = Capabilities(xai=has_xai)
 
         # Act
-        train_output_models = prepare_train(
-            train_data=mock_train_data,
-            dataset=fxt_dataset_with_images,
-        )
-        output_model_ids = train_output_models.to_train_output_model_ids()
+        with patch.object(SupportedModels, "get_model_manifest_by_id", return_value=mock_model_manifest):
+            train_output_models = prepare_train(
+                train_data=mock_train_data,
+                dataset=fxt_dataset_with_images,
+            )
+            output_model_ids = train_output_models.to_train_output_model_ids()
 
         # Assert
         assert output_model_ids.base == "0"
@@ -48,9 +55,15 @@ class TestTrainHelpers:
         assert (
             ModelPrecision.FP16 if feature_flag_setting else ModelPrecision.FP32
         ) in train_output_models.mo_with_xai.precision
-        assert output_model_ids.mo_fp32_without_xai == "2"
-        assert output_model_ids.mo_fp16_without_xai == "3"
-        assert output_model_ids.onnx == "4"
+        if not has_xai and not feature_flag_setting:
+            assert output_model_ids.mo_fp32_without_xai is None
+        else:
+            assert output_model_ids.mo_fp32_without_xai == "2"
+        if not has_xai and feature_flag_setting:
+            assert output_model_ids.mo_fp16_without_xai is None
+        else:
+            assert output_model_ids.mo_fp16_without_xai == "3" if output_model_ids.mo_fp32_without_xai else "2"
+        assert output_model_ids.onnx == "4" if has_xai else "3"
 
         mock_ml_artifacts_adapter.return_value.push_placeholders.assert_called_once()
         mock_ml_artifacts_adapter.return_value.push_metadata.assert_called_once()
