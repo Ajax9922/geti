@@ -260,8 +260,7 @@ class MLArtifactsAdapter:
             has_xai_head = model.has_xai_head
             # TODO: remove workaround after https://github.com/open-edge-platform/geti/issues/924
             # model.has_xai_head is unreliable for keypoint detection
-            if "keypoint_detection" in model.model_storage.model_manifest_id.lower():
-                has_xai_head = False
+            is_keypoint = model.model_storage.model_manifest_id.lower().startswith("keypoint_detection")
             precision = next(iter(model.precision)).name.lower()
             xai_suffix = "xai" if has_xai_head else "non-xai"
 
@@ -269,10 +268,10 @@ class MLArtifactsAdapter:
                 self._update_base_model(model, precision, xai_suffix)
 
             elif model.model_format == ModelFormat.OPENVINO:
-                self._update_ov_model(model, precision, xai_suffix)
+                self._update_ov_model(model, precision, xai_suffix and not is_keypoint)
 
             elif model.model_format == ModelFormat.ONNX:
-                self._update_onnx_model(model, precision, xai_suffix)
+                self._update_onnx_model(model, precision, xai_suffix and not is_keypoint)
 
     @unified_tracing
     def update_output_model_for_optimize(
