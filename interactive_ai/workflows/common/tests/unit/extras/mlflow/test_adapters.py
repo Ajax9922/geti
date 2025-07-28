@@ -278,6 +278,7 @@ class TestMLArtifactsAdapter:
         assert saved_file_names == {os.path.join("jobs", fxt_job_metadata.id, "inputs", fname)}
 
     @pytest.mark.parametrize("has_additional_model_artifacts", [True, False])
+    @pytest.mark.parametrize("model_manifest_id", ["Keypoint_Detection_RTMPose_Tiny", "ote_anomaly_padim"])
     @patch("jobs_common_extras.experiments.adapters.ml_artifacts.ModelRepo")
     @patch("jobs_common_extras.experiments.adapters.ml_artifacts.ProjectRepo")
     @patch("jobs_common_extras.experiments.adapters.ml_artifacts.ExperimentsBinaryRepo")
@@ -290,6 +291,7 @@ class TestMLArtifactsAdapter:
         fxt_project_identifier,
         fxt_job_metadata,
         fxt_organization_id,
+        model_manifest_id,
         has_additional_model_artifacts: bool,
     ) -> None:
         # Arrange
@@ -304,6 +306,8 @@ class TestMLArtifactsAdapter:
         def _return_as_is(model_binary_repo, src_filepath) -> str:
             return os.path.basename(src_filepath)
 
+        mock_model_storage = MagicMock()
+        mock_model_storage.model_manifest_id = model_manifest_id
         mock_repo.return_value.copy_to.side_effect = _return_as_is
 
         mock_model_repo.return_value = MagicMock(spec=ModelRepo)
@@ -313,18 +317,21 @@ class TestMLArtifactsAdapter:
         mock_base_model.model_format = ModelFormat.BASE_FRAMEWORK
         mock_base_model.precision = [ModelPrecision.FP32]
         mock_base_model.has_xai_head = True
+        mock_base_model.model_storage = mock_model_storage
 
         mock_ov_model = MagicMock(spec=Model)
         mock_ov_model.model_status = ModelStatus.NOT_READY
         mock_ov_model.model_format = ModelFormat.OPENVINO
         mock_ov_model.precision = [ModelPrecision.FP16]
         mock_ov_model.has_xai_head = False
+        mock_ov_model.model_storage = mock_model_storage
 
         mock_onnx_model = MagicMock(spec=Model)
         mock_onnx_model.model_status = ModelStatus.NOT_READY
         mock_onnx_model.model_format = ModelFormat.ONNX
         mock_onnx_model.precision = [ModelPrecision.FP32]
         mock_onnx_model.has_xai_head = False
+        mock_onnx_model.model_storage = mock_model_storage
 
         models_to_update = [
             mock_base_model,
@@ -367,7 +374,11 @@ class TestMLArtifactsAdapter:
             for call_args in mock_repo.return_value.copy_to.call_args_list
         }
         expected_filenames = {
-            "model_fp32_xai.pth",
+            (
+                "model_fp32_xai.pth"
+                if model_manifest_id != "Keypoint_Detection_RTMPose_Tiny"
+                else "model_fp32_non-xai.pth"
+            ),
             "model_fp16_non-xai.xml",
             "model_fp16_non-xai.bin",
             "model_fp32_non-xai.onnx",

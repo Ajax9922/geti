@@ -257,8 +257,13 @@ class MLArtifactsAdapter:
             This function will inplace their data.
         """
         for model in models_to_update:
+            has_xai_head = model.has_xai_head
+            # TODO: remove workaround after https://github.com/open-edge-platform/geti/issues/924
+            # model.has_xai_head is unreliable for keypoint detection
+            if "keypoint_detection" in model.model_storage.model_manifest_id.lower():
+                has_xai_head = False
             precision = next(iter(model.precision)).name.lower()
-            xai_suffix = "xai" if model.has_xai_head else "non-xai"
+            xai_suffix = "xai" if has_xai_head else "non-xai"
 
             if model.model_format == ModelFormat.BASE_FRAMEWORK:
                 self._update_base_model(model, precision, xai_suffix)
