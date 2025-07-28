@@ -243,32 +243,42 @@ def prepare_train(train_data: TrainWorkflowData, dataset: Dataset) -> TrainOutpu
         previous_trained_revision=input_model,
     )
     use_fp16 = FeatureFlagProvider.is_enabled(FeatureFlag.FEATURE_FLAG_FP16_INFERENCE)
-    output_models = TrainOutputModels(
-        base=output_base_model,
-        mo_with_xai=model_builder.create_model(
-            model_format=ModelFormat.OPENVINO,
-            has_xai_head=True,
-            precision=[ModelPrecision.FP16 if use_fp16 else ModelPrecision.FP32],
-            model_optimization_type=ModelOptimizationType.MO,
-            previous_revision=output_base_model,
-            previous_trained_revision=output_base_model,
-        ),
-        mo_fp32_without_xai=model_builder.create_model(
+
+    # TODO https://github.com/open-edge-platform/geti/issues/924: remove dependency to TrainOutputModels.mo_with_xai
+    model_manifest = SupportedModels.get_model_manifest_by_id(model_storage.model_manifest_id)
+    mo_base_model = model_builder.create_model(
+        model_format=ModelFormat.OPENVINO,
+        has_xai_head=True,
+        precision=[ModelPrecision.FP16 if use_fp16 else ModelPrecision.FP32],
+        model_optimization_type=ModelOptimizationType.MO,
+        previous_revision=output_base_model,
+        previous_trained_revision=output_base_model,
+    )
+    mo_fp32_without_xai = None
+    if model_manifest.capabilities.xai or ModelPrecision.FP32 not in mo_base_model.precision:
+        mo_fp32_without_xai = model_builder.create_model(
             model_format=ModelFormat.OPENVINO,
             has_xai_head=False,
             precision=[ModelPrecision.FP32],
             model_optimization_type=ModelOptimizationType.MO,
             previous_revision=output_base_model,
             previous_trained_revision=output_base_model,
-        ),
-        mo_fp16_without_xai=model_builder.create_model(
+        )
+    mo_fp16_without_xai = None
+    if model_manifest.capabilities.xai or ModelPrecision.FP16 not in mo_base_model.precision:
+        mo_fp16_without_xai = model_builder.create_model(
             model_format=ModelFormat.OPENVINO,
             has_xai_head=False,
             precision=[ModelPrecision.FP16],
             model_optimization_type=ModelOptimizationType.MO,
             previous_revision=output_base_model,
             previous_trained_revision=output_base_model,
-        ),
+        )
+    output_models = TrainOutputModels(
+        base=output_base_model,
+        mo_with_xai=mo_base_model,
+        mo_fp32_without_xai=mo_fp32_without_xai,
+        mo_fp16_without_xai=mo_fp16_without_xai,
         onnx=model_builder.create_model(
             model_format=ModelFormat.ONNX,
             model_optimization_type=ModelOptimizationType.ONNX,
