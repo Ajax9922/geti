@@ -181,9 +181,11 @@ def _prepare_s3_bucket(
 
 @unified_tracing
 def _get_export_parameters(
-    train_output_models: TrainOutputModels,
+    train_output_models: TrainOutputModels, model_manifest_id: str
 ) -> list[dict[str, str | bool]]:
     export_parameters: list[dict[str, str | bool]] = []
+    # TODO https://github.com/open-edge-platform/geti/issues/924: remove dependency to TrainOutputModels.mo_with_xai
+    model_manifest = SupportedModels.get_model_manifest_by_id(model_manifest_id)
     for model in train_output_models.get_all_models():
         if model.optimization_type in {
             ModelOptimizationType.MO,
@@ -194,7 +196,7 @@ def _get_export_parameters(
                     "format": model.model_format.name.lower(),
                     "output_model_id": str(model.id_),
                     "precision": model.precision[0].name if model.precision else "null",
-                    "with_xai": model.has_xai_head,
+                    "with_xai": model_manifest.capabilities.xai,
                 }
             )
     return export_parameters
@@ -241,40 +243,32 @@ def prepare_train(train_data: TrainWorkflowData, dataset: Dataset) -> TrainOutpu
         previous_trained_revision=input_model,
     )
     use_fp16 = FeatureFlagProvider.is_enabled(FeatureFlag.FEATURE_FLAG_FP16_INFERENCE)
-    model_manifest = SupportedModels.get_model_manifest_by_id(model_storage.model_manifest_id)
-    mo_base_model = model_builder.create_model(
-        model_format=ModelFormat.OPENVINO,
-        has_xai_head=model_manifest.capabilities.xai,
-        precision=[ModelPrecision.FP16 if use_fp16 else ModelPrecision.FP32],
-        model_optimization_type=ModelOptimizationType.MO,
-        previous_revision=output_base_model,
-        previous_trained_revision=output_base_model,
-    )
-    mo_fp32_without_xai = None
-    if mo_base_model.has_xai_head or ModelPrecision.FP32 not in mo_base_model.precision:
-        mo_fp32_without_xai = model_builder.create_model(
+    output_models = TrainOutputModels(
+        base=output_base_model,
+        mo_with_xai=model_builder.create_model(
+            model_format=ModelFormat.OPENVINO,
+            has_xai_head=True,
+            precision=[ModelPrecision.FP16 if use_fp16 else ModelPrecision.FP32],
+            model_optimization_type=ModelOptimizationType.MO,
+            previous_revision=output_base_model,
+            previous_trained_revision=output_base_model,
+        ),
+        mo_fp32_without_xai=model_builder.create_model(
             model_format=ModelFormat.OPENVINO,
             has_xai_head=False,
             precision=[ModelPrecision.FP32],
             model_optimization_type=ModelOptimizationType.MO,
             previous_revision=output_base_model,
             previous_trained_revision=output_base_model,
-        )
-    mo_fp16_without_xai = None
-    if mo_base_model.has_xai_head or ModelPrecision.FP16 not in mo_base_model.precision:
-        mo_fp16_without_xai = model_builder.create_model(
+        ),
+        mo_fp16_without_xai=model_builder.create_model(
             model_format=ModelFormat.OPENVINO,
             has_xai_head=False,
             precision=[ModelPrecision.FP16],
             model_optimization_type=ModelOptimizationType.MO,
             previous_revision=output_base_model,
             previous_trained_revision=output_base_model,
-        )
-    output_models = TrainOutputModels(
-        base=output_base_model,
-        mo_with_xai=mo_base_model,
-        mo_fp32_without_xai=mo_fp32_without_xai,
-        mo_fp16_without_xai=mo_fp16_without_xai,
+        ),
         onnx=model_builder.create_model(
             model_format=ModelFormat.ONNX,
             model_optimization_type=ModelOptimizationType.ONNX,
@@ -301,7 +295,9 @@ def prepare_train(train_data: TrainWorkflowData, dataset: Dataset) -> TrainOutpu
         model_manifest_id=model_storage.model_manifest_id,
         input_model=input_model,
         hyper_parameters=hyper_parameter_dict,
-        export_parameters=_get_export_parameters(train_output_models=output_models),
+        export_parameters=_get_export_parameters(
+            train_output_models=output_models, model_manifest_id=model_storage.model_manifest_id
+        ),
     )
 
     return output_models
