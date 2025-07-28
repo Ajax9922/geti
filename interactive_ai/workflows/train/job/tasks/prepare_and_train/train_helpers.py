@@ -260,7 +260,9 @@ def prepare_train(train_data: TrainWorkflowData, dataset: Dataset) -> TrainOutpu
             model_optimization_type=ModelOptimizationType.MO,
             previous_revision=output_base_model,
             previous_trained_revision=output_base_model,
-        ) if not mo_base_model.has_xai_head and ModelPrecision.FP32 not in mo_base_model.precision else None,
+        )
+        if not mo_base_model.has_xai_head and ModelPrecision.FP32 not in mo_base_model.precision
+        else None,
         mo_fp16_without_xai=model_builder.create_model(
             model_format=ModelFormat.OPENVINO,
             has_xai_head=False,
@@ -268,7 +270,9 @@ def prepare_train(train_data: TrainWorkflowData, dataset: Dataset) -> TrainOutpu
             model_optimization_type=ModelOptimizationType.MO,
             previous_revision=output_base_model,
             previous_trained_revision=output_base_model,
-        ) if not mo_base_model.has_xai_head and ModelPrecision.FP16 not in mo_base_model.precision else None,
+        )
+        if not mo_base_model.has_xai_head and ModelPrecision.FP16 not in mo_base_model.precision
+        else None,
         onnx=model_builder.create_model(
             model_format=ModelFormat.ONNX,
             model_optimization_type=ModelOptimizationType.ONNX,
