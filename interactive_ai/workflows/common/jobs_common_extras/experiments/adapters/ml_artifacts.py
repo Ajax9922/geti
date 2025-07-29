@@ -262,16 +262,17 @@ class MLArtifactsAdapter:
             # model.has_xai_head is unreliable for keypoint detection
             is_keypoint = model.model_storage.model_manifest_id.lower().startswith("keypoint_detection")
             precision = next(iter(model.precision)).name.lower()
-            xai_suffix = "xai" if has_xai_head else "non-xai"
+            xai_suffix_base = "xai" if has_xai_head else "non-xai"
+            xai_suffix_other = "xai" if has_xai_head and not is_keypoint else "non-xai"
 
             if model.model_format == ModelFormat.BASE_FRAMEWORK:
-                self._update_base_model(model, precision, xai_suffix)
+                self._update_base_model(model, precision, xai_suffix_base)
 
             elif model.model_format == ModelFormat.OPENVINO:
-                self._update_ov_model(model, precision, xai_suffix and not is_keypoint)
+                self._update_ov_model(model, precision, xai_suffix_other)
 
             elif model.model_format == ModelFormat.ONNX:
-                self._update_onnx_model(model, precision, xai_suffix and not is_keypoint)
+                self._update_onnx_model(model, precision, xai_suffix_other)
 
     @unified_tracing
     def update_output_model_for_optimize(

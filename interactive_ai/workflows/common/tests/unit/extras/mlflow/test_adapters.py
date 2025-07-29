@@ -374,11 +374,7 @@ class TestMLArtifactsAdapter:
             for call_args in mock_repo.return_value.copy_to.call_args_list
         }
         expected_filenames = {
-            (
-                "model_fp32_xai.pth"
-                if model_manifest_id != "Keypoint_Detection_RTMPose_Tiny"
-                else "model_fp32_non-xai.pth"
-            ),
+            "model_fp32_xai.pth",
             "model_fp16_non-xai.xml",
             "model_fp16_non-xai.bin",
             "model_fp32_non-xai.onnx",
