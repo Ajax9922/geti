@@ -196,7 +196,7 @@ def _get_export_parameters(
                     "format": model.model_format.name.lower(),
                     "output_model_id": str(model.id_),
                     "precision": model.precision[0].name if model.precision else "null",
-                    "with_xai": model_manifest.capabilities.xai,
+                    "with_xai": model.has_xai_head and model_manifest.capabilities.xai,
                 }
             )
     return export_parameters
