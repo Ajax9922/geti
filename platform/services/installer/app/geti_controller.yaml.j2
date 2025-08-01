@@ -1,0 +1,30 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: {{ chart_name }}
+spec:
+  insecureSkipTLSVerify: true
+  chart: "oci://{{ geti_registry }}/geti/charts/geti-controller"
+  version: {{ build_version }}
+  targetNamespace: default
+  timeout: 10m
+  backOffLimit: 0
+  failurePolicy: abort
+  valuesContent: |-
+    global:
+      ingress_enabled: false
+      platformVersion: "{{ platform_version }}"
+      registry_address: "{{ geti_registry }}"
+      tag: "{{ build_version }}"
+      login: "{{ username }}"
+      passwordHash: "{{ password_hash }}"
+      dataFolder: "{{ data_folder }}"
+      tlsCert: "{{ tls_cert_file }}"
+      tlsKey: "{{ tls_key_file }}"
+      repoCA: "{{ repoCA }}"
+      imageRegistry: "{{ image_registry }}"
+      proxy:
+        enabled: "{{ proxy_enabled }}"
+        https_proxy: "{{ https_proxy }}"
+        http_proxy: "{{ http_proxy }}"
+        no_proxy: "{{ no_proxy }}"
