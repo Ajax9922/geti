@@ -76,6 +76,9 @@ export {
     FileTrigger,
     DateField,
     RangeCalendar,
+    ToastContainer,
+    ToastQueue,
+    type SpectrumToastOptions,
     type SpectrumProgressBarProps,
     type SpectrumToggleButtonProps,
     type SpectrumTabsProps,
@@ -143,6 +146,8 @@ export { VirtualizedListLayout } from './src/virtualize-list-layout/virtualize-l
 export { CornerIndicator } from './src/corner-indicator/corner-indicator.component';
 export { VirtualizedHorizontalGrid } from './src/virtualized-horizontal-grid/virtualized-horizontal-grid';
 export { ToggleButtons } from './src/toggle-buttons/toggle-buttons.component';
+export { PhotoPlaceholder } from './src/photo-placeholder/photo-placeholder.component';
+export { FullscreenAction } from './src/fullscreen-action/fullscreen-action.component';
 
 export {
     ListBox as AriaComponentsListBox,

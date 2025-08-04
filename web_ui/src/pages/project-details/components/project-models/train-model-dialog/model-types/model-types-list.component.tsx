@@ -54,15 +54,15 @@ export const ModelTypesList: FC<ModelTypesListProps> = ({
     const baseAlgorithms = getBaseAlgorithms(algorithms, activeModelTemplateId);
 
     return (
-        <Grid columns={repeat('auto-fit', minmax('size-3000', '1fr'))} gap={'size-250'}>
+        <Grid columns={repeat('auto-fit', minmax('size-3400', '1fr'))} gap={'size-250'}>
             {baseAlgorithms.map((algorithm) => {
                 const isRecommendedAlgorithm = algorithm.performanceCategory !== PerformanceCategory.OTHER;
                 const name = isRecommendedAlgorithm ? capitalize(algorithm.performanceCategory) : algorithm.name;
 
                 return (
                     <ModelType
-                        name={name}
                         key={algorithm.modelTemplateId}
+                        name={name}
                         algorithm={algorithm}
                         selectedModelTemplateId={selectedModelTemplateId}
                         onChangeSelectedTemplateId={onChangeSelectedTemplateId}

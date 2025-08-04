@@ -54,8 +54,8 @@ from geti_types import CTX_SESSION_VAR, ID, ProjectIdentifier
 
 logger = logging.getLogger(__name__)
 
-FEATURE_FLAG_ANOMALY_REDUCTION = "FEATURE_FLAG_ANOMALY_REDUCTION"
 FEATURE_FLAG_KEYPOINT_DETECTION = "FEATURE_FLAG_KEYPOINT_DETECTION"
+FEATURE_FLAG_ANNOTATION_HOLE = "FEATURE_FLAG_ANNOTATION_HOLE"
 
 
 class ProjectBuilder:
@@ -286,10 +286,8 @@ class ProjectBuilder:
             )
             labels = [normal_label, anomalous_label]
 
-            is_anomaly_reduced = FeatureFlagProvider.is_enabled(FEATURE_FLAG_ANOMALY_REDUCTION)
-            domain_name = "anomaly" if is_anomaly_reduced else domain.name.lower()
             label_group = LabelGroup(
-                name=f"default - {domain_name}",
+                name=f"default - {domain.name.lower()}",
                 labels=labels,
                 group_type=LabelGroupType.EXCLUSIVE,
             )
@@ -328,6 +326,7 @@ class ProjectBuilder:
         :return: The label groups and the labels relevant to the domain
         """
         empty_label_created = False
+        background_label_created = False
         custom_labels = []
         custom_label_groups = []
         top_level_multiclass_classification_groups_found = False
@@ -350,6 +349,16 @@ class ProjectBuilder:
                     )
                     raise ValueError("Invalid group for empty label")
                 empty_label_created = True
+            group_has_background_label: bool = any(label.is_background for label in labels)
+            if group_has_background_label:  # background label provided along with custom labels
+                if len(labels) > 1:
+                    logger.error(
+                        "Found background label in a group '%s' with more than 1 label: %s",
+                        group_name,
+                        labels,
+                    )
+                    raise ValueError("Invalid group for background label")
+                background_label_created = True
             label_group = LabelGroup(
                 name=group_name,
                 labels=labels,
@@ -388,6 +397,26 @@ class ProjectBuilder:
             )
             custom_labels.extend([empty_label])
             custom_label_groups.extend([label_group])
+
+        if (
+            not background_label_created
+            and FeatureFlagProvider.is_enabled(FEATURE_FLAG_ANNOTATION_HOLE)
+            and domain == Domain.SEGMENTATION
+        ):
+            background_label = Label(
+                name="Background",
+                domain=Domain.SEGMENTATION,
+                color=Color(red=0, green=0, blue=0),
+                is_background=True,
+                id_=LabelRepo.generate_id(),
+            )
+            label_group = LabelGroup(
+                name=background_label.name,
+                labels=[background_label],
+                group_type=LabelGroupType.EXCLUSIVE,
+            )
+            custom_labels.append(background_label)
+            custom_label_groups.append(label_group)
 
         return custom_label_groups, custom_labels
 
@@ -482,7 +511,6 @@ class ProjectBuilder:
         ordered_tasks: tuple[TaskNode, ...] = project.task_graph.ordered_tasks
         previous_task_labels: list[Label] = []
         previous_task: TaskNode | NullTaskNode = NullTaskNode()
-        is_anomaly_reduced = FeatureFlagProvider.is_enabled(FEATURE_FLAG_ANOMALY_REDUCTION)
         for task in ordered_tasks:
             if not task.task_properties.is_trainable:
                 continue
@@ -514,10 +542,7 @@ class ProjectBuilder:
                 id_=LabelSchemaRepo.generate_id(),
                 previous_schema_revision_id=task_to_schema_revision_id,
             )
-            task_name = task.title
-            if is_anomaly_reduced and task.task_properties.is_anomaly:
-                task_name = "Anomaly"
-            task_title_to_label_schema[task_name] = task_label_schema
+            task_title_to_label_schema[task.title] = task_label_schema
 
             if previous_task.task_properties.task_type.is_trainable:
                 add_previous_task_label_as_parent = (
@@ -560,7 +585,6 @@ class ProjectBuilder:
         :param parser_kwargs: arguments to pass to the parser for initialization
         :return: the project, the label schema, and a mapping of task to label schema view
         """
-        is_anomaly_reduced = FeatureFlagProvider.is_enabled(FEATURE_FLAG_ANOMALY_REDUCTION)
         is_keypoint_detection_enabled = FeatureFlagProvider.is_enabled(FEATURE_FLAG_KEYPOINT_DETECTION)
         parser = parser_class(**parser_kwargs)
         ProjectCreationValidator().validate(parser=parser)
@@ -580,15 +604,7 @@ class ProjectBuilder:
         child_to_parent_id: dict[Label, str] = {}
         keypoint_structure: KeypointStructure | None = None
         for task_name in tasks_names:
-            if is_anomaly_reduced and task_name.upper() in [
-                "ANOMALY",
-                TaskType.ANOMALY_CLASSIFICATION.name,
-                TaskType.ANOMALY_DETECTION.name,
-                TaskType.ANOMALY_SEGMENTATION.name,
-            ]:
-                task_type = TaskType.ANOMALY_CLASSIFICATION
-            else:
-                task_type = parser.get_task_type_by_name(task_name=task_name)
+            task_type = parser.get_task_type_by_name(task_name=task_name)
             custom_labels_names = parser.get_custom_labels_names_by_task(
                 task_name=task_name,
             )
@@ -724,26 +740,14 @@ class ProjectBuilder:
         old_label_names = [label.name for label in old_labels]
         new_label_names = parser.get_custom_labels_names_by_task(task_name=task_name)
         for label_name in new_label_names:
-            label_id = parser.get_label_id_by_name(
-                task_name=task_name,
-                label_name=label_name,
-            )
+            label_id = parser.get_label_id_by_name(task_name=task_name, label_name=label_name)
             if not label_id and label_name not in old_label_names:
                 # The label exists only in the REST data and not in the project,
                 # this means that the label is to be added, and not to be edited
                 continue
-            label_color_hex_str = parser.get_label_color_by_name(
-                task_name=task_name,
-                label_name=label_name,
-            )
-            label_hotkey = parser.get_label_hotkey_by_name(
-                task_name=task_name,
-                label_name=label_name,
-            )
-            label_group_name = parser.get_label_group_by_name(
-                task_name=task_name,
-                label_name=label_name,
-            )
+            label_color_hex_str = parser.get_label_color_by_name(task_name=task_name, label_name=label_name)
+            label_hotkey = parser.get_label_hotkey_by_name(task_name=task_name, label_name=label_name)
+            label_group_name = parser.get_label_group_by_name(task_name=task_name, label_name=label_name)
             for old_group in old_groups:
                 group_label_ids = [label.id_ for label in old_group.labels]
                 if label_id in group_label_ids and label_group_name != old_group.name:
@@ -901,12 +905,9 @@ class ProjectBuilder:
         modified_scene_ids_by_storage: dict[ID, set[ID]] = {
             storage.id_: set() for storage in project.get_dataset_storages()
         }
-        is_anomaly_reduced = FeatureFlagProvider.is_enabled(FEATURE_FLAG_ANOMALY_REDUCTION)
         is_keypoint_detection_enabled = FeatureFlagProvider.is_enabled(FEATURE_FLAG_KEYPOINT_DETECTION)
         for task_node in ordered_trainable_tasks:
             task_name = task_node.title
-            if is_anomaly_reduced and task_node.task_properties.is_anomaly:
-                task_name = "Anomaly"
             label_schema_view = label_schema_repo.get_latest_view_by_task(task_node_id=task_node.id_)
             if isinstance(label_schema_view, NullLabelSchema):
                 raise ProjectUpdateError(f"Cannot find the label schema view for task with ID '{task_node.id_}'")

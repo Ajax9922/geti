@@ -1,9 +1,9 @@
-FROM python:3.10-slim-bookworm@sha256:034724ef64585eeb0e82385e9aabcbeabfe5f7cae2c2dcedb1da95114372b6d7 AS base
+FROM python:3.10-slim-bookworm@sha256:81f1cdb3770d54ecfdbddcc52c2125fce674c14a1d976dfd8f65dc0734f9c3c5 AS base
 
 FROM base AS build
 
 # Install Git and clone the OTX at the specified tag
-ARG OTX_RELEASE_TAG=2.4.5
+ARG OTX_RELEASE_TAG=release/2.5
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -47,6 +47,8 @@ RUN apt-get update && \
 COPY --link --from=build --chown=10001 /interactive_ai/services/resource /interactive_ai/services/resource
 COPY --link --from=build --chown=10001 /training_extensions/src/otx/tools/templates /model_templates
 COPY --link --from=schemas . /interactive_ai/services/api
+
+ENV MODEL_TEMPLATES_DIR=/model_templates
 
 # Place executables in the environment at the front of the path
 ENV PATH="/interactive_ai/services/resource/.venv/bin:$PATH"

@@ -3,7 +3,7 @@
 
 import { FC, ReactNode } from 'react';
 
-import { Flex, Grid, Heading, Radio, RadioGroup, repeat, Tooltip, TooltipTrigger } from '@geti/ui';
+import { Divider, Flex, Grid, Heading, Radio, RadioGroup, repeat, Tooltip, TooltipTrigger } from '@geti/ui';
 import clsx from 'clsx';
 import { isFunction } from 'lodash-es';
 
@@ -45,15 +45,62 @@ const TemplateRating: FC<TemplateRatingProps> = ({ ratings }) => {
     );
 };
 
+interface ModelAttributeProps {
+    value: string;
+    title: string;
+    gridArea: string;
+}
+
+const ModelAttribute = ({ title, value, gridArea }: ModelAttributeProps) => {
+    return (
+        <>
+            <Heading margin={0} UNSAFE_className={classes.attributeTitle} gridArea={`${gridArea}-title`}>
+                {title}
+            </Heading>
+            <span
+                aria-label={title}
+                style={{
+                    gridArea: `${gridArea}-attribute`,
+                }}
+            >
+                {value}
+            </span>
+        </>
+    );
+};
+
+type ModelAttributesProps = Pick<SupportedAlgorithm, 'trainableParameters' | 'gigaflops'>;
+
+const ModelAttributes = ({ trainableParameters, gigaflops }: ModelAttributesProps) => {
+    return (
+        <Grid
+            columns={repeat(2, 'max-content')}
+            gap={'size-200'}
+            areas={['model-size-title complexity-title', 'model-size-attribute complexity-attribute']}
+        >
+            <ModelAttribute gridArea={'model-size'} title={'Model size'} value={`${trainableParameters} M`} />
+            <ModelAttribute gridArea={'complexity'} title={'Complexity'} value={`${gigaflops} GFlops`} />
+        </Grid>
+    );
+};
+
+type PerformanceRating = SupportedAlgorithm['performanceRatings'][keyof SupportedAlgorithm['performanceRatings']];
+
+const RATING_MAP: Record<PerformanceRating, Ratings> = {
+    1: 'LOW',
+    2: 'MEDIUM',
+    3: 'HIGH',
+};
+
 export const ModelType: FC<ModelTypeProps> = ({
+    name,
     algorithm,
     selectedModelTemplateId,
     onChangeSelectedTemplateId,
     activeModelTemplateId,
     renderTag,
-    name,
 }) => {
-    const { modelTemplateId, lifecycleStage, summary } = algorithm;
+    const { modelTemplateId, lifecycleStage, description, performanceRatings } = algorithm;
     const isSelected = selectedModelTemplateId === modelTemplateId;
 
     const shouldShowActiveTag = modelTemplateId === activeModelTemplateId;
@@ -98,7 +145,7 @@ export const ModelType: FC<ModelTypeProps> = ({
                         <InfoTooltip
                             id={`${name.toLocaleLowerCase()}-summary-id`}
                             tooltipText={
-                                <ModelArchitectureTooltipText description={summary} isDeprecated={isDeprecated} />
+                                <ModelArchitectureTooltipText description={description} isDeprecated={isDeprecated} />
                             }
                             iconColor={isSelected ? 'var(--energy-blue)' : undefined}
                             className={classes.infoTooltip}
@@ -112,7 +159,20 @@ export const ModelType: FC<ModelTypeProps> = ({
                 </>
             }
             descriptionContent={
-                <TemplateRating ratings={{ accuracy: 'HIGH', trainingTime: 'MEDIUM', inferenceSpeed: 'LOW' }} />
+                <Flex direction={'column'} gap={'size-200'}>
+                    <TemplateRating
+                        ratings={{
+                            accuracy: RATING_MAP[performanceRatings.accuracy],
+                            trainingTime: RATING_MAP[performanceRatings.trainingTime],
+                            inferenceSpeed: RATING_MAP[performanceRatings.inferenceSpeed],
+                        }}
+                    />
+                    <Divider size={'S'} />
+                    <ModelAttributes
+                        gigaflops={algorithm.gigaflops}
+                        trainableParameters={algorithm.trainableParameters}
+                    />
+                </Flex>
             }
         />
     );
