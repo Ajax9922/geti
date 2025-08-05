@@ -15,5 +15,3 @@ hyperparameters:
     max_epochs: null
     learning_rate: null
     early_stopping: null
-    input_size_width: null
-    input_size_height: null

@@ -3,3 +3,11 @@ task: anomaly
 hyperparameters:
   evaluation:
     metric: accuracy
+  training:
+    allowed_values_input_size:
+      - 256
+    input_size_width: 256
+    input_size_height: 256
+    early_stopping:
+      enable: true
+      patience: 5
