@@ -71,6 +71,7 @@ const TrainModelDialog: FC<TrainModelDialogProps> = ({ onClose, onSuccess, isAll
         updateTrainingConfiguration,
         trainModel,
         openBasicMode,
+        hasSupportedModels,
     } = useTrainModelState();
 
     const { canTrainModel, numberOfRequiredAnnotations } = isAllowedToTrainModel(selectedTask);
@@ -114,6 +115,7 @@ const TrainModelDialog: FC<TrainModelDialogProps> = ({ onClose, onSuccess, isAll
                             />
                         ) : (
                             <AdvancedSettings
+                                hasSupportedModels={hasSupportedModels}
                                 trainingConfiguration={trainingConfiguration}
                                 onUpdateTrainingConfiguration={updateTrainingConfiguration}
                                 selectedModelTemplateId={selectedModelTemplateId}
