@@ -11,7 +11,7 @@ from geti_types import ID
 
 logger = logging.getLogger(__name__)
 
-DOWNLOAD_URL_VALIDITY_PERIOD: int = int(os.getenv("DOWNLOAD_URL_VALIDITY_PERIOD", "900"))
+DOWNLOAD_URL_VALIDITY_PERIOD: int = int(os.getenv("DOWNLOAD_URL_VALIDITY_PERIOD", "86400"))
 logger.info(f"Pre-signed download URL will be configured to be valid for {DOWNLOAD_URL_VALIDITY_PERIOD} seconds.")
 
 
@@ -82,6 +82,7 @@ class ZipStorageRepo(StorageRepo):
                 "Bucket": self.bucket_name,
                 "Key": zip_s3_path,
                 "ResponseContentDisposition": f'attachment; filename="{download_file_name}"',
+                "ResponseAcceptRanges": "bytes",
             },
             ExpiresIn=DOWNLOAD_URL_VALIDITY_PERIOD,
         )

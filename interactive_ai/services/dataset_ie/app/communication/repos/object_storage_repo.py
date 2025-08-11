@@ -217,6 +217,7 @@ class ObjectDataRepo(IObjectDataRepo, metaclass=abc.ABCMeta):
                     "Bucket": self.bucket,
                     "Key": file_key,
                     "ResponseContentDisposition": f'attachment; filename="{filename}"',
+                    "ResponseAcceptRanges": "bytes",
                 },
                 ExpiresIn=24 * 60 * 60,
             )
