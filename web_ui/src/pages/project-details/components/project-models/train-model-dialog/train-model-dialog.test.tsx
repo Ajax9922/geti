@@ -9,6 +9,7 @@ import { createInMemoryModelsService } from '../../../../../core/models/services
 import { DOMAIN } from '../../../../../core/projects/core.interface';
 import { ProjectProps } from '../../../../../core/projects/project.interface';
 import { createInMemoryProjectService } from '../../../../../core/projects/services/in-memory-project-service';
+import { PerformanceCategory } from '../../../../../core/supported-algorithms/dtos/supported-algorithms.interface';
 import { createInMemorySupportedAlgorithmsService } from '../../../../../core/supported-algorithms/services/in-memory-supported-algorithms-service';
 import { idMatchingFormat } from '../../../../../test-utils/id-utils';
 import {
@@ -62,6 +63,7 @@ const mockedSupportedAlgorithms = [
         gigaflops: 1.3,
         description: 'YOLO architecture for detection',
         isDefaultAlgorithm: true,
+        performanceCategory: PerformanceCategory.ACCURACY,
     }),
     getMockedSupportedAlgorithm({
         name: 'SSD detection',
@@ -70,6 +72,7 @@ const mockedSupportedAlgorithms = [
         gigaflops: 5.4,
         description: 'SSD architecture for detection',
         isDefaultAlgorithm: false,
+        performanceCategory: PerformanceCategory.SPEED,
     }),
     getMockedSupportedAlgorithm({
         name: 'ATTS detection',
@@ -78,31 +81,53 @@ const mockedSupportedAlgorithms = [
         gigaflops: 3,
         description: 'ATTS architecture for detection',
         isDefaultAlgorithm: false,
+        performanceCategory: PerformanceCategory.BALANCE,
+    }),
+    getMockedSupportedAlgorithm({
+        name: 'ATTS2 detection',
+        domain: DOMAIN.DETECTION,
+        modelTemplateId: 'detection_atts2_detection',
+        gigaflops: 3,
+        description: 'ATTS2 architecture for detection',
+        isDefaultAlgorithm: false,
+        performanceCategory: PerformanceCategory.OTHER,
     }),
 
     getMockedSupportedAlgorithm({
         name: 'YOLO classification',
         domain: DOMAIN.CLASSIFICATION,
-        modelTemplateId: 'detection_yolo_classification',
+        modelTemplateId: 'classification_yolo_classification',
         gigaflops: 1.3,
         description: 'YOLO architecture for classification',
         isDefaultAlgorithm: false,
+        performanceCategory: PerformanceCategory.ACCURACY,
     }),
     getMockedSupportedAlgorithm({
         name: 'SSD classification',
         domain: DOMAIN.CLASSIFICATION,
-        modelTemplateId: 'detection_ssd_classification',
+        modelTemplateId: 'classification_ssd_classification',
         gigaflops: 5.4,
         description: 'SSD architecture for classification',
         isDefaultAlgorithm: true,
+        performanceCategory: PerformanceCategory.BALANCE,
     }),
     getMockedSupportedAlgorithm({
         name: 'ATTS classification',
         domain: DOMAIN.CLASSIFICATION,
-        modelTemplateId: 'detection_atts_classification',
+        modelTemplateId: 'classification_atts_classification',
         gigaflops: 3,
         description: 'ATTS architecture for classification',
         isDefaultAlgorithm: false,
+        performanceCategory: PerformanceCategory.SPEED,
+    }),
+    getMockedSupportedAlgorithm({
+        name: 'ATTS2 classification',
+        domain: DOMAIN.CLASSIFICATION,
+        modelTemplateId: 'classification_atts2_classification',
+        gigaflops: 3,
+        description: 'ATTS2 architecture for classification',
+        isDefaultAlgorithm: false,
+        performanceCategory: PerformanceCategory.OTHER,
     }),
 ];
 
@@ -238,7 +263,32 @@ describe('Train model dialog', () => {
 
         expect(screen.getByLabelText('Selected card')).toHaveAttribute(
             'data-testid',
-            idMatchingFormat(`${defaultModelTemplate?.name}-id`)
+            idMatchingFormat(`${defaultModelTemplate?.performanceCategory.toLocaleLowerCase()}-id`)
+        );
+    });
+
+    it('model type with default algorithm should be selected by default if there is no active model', async () => {
+        const modelsService = createInMemoryModelsService();
+
+        modelsService.getModels = jest.fn(async () => [
+            getMockedModelsGroup({
+                taskId: mockedSingleProject.tasks[0].id,
+                modelTemplateId: mockedSupportedAlgorithms[1].modelTemplateId,
+                modelVersions: [getMockedModelVersion({ isActiveModel: false })],
+            }),
+        ]);
+
+        await renderTrainModelDialog({
+            services: {
+                modelsService,
+            },
+        });
+
+        const defaultModelTemplate = getDefaultModelTemplate(DOMAIN.DETECTION);
+
+        expect(screen.getByLabelText('Selected card')).toHaveAttribute(
+            'data-testid',
+            idMatchingFormat(`${defaultModelTemplate?.performanceCategory.toLocaleLowerCase()}-id`)
         );
     });
 
@@ -249,7 +299,7 @@ describe('Train model dialog', () => {
 
         expect(screen.getByLabelText('Selected card')).toHaveAttribute(
             'data-testid',
-            idMatchingFormat(`${defaultModelTemplate?.name}-id`)
+            idMatchingFormat(`${defaultModelTemplate?.performanceCategory.toLocaleLowerCase()}-id`)
         );
     });
 
@@ -265,7 +315,7 @@ describe('Train model dialog', () => {
 
         expect(screen.getByLabelText('Selected card')).toHaveAttribute(
             'data-testid',
-            idMatchingFormat(`${defaultModelTemplateDetection?.name}-id`)
+            idMatchingFormat(`${defaultModelTemplateDetection?.performanceCategory.toLocaleLowerCase()}-id`)
         );
 
         fireEvent.click(screen.getByRole('button', { name: /select domain/i }));
@@ -273,7 +323,7 @@ describe('Train model dialog', () => {
 
         expect(screen.getByLabelText('Selected card')).toHaveAttribute(
             'data-testid',
-            idMatchingFormat(`${defaultModelTemplateClassification?.name}-id`)
+            idMatchingFormat(`${defaultModelTemplateClassification?.performanceCategory.toLocaleLowerCase()}-id`)
         );
     });
 
@@ -302,7 +352,45 @@ describe('Train model dialog', () => {
         });
     });
 
-    it('calls training configuration and train endpoints when starting training in advanced mode', async () => {
+    it('calls training configuration and train endpoints when starting training in advanced mode and training configuration was changed', async () => {
+        const modelsService = createInMemoryModelsService();
+
+        const mockedTrainedModel = jest.fn();
+        modelsService.trainModel = mockedTrainedModel;
+
+        const configParametersService = createApiModelConfigParametersService();
+        const mockedUpdateTrainingConfiguration = jest.fn();
+        configParametersService.updateTrainingConfiguration = mockedUpdateTrainingConfiguration;
+        configParametersService.getTrainingConfiguration = jest.fn(async () => getMockedTrainingConfiguration());
+
+        await renderTrainModelDialog({
+            services: {
+                modelsService,
+                configParametersService,
+            },
+        });
+
+        fireEvent.click(screen.getByRole('button', { name: /advanced settings/i }));
+
+        expect(screen.getByRole('tablist', { name: /advanced settings tabs/i })).toBeInTheDocument();
+
+        fireEvent.click(screen.getByRole('tab', { name: /data management/i }));
+
+        fireEvent.keyDown(screen.getByLabelText('Start range'), { key: 'Left' });
+
+        fireEvent.click(screen.getByRole('button', { name: /start/i }));
+
+        await waitFor(() => {
+            expect(mockedTrainedModel).toHaveBeenCalled();
+            expect(mockedUpdateTrainingConfiguration).toHaveBeenCalled();
+        });
+
+        expect(mockedUpdateTrainingConfiguration.mock.invocationCallOrder[0]).toBeLessThan(
+            mockedTrainedModel.mock.invocationCallOrder[0]
+        );
+    });
+
+    it('does not call training configuration endpoint when training configuration was not changed', async () => {
         const modelsService = createInMemoryModelsService();
 
         const mockedTrainedModel = jest.fn();
@@ -327,13 +415,9 @@ describe('Train model dialog', () => {
         fireEvent.click(screen.getByRole('button', { name: /start/i }));
 
         await waitFor(() => {
+            expect(mockedUpdateTrainingConfiguration).not.toHaveBeenCalled();
             expect(mockedTrainedModel).toHaveBeenCalled();
-            expect(mockedUpdateTrainingConfiguration).toHaveBeenCalled();
         });
-
-        expect(mockedUpdateTrainingConfiguration.mock.invocationCallOrder[0]).toBeLessThan(
-            mockedTrainedModel.mock.invocationCallOrder[0]
-        );
     });
 
     it('does not call train endpoint when training configuration fails', async () => {
@@ -360,6 +444,10 @@ describe('Train model dialog', () => {
         fireEvent.click(screen.getByRole('button', { name: /advanced settings/i }));
 
         expect(screen.getByRole('tablist', { name: /advanced settings tabs/i })).toBeInTheDocument();
+
+        fireEvent.click(screen.getByRole('tab', { name: /data management/i }));
+
+        fireEvent.keyDown(screen.getByLabelText('Start range'), { key: 'Left' });
 
         fireEvent.click(screen.getByRole('button', { name: /start/i }));
 
@@ -406,10 +494,11 @@ describe('Train model dialog', () => {
             ],
         };
 
+        const defaultMockedConfiguration = getMockedTrainingConfiguration();
+
         const trainingConfiguration = getMockedTrainingConfiguration({
             datasetPreparation: {
-                subsetSplit: [],
-                augmentation: {},
+                ...defaultMockedConfiguration.datasetPreparation,
                 filtering: filterParameter,
             },
         });
@@ -491,5 +580,244 @@ describe('Train model dialog', () => {
                 })
             );
         });
+    });
+
+    it('back button is visible in advanced mode', async () => {
+        await renderTrainModelDialog();
+
+        fireEvent.click(screen.getByRole('button', { name: /advanced settings/i }));
+
+        expect(screen.getByRole('button', { name: /back/i })).toBeInTheDocument();
+    });
+
+    it('back button resets model type to recommended one when neither recommended nor active algorithm is selected', async () => {
+        await renderTrainModelDialog();
+
+        const defaultModelTemplate = getDefaultModelTemplate(DOMAIN.DETECTION);
+
+        expect(screen.getByLabelText('Selected card')).toHaveAttribute(
+            'data-testid',
+            idMatchingFormat(`${defaultModelTemplate?.performanceCategory.toLocaleLowerCase()}-id`)
+        );
+
+        fireEvent.click(screen.getByRole('button', { name: /advanced settings/i }));
+
+        const otherModelType = mockedSupportedAlgorithms.find(
+            (algorithm) =>
+                algorithm.performanceCategory === PerformanceCategory.OTHER && algorithm.domain === DOMAIN.DETECTION
+        );
+
+        fireEvent.click(screen.getByText(otherModelType?.name ?? ''));
+
+        expect(screen.getByLabelText('Selected card')).toHaveAttribute(
+            'data-testid',
+            idMatchingFormat(`${otherModelType?.name}-id`)
+        );
+
+        fireEvent.click(screen.getByRole('button', { name: /back/i }));
+
+        expect(screen.getByLabelText('Selected card')).toHaveAttribute(
+            'data-testid',
+            idMatchingFormat(`${defaultModelTemplate?.performanceCategory.toLocaleLowerCase()}-id`)
+        );
+    });
+
+    it('back button resets to selected algorithm to default one when there are no models and neither recommended nor active is selected', async () => {
+        const modelsService = createInMemoryModelsService();
+        modelsService.getModels = jest.fn(async () => []);
+
+        await renderTrainModelDialog({
+            services: {
+                modelsService,
+            },
+        });
+
+        const defaultModelTemplate = getDefaultModelTemplate(DOMAIN.DETECTION);
+
+        expect(screen.getByLabelText('Selected card')).toHaveAttribute(
+            'data-testid',
+            idMatchingFormat(`${defaultModelTemplate?.performanceCategory.toLocaleLowerCase()}-id`)
+        );
+
+        fireEvent.click(screen.getByRole('button', { name: /advanced settings/i }));
+
+        const otherModelType = mockedSupportedAlgorithms.find(
+            (algorithm) =>
+                algorithm.performanceCategory === PerformanceCategory.OTHER && algorithm.domain === DOMAIN.DETECTION
+        );
+
+        fireEvent.click(screen.getByText(otherModelType?.name ?? ''));
+
+        expect(screen.getByLabelText('Selected card')).toHaveAttribute(
+            'data-testid',
+            idMatchingFormat(`${otherModelType?.name}-id`)
+        );
+
+        fireEvent.click(screen.getByRole('button', { name: /back/i }));
+
+        expect(screen.getByLabelText('Selected card')).toHaveAttribute(
+            'data-testid',
+            idMatchingFormat(`${defaultModelTemplate?.performanceCategory.toLocaleLowerCase()}-id`)
+        );
+    });
+
+    it('shows correct and updated status when training configuration data was updated', async () => {
+        const configParametersService = createApiModelConfigParametersService();
+
+        configParametersService.getTrainingConfiguration = jest.fn(async () =>
+            getMockedTrainingConfiguration({
+                datasetPreparation: {
+                    subsetSplit: [
+                        getMockedConfigurationParameter({
+                            key: 'training',
+                            type: 'int',
+                            name: 'Training percentage',
+                            value: 70,
+                            description: 'Percentage of data to use for training',
+                            defaultValue: 70,
+                            maxValue: 70,
+                            minValue: 1,
+                        }),
+                        getMockedConfigurationParameter({
+                            key: 'validation',
+                            type: 'int',
+                            name: 'Validation percentage',
+                            value: 20,
+                            description: 'Percentage of data to use for validation',
+                            defaultValue: 20,
+                            maxValue: 100,
+                            minValue: 1,
+                        }),
+                        getMockedConfigurationParameter({
+                            key: 'test',
+                            type: 'int',
+                            name: 'Test percentage',
+                            value: 10,
+                            description: 'Percentage of data to use for testing',
+                            defaultValue: 10,
+                            maxValue: 100,
+                            minValue: 1,
+                        }),
+                        getMockedConfigurationParameter({
+                            type: 'int',
+                            value: 6,
+                            key: 'dataset_size',
+                        }),
+                    ],
+                    augmentation: {},
+                    filtering: {},
+                },
+            })
+        );
+
+        await renderTrainModelDialog({
+            services: {
+                configParametersService,
+            },
+        });
+
+        fireEvent.click(screen.getByRole('button', { name: /advanced settings/i }));
+
+        expect(screen.getByRole('tablist', { name: /advanced settings tabs/i })).toBeInTheDocument();
+
+        fireEvent.click(screen.getByRole('tab', { name: /data management/i }));
+
+        fireEvent.keyDown(screen.getByLabelText('Start range'), { key: 'Left' });
+
+        expect(screen.getByRole('alert')).toBeInTheDocument();
+
+        fireEvent.click(screen.getByRole('tab', { name: 'Training' }));
+
+        expect(screen.getByLabelText('Learning parameters tag')).toHaveTextContent('Default');
+
+        fireEvent.click(screen.getByRole('button', { name: 'Increase Change Maximum epochs' }));
+
+        expect(screen.getByLabelText('Learning parameters tag')).toHaveTextContent('Modified');
+
+        fireEvent.click(screen.getByRole('button', { name: /back/i }));
+
+        fireEvent.click(screen.getByRole('button', { name: /advanced settings/i }));
+
+        fireEvent.click(screen.getByRole('tab', { name: /data management/i }));
+
+        expect(screen.getByRole('alert')).toBeInTheDocument();
+
+        fireEvent.click(screen.getByRole('tab', { name: 'Training' }));
+
+        expect(screen.getByLabelText('Learning parameters tag')).toHaveTextContent('Modified');
+    });
+
+    it('disables train button when any training subset size is zero and user is in advanced settings mode', async () => {
+        const configParametersService = createApiModelConfigParametersService();
+
+        configParametersService.getTrainingConfiguration = jest.fn(async () =>
+            getMockedTrainingConfiguration({
+                datasetPreparation: {
+                    subsetSplit: [
+                        getMockedConfigurationParameter({
+                            key: 'training',
+                            type: 'int',
+                            name: 'Training percentage',
+                            value: 70,
+                            description: 'Percentage of data to use for training',
+                            defaultValue: 70,
+                            maxValue: 70,
+                            minValue: 1,
+                        }),
+                        getMockedConfigurationParameter({
+                            key: 'validation',
+                            type: 'int',
+                            name: 'Validation percentage',
+                            value: 20,
+                            description: 'Percentage of data to use for validation',
+                            defaultValue: 20,
+                            maxValue: 100,
+                            minValue: 1,
+                        }),
+                        getMockedConfigurationParameter({
+                            key: 'test',
+                            type: 'int',
+                            name: 'Test percentage',
+                            value: 10,
+                            description: 'Percentage of data to use for testing',
+                            defaultValue: 10,
+                            maxValue: 100,
+                            minValue: 1,
+                        }),
+                        getMockedConfigurationParameter({
+                            type: 'int',
+                            value: 6,
+                            key: 'dataset_size',
+                        }),
+                    ],
+                    augmentation: {},
+                    filtering: {},
+                },
+            })
+        );
+
+        await renderTrainModelDialog({
+            services: {
+                configParametersService,
+            },
+        });
+
+        expect(screen.getByRole('button', { name: /start/i })).toBeEnabled();
+
+        fireEvent.click(screen.getByRole('button', { name: /advanced settings/i }));
+
+        expect(screen.getByRole('tablist', { name: /advanced settings tabs/i })).toBeInTheDocument();
+
+        fireEvent.click(screen.getByRole('tab', { name: /data management/i }));
+
+        expect(screen.getByRole('heading', { name: /Training subsets/ })).toBeInTheDocument();
+
+        fireEvent.keyDown(screen.getByLabelText('Start range'), { key: 'Left' });
+
+        expect(screen.getByRole('button', { name: /start/i })).toBeDisabled();
+
+        fireEvent.click(screen.getByRole('button', { name: /back/i }));
+
+        expect(screen.getByRole('button', { name: /start/i })).toBeEnabled();
     });
 });
