@@ -4,7 +4,7 @@
 # GET /organizations/{organization_id}/workspaces
 # Get a list of workspaces
 allow if {
-	http_request.method == "GET"
+	# TODO: http_request.method == "GET"
 	["api", api_ver, "organizations", organization_id, "workspaces"] = parsed_path
 	print("Policy: list of workspaces")
 	is_valid_api_version(api_ver)
