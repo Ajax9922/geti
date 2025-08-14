@@ -252,7 +252,8 @@
   {
     "url": "https://download.pytorch.org/models/maskrcnn_resnet50_fpn_v2_coco-73cbd019.pth",
     "target": "/home/non-root/.cache/torch/hub/checkpoints/maskrcnn_resnet50_fpn_v2_coco-73cbd019.pth",
-    "sha_sum": "73cbd0190fcbe3ba339921fbce2c3a0b6bb9126c9a133c85e43a2a8e060a109e"
+    "sha_sum": "73cbd0190fcbe3ba339921fbce2c3a0b6bb9126c9a133c85e43a2a8e060a109e",
+    "template_ids": ["Rotated_Detection_MaskRCNN_ResNet50_V2", "Custom_Instance_Segmentation_MaskRCNN_ResNet50_v2"]
   },
   {
     "url": "https://download.pytorch.org/models/resnet50-0676ba61.pth",
@@ -318,7 +319,7 @@
     "target": "/home/non-root/.cache/torch/hub/checkpoints/models--timm--resnet18.a1_in1k.zip",
     "unzip": false,
     "sha_sum": "c0ddac84c0ad89a29428527669359316f76bc746dc9f0d51b72f148e2f7b9252",
-    "template_ids": ["ote_anomaly_classification_padim", "ote_anomaly_classification_stfpm", "ote_anomaly_uflow"]
+    "template_ids": ["ote_anomaly_padim", "ote_anomaly_stfpm", "ote_anomaly_uflow"]
   },
   {
     "url": "models--timm--tf_efficientnetv2_s.in21k.zip",
@@ -337,19 +338,7 @@
     "url": "https://download.pytorch.org/models/resnet18-5c106cde.pth",
     "target": "/home/non-root/.cache/torch/hub/checkpoints/resnet18-5c106cde.pth",
     "sha_sum": "5c106cde386e87d4033832f2996f5493238eda96ccf559d1d62760c4de0613f8",
-    "template_ids": ["ote_anomaly_classification_padim", "ote_anomaly_classification_stfpm"]
-  },
-  {
-    "url": "https://download.pytorch.org/models/resnet18-5c106cde.pth",
-    "target": "/home/non-root/.cache/torch/hub/checkpoints/resnet18-5c106cde.pth",
-    "sha_sum": "5c106cde386e87d4033832f2996f5493238eda96ccf559d1d62760c4de0613f8",
-    "template_ids": ["ote_anomaly_detection_padim", "ote_anomaly_detection_stfpm"]
-  },
-  {
-    "url": "https://download.pytorch.org/models/resnet18-5c106cde.pth",
-    "target": "/home/non-root/.cache/torch/hub/checkpoints/resnet18-5c106cde.pth",
-    "sha_sum": "5c106cde386e87d4033832f2996f5493238eda96ccf559d1d62760c4de0613f8",
-    "template_ids": ["ote_anomaly_segmentation_padim", "ote_anomaly_segmentation_stfpm"]
+    "template_ids": ["ote_anomaly_padim", "ote_anomaly_stfpm"]
   },
   {
     "url": "https://download.openmmlab.com/mmclassification/v0/deit/deit-tiny_pt-4xb256_in1k_20220218-13b382a0.pth",

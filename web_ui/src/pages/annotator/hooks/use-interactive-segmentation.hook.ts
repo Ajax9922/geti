@@ -3,15 +3,16 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import { RITM } from '@geti/smart-tools';
-import { Shape as SmartToolsShape } from '@geti/smart-tools/src/shared/interfaces';
+import { RITM } from '@geti/smart-tools/ritm';
+import { Shape as SmartToolsShape } from '@geti/smart-tools/types';
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
+import { Remote } from 'comlink';
 
 import { AlgorithmType } from '../../../hooks/use-load-ai-webworker/algorithm.interface';
 import { useLoadAIWebworker } from '../../../hooks/use-load-ai-webworker/use-load-ai-webworker.hook';
 import { useAnnotationScene } from '../providers/annotation-scene-provider/annotation-scene-provider.component';
 import { RITMData, RITMResult } from '../tools/ritm-tool/ritm-tool.interface';
-import { convertGetiShapeTypeToToolShapeType, convertToolShapeToGetiShape } from '../tools/utils';
+import { convertToolShapeToGetiShape } from '../tools/utils';
 
 interface useInteractiveSegmentationProps {
     onSuccess: (result: RITMResult) => void;
@@ -35,7 +36,7 @@ export const useInteractiveSegmentation = ({
 
     const { worker } = useLoadAIWebworker(AlgorithmType.RITM);
 
-    const ritmInstance = useRef<RITM | null>(null);
+    const ritmInstance = useRef<Remote<RITM> | null>(null);
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const cancelRequested = useRef<boolean>(false);
@@ -58,12 +59,6 @@ export const useInteractiveSegmentation = ({
         if (worker) {
             loadWorker();
         }
-
-        return () => {
-            if (ritmInstance && ritmInstance.current) {
-                ritmInstance.current.cleanMemory();
-            }
-        };
     }, [worker]);
 
     useEffect(() => {
@@ -79,7 +74,7 @@ export const useInteractiveSegmentation = ({
             cancelRequested.current = false;
             setIsDrawing(true);
 
-            return ritmInstance.current.execute(area, givenPoints, convertGetiShapeTypeToToolShapeType(outputShape));
+            return ritmInstance.current.execute(area, givenPoints, outputShape);
         },
 
         onError: showNotificationError,

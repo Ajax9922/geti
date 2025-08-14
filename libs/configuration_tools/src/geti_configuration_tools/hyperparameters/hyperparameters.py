@@ -1,14 +1,14 @@
 # Copyright (C) 2022-2025 Intel Corporation
 # LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
-
-from pydantic import BaseModel, Field, model_validator
+from pydantic import Field, model_validator
 
 from geti_configuration_tools.utils import partial_model
 
 from .augmentation import AugmentationParameters
+from .base_model_no_extra import BaseModelNoExtra
 
 
-class DatasetPreparationParameters(BaseModel):
+class DatasetPreparationParameters(BaseModelNoExtra):
     """Parameters for dataset preparation before training."""
 
     augmentation: AugmentationParameters = Field(
@@ -18,7 +18,7 @@ class DatasetPreparationParameters(BaseModel):
     )
 
 
-class EarlyStopping(BaseModel):
+class EarlyStopping(BaseModelNoExtra):
     enable: bool = Field(
         default=False,
         title="Enable early stopping",
@@ -32,42 +32,17 @@ class EarlyStopping(BaseModel):
     )
 
 
-class MaxDetectionPerImage(BaseModel):
-    enable: bool = Field(
-        default=False,
-        title="Enable maximum detection per image",
-        description="Whether to limit the number of detections per image",
-    )
-    max_detection_per_image: int = Field(
-        default=10000,
-        gt=0,
-        title="Maximum number of detections per image",
-        description=(
-            "Maximum number of objects that can be detected in a single image, "
-            "only applicable for instance segmentation models"
-        ),
-    )
-
-
-class TrainingHyperParameters(BaseModel):
+class TrainingHyperParameters(BaseModelNoExtra):
     """Hyperparameters for model training process."""
 
-    max_epochs: int = Field(
-        gt=0, default=1000, title="Maximum epochs", description="Maximum number of training epochs to run"
+    max_epochs: int | None = Field(
+        gt=0, default=None, title="Maximum epochs", description="Maximum number of training epochs to run"
     )
-    early_stopping: EarlyStopping = Field(
-        default_factory=EarlyStopping, title="Early stopping", description="Configuration for early stopping mechanism"
+    early_stopping: EarlyStopping | None = Field(
+        default=None, title="Early stopping", description="Configuration for early stopping mechanism"
     )
-    learning_rate: float = Field(
-        gt=0, lt=1, default=0.001, title="Learning rate", description="Base learning rate for the optimizer"
-    )
-    max_detection_per_image: MaxDetectionPerImage | None = Field(
-        default_factory=MaxDetectionPerImage,
-        title="Maximum number of detections per image",
-        description=(
-            "Maximum number of objects that can be detected in a single image, "
-            "only applicable for instance segmentation models"
-        ),
+    learning_rate: float | None = Field(
+        gt=0, lt=1, default=None, title="Learning rate", description="Base learning rate for the optimizer"
     )
     input_size_width: int | None = Field(
         default=None,
@@ -140,20 +115,32 @@ class TrainingHyperParameters(BaseModel):
         return self
 
 
-class EvaluationParameters(BaseModel):
+class EvaluationParameters(BaseModelNoExtra):
     """Parameters for model evaluation."""
 
-    metric: None = Field(
+    metric: str | None = Field(
         default=None, title="Evaluation metric", description="Metric used to evaluate model performance"
     )
 
 
-class Hyperparameters(BaseModel):
+class Hyperparameters(BaseModelNoExtra):
     """Complete set of configurable parameters for model training and evaluation."""
 
-    dataset_preparation: DatasetPreparationParameters
-    training: TrainingHyperParameters
-    evaluation: EvaluationParameters
+    dataset_preparation: DatasetPreparationParameters = Field(
+        default_factory=DatasetPreparationParameters,
+        title="Dataset preparation",
+        description="Parameters for preparing the dataset before training",
+    )
+    training: TrainingHyperParameters | None = Field(
+        default=None,
+        title="Training hyperparameters",
+        description="Hyperparameters for the model training process",
+    )
+    evaluation: EvaluationParameters = Field(
+        default_factory=EvaluationParameters,
+        title="Evaluation parameters",
+        description="Parameters for evaluating the trained model",
+    )
 
 
 @partial_model

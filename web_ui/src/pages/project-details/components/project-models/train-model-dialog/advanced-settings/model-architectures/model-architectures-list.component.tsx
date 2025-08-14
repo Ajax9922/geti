@@ -24,10 +24,11 @@ export const ModelArchitecturesList: FC<ModelArchitecturesListProps> = ({
     activeModelTemplateId,
 }) => {
     return (
-        <Grid columns={repeat('auto-fit', minmax('size-3000', '1fr'))} gap={'size-250'}>
+        <Grid columns={repeat('auto-fit', minmax('size-3400', '1fr'))} gap={'size-250'}>
             {algorithms.map((algorithm) => (
                 <ModelType
                     key={algorithm.modelTemplateId}
+                    name={algorithm.name}
                     algorithm={algorithm}
                     selectedModelTemplateId={selectedModelTemplateId}
                     onChangeSelectedTemplateId={onChangeSelectedTemplateId}
