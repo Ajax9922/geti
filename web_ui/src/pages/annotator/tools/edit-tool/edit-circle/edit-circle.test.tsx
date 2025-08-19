@@ -25,12 +25,7 @@ import { calculateAnchorPoint, EditCircle as EditCircleTool } from './edit-circl
 const mockROI = { x: 0, y: 0, width: 200, height: 200 };
 const mockImage = getMockedImage(mockROI);
 
-jest.mock('../../../annotator.component', () => ({
-    useAnnotator: jest.fn(),
-}));
-
 jest.mock('../../../providers/region-of-interest-provider/region-of-interest-provider.component', () => ({
-    ...jest.requireActual('../../../providers/region-of-interest-provider/region-of-interest-provider.component'),
     useROI: jest.fn(() => ({
         roi: mockROI,
         image: mockImage,
@@ -38,7 +33,6 @@ jest.mock('../../../providers/region-of-interest-provider/region-of-interest-pro
 }));
 
 jest.mock('./../../../zoom/zoom-provider.component', () => ({
-    ...jest.requireActual('./../../../zoom/zoom-provider.component'),
     useZoom: jest.fn(() => ({ zoomState: { zoom: 1.0, translation: { x: 0, y: 0 } } })),
 }));
 
