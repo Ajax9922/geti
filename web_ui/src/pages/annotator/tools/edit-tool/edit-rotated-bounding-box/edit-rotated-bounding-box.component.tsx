@@ -13,6 +13,7 @@ import {
     Vec2,
 } from '@geti/smart-tools/utils';
 
+import { TranslateShape } from '../../../../../../packages/smart-tools/src/edit-bounding-box/translate-shape.component';
 import { Annotation } from '../../../../../core/annotations/annotation.interface';
 import { ShapeType } from '../../../../../core/annotations/shapetype.enum';
 import { AnnotationToolContext } from '../../../core/annotation-tool-context.interface';
@@ -20,7 +21,6 @@ import { useROI } from '../../../providers/region-of-interest-provider/region-of
 import { useZoom } from '../../../zoom/zoom-provider.component';
 import { isShapeWithinRoi } from '../../utils';
 import { ResizeAnchorType } from '../resize-anchor.enum';
-import { TranslateShape } from '../translate-shape.component';
 import { getSideAnchorLocations } from './location';
 import { RotationElement } from './rotation-element/rotation-element.component';
 

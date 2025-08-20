@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { ANCHOR_SIZE, ResizeAnchor } from '@geti/smart-tools';
 import { Vec2 } from '@geti/smart-tools/utils';
 
+import { TranslateShape } from '../../../../../../packages/smart-tools/src/edit-bounding-box/translate-shape.component';
 import { Annotation, RegionOfInterest } from '../../../../../core/annotations/annotation.interface';
 import { Point } from '../../../../../core/annotations/shapes.interface';
 import { ShapeType } from '../../../../../core/annotations/shapetype.enum';
@@ -16,7 +17,6 @@ import { useZoom } from '../../../zoom/zoom-provider.component';
 import { getMaxCircleRadius, MIN_RADIUS } from '../../circle-tool/utils';
 import { isShapeWithinRoi } from '../../utils';
 import { ResizeAnchorType } from '../resize-anchor.enum';
-import { TranslateShape } from '../translate-shape.component';
 
 import classes from './../../../annotator-canvas.module.scss';
 

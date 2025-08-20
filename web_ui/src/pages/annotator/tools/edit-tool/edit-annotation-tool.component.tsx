@@ -3,6 +3,8 @@
 
 import { RefObject, useRef } from 'react';
 
+import { EditBoundingBox as EditBoundingBoxTool } from '@geti/smart-tools';
+
 import { Annotation, KeypointAnnotation } from '../../../../core/annotations/annotation.interface';
 import { ShapeType } from '../../../../core/annotations/shapetype.enum';
 import { useOutsideClick } from '../../../../hooks/outside-click/outside-click.hook';
@@ -16,7 +18,7 @@ import { useTask } from '../../providers/task-provider/task-provider.component';
 import { useZoom } from '../../zoom/zoom-provider.component';
 import { SelectingToolType } from '../selecting-tool/selecting-tool.enums';
 import { ToolAnnotationContextProps } from '../tools.interface';
-import { EditBoundingBox as EditBoundingBoxTool } from './edit-bounding-box/edit-bounding-box.component';
+import { convertToolShapeToGetiShape } from '../utils';
 import { EditCircle as EditCircleTool } from './edit-circle/edit-circle.component';
 import { EditKeypointTool } from './edit-keypoint/edit-keypoint-tool.component';
 import { EditPolygon as EditPolygonTool } from './edit-polygon/edit-polygon.component';
@@ -54,7 +56,13 @@ const EditAnnotationToolFactory = ({
                     roi={roi}
                     image={image}
                     zoom={zoom}
-                    updateAnnotation={scene.updateAnnotation}
+                    updateAnnotation={(newAnnotation) => {
+                        scene.updateAnnotation({
+                            ...newAnnotation,
+                            shape: convertToolShapeToGetiShape(newAnnotation.shape),
+                            labels: annotation.labels,
+                        });
+                    }}
                     annotation={annotation as Annotation & { shape: { shapeType: ShapeType.Rect } }}
                     disableTranslation={disableTranslation}
                     disablePoints={disablePoints}

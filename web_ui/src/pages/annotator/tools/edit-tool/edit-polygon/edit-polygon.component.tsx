@@ -3,6 +3,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
+import { TranslateShape } from '../../../../../../packages/smart-tools/src/edit-bounding-box/translate-shape.component';
 import { Annotation } from '../../../../../core/annotations/annotation.interface';
 import { Polygon } from '../../../../../core/annotations/shapes.interface';
 import { ShapeType } from '../../../../../core/annotations/shapetype.enum';
@@ -13,7 +14,6 @@ import { useROI } from '../../../providers/region-of-interest-provider/region-of
 import { useZoom } from '../../../zoom/zoom-provider.component';
 import { SelectingToolType } from '../../selecting-tool/selecting-tool.enums';
 import { isPolygonValid, removeOffLimitPointsPolygon } from '../../utils';
-import { TranslateShape } from '../translate-shape.component';
 import { EditPoints } from './edit-points.component';
 
 import classes from './../../../annotator-canvas.module.scss';
