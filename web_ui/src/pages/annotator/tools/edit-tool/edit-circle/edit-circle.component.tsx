@@ -7,9 +7,10 @@ import { ANCHOR_SIZE, ResizeAnchor } from '@geti/smart-tools';
 import { Vec2 } from '@geti/smart-tools/utils';
 
 import { TranslateShape } from '../../../../../../packages/smart-tools/src/edit-bounding-box/translate-shape.component';
-import { Annotation, RegionOfInterest } from '../../../../../core/annotations/annotation.interface';
+import { Annotation as AnnotationType, RegionOfInterest } from '../../../../../core/annotations/annotation.interface';
 import { Point } from '../../../../../core/annotations/shapes.interface';
 import { ShapeType } from '../../../../../core/annotations/shapetype.enum';
+import { Annotation } from '../../../annotation/annotation.component';
 import { Labels } from '../../../annotation/labels/labels.component';
 import { AnnotationToolContext } from '../../../core/annotation-tool-context.interface';
 import { useROI } from '../../../providers/region-of-interest-provider/region-of-interest-provider.component';
@@ -25,7 +26,7 @@ type Circle = { x: number; y: number; r: number };
 
 interface EditCircleProps {
     annotationToolContext: AnnotationToolContext;
-    annotation: Annotation & { shape: { shapeType: ShapeType.Circle } };
+    annotation: AnnotationType & { shape: { shapeType: ShapeType.Circle } };
     disableTranslation?: boolean;
     disablePoints?: boolean;
 }
@@ -119,7 +120,9 @@ export const EditCircle = ({
                     annotation={{ ...annotation, shape }}
                     translateShape={translate}
                     onComplete={onComplete}
-                />
+                >
+                    <Annotation annotation={annotation} />
+                </TranslateShape>
 
                 <line
                     x1={shape.x}

@@ -4,9 +4,10 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { TranslateShape } from '../../../../../../packages/smart-tools/src/edit-bounding-box/translate-shape.component';
-import { Annotation } from '../../../../../core/annotations/annotation.interface';
+import { Annotation as AnnotationType } from '../../../../../core/annotations/annotation.interface';
 import { Polygon } from '../../../../../core/annotations/shapes.interface';
 import { ShapeType } from '../../../../../core/annotations/shapetype.enum';
+import { Annotation } from '../../../annotation/annotation.component';
 import { Labels } from '../../../annotation/labels/labels.component';
 import { AnnotationScene } from '../../../core/annotation-scene.interface';
 import { AnnotationToolContext, ToolType } from '../../../core/annotation-tool-context.interface';
@@ -20,12 +21,12 @@ import classes from './../../../annotator-canvas.module.scss';
 
 interface EditPolygonProps {
     annotationToolContext: AnnotationToolContext;
-    annotation: Annotation & { shape: { shapeType: ShapeType.Polygon } };
+    annotation: AnnotationType & { shape: { shapeType: ShapeType.Polygon } };
     disableTranslation?: boolean;
     disablePoints?: boolean;
 }
 
-const updateOrRemovePolygonAnnotation = (annotation: Annotation, scene: AnnotationScene): void => {
+const updateOrRemovePolygonAnnotation = (annotation: AnnotationType, scene: AnnotationScene): void => {
     if (isPolygonValid(annotation.shape as Polygon)) {
         scene.updateAnnotation({ ...annotation });
     } else {
@@ -122,7 +123,9 @@ export const EditPolygon = ({
                     annotation={{ ...annotation, shape }}
                     onComplete={() => onComplete(shape)}
                     disabled={disableTranslation || isBrushSubTool}
-                />
+                >
+                    <Annotation annotation={annotation} />
+                </TranslateShape>
             </svg>
 
             {shape.points.length > 0 && !isBrushSubTool && <Labels annotation={{ ...annotation, shape }} />}

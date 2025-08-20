@@ -65,7 +65,17 @@ export const EditBoundingBox = ({
                     annotation={{ ...annotation, shape }}
                     translateShape={translate}
                     onComplete={onComplete}
-                />
+                >
+                    <g id={`canvas-annotation-${annotation.id}`}>
+                        <rect
+                            x={annotation.shape.x}
+                            y={annotation.shape.y}
+                            width={annotation.shape.width}
+                            height={annotation.shape.height}
+                            fill='transparent'
+                        />
+                    </g>
+                </TranslateShape>
             </svg>
 
             {disablePoints === false ? (
