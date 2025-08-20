@@ -3,20 +3,15 @@
 
 import { useEffect, useState } from 'react';
 
-import { ANCHOR_SIZE, ResizeAnchor } from '@geti/smart-tools';
-import { RegionOfInterest } from '@geti/smart-tools/types';
-
-import { Annotation } from '../../../../../core/annotations/annotation.interface';
-import { Point } from '../../../../../core/annotations/shapes.interface';
-import { ShapeType } from '../../../../../core/annotations/shapetype.enum';
-import { Labels } from '../../../annotation/labels/labels.component';
+import { Annotation, Point, RegionOfInterest } from '../../shared/interfaces';
+import { getBoundingBoxInRoi, getBoundingBoxResizePoints, getClampedBoundingBox } from '../../utils/tool-utils';
+import { ANCHOR_SIZE, ResizeAnchor } from '../resize-anchor.component';
 import { TranslateShape } from '../translate-shape.component';
-import { getBoundingBoxInRoi, getBoundingBoxResizePoints, getClampedBoundingBox } from '../utils';
 
-import classes from './../../../annotator-canvas.module.scss';
+import classes from './edit-bounding-box.module.scss';
 
 interface EditBoundingBoxProps {
-    annotation: Annotation & { shape: { shapeType: ShapeType.Rect } };
+    annotation: Annotation & { shape: { shapeType: 'rect' } };
     disableTranslation?: boolean;
     disablePoints?: boolean;
     roi: RegionOfInterest;
@@ -72,8 +67,6 @@ export const EditBoundingBox = ({
                     onComplete={onComplete}
                 />
             </svg>
-
-            <Labels annotation={{ ...annotation, shape }} />
 
             {disablePoints === false ? (
                 <svg
