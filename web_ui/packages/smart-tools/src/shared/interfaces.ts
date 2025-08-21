@@ -60,4 +60,5 @@ export interface Annotation {
     readonly isSelected: boolean;
     readonly isHidden: boolean;
     readonly isLocked: boolean;
+    readonly color?: string;
 }

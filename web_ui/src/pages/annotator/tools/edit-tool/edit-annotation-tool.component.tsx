@@ -11,6 +11,7 @@ import { useOutsideClick } from '../../../../hooks/outside-click/outside-click.h
 import { hasEqualId } from '../../../../shared/utils';
 import { isWheelButton } from '../../../buttons-utils';
 import { Labels } from '../../annotation/labels/labels.component';
+import { getLabelsColor } from '../../annotation/labels/utils';
 import { ToolType } from '../../core/annotation-tool-context.interface';
 import { useROI } from '../../providers/region-of-interest-provider/region-of-interest-provider.component';
 import { getGlobalAnnotations } from '../../providers/task-chain-provider/utils';
@@ -51,6 +52,8 @@ const EditAnnotationToolFactory = ({
 
     switch (annotation.shape.shapeType) {
         case ShapeType.Rect: {
+            const annotationColor = getLabelsColor(annotation.labels, selectedTask);
+
             return (
                 <EditBoundingBoxTool
                     roi={roi}
@@ -63,7 +66,11 @@ const EditAnnotationToolFactory = ({
                             labels: annotation.labels,
                         });
                     }}
-                    annotation={annotation as Annotation & { shape: { shapeType: ShapeType.Rect } }}
+                    annotation={
+                        { ...annotation, color: annotationColor } as Annotation & {
+                            shape: { shapeType: ShapeType.Rect };
+                        }
+                    }
                     disableTranslation={disableTranslation}
                     disablePoints={disablePoints}
                 />

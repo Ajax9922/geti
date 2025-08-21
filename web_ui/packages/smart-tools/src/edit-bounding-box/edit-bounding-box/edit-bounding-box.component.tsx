@@ -68,11 +68,18 @@ export const EditBoundingBox = ({
                 >
                     <g id={`canvas-annotation-${annotation.id}`}>
                         <rect
-                            x={annotation.shape.x}
-                            y={annotation.shape.y}
-                            width={annotation.shape.width}
-                            height={annotation.shape.height}
-                            fill='transparent'
+                            x={shape.x}
+                            y={shape.y}
+                            width={shape.width}
+                            height={shape.height}
+                            fill={annotation.color || 'var(--intel-blue, #0068b5)'}
+                            fillOpacity='var(--annotation-fill-opacity, 0.2)'
+                            stroke={annotation.color || 'var(--intel-blue, #0068b5)'}
+                            strokeWidth={2 / zoom}
+                            strokeOpacity='var(--annotation-border-opacity, 0.8)'
+                            strokeLinecap='round'
+                            strokeDasharray='0'
+                            strokeDashoffset='0'
                         />
                     </g>
                 </TranslateShape>
