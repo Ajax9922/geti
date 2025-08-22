@@ -8,7 +8,6 @@ import { Annotation as AnnotationType } from '../../../../../core/annotations/an
 import { Polygon } from '../../../../../core/annotations/shapes.interface';
 import { ShapeType } from '../../../../../core/annotations/shapetype.enum';
 import { Annotation } from '../../../annotation/annotation.component';
-import { Labels } from '../../../annotation/labels/labels.component';
 import { AnnotationScene } from '../../../core/annotation-scene.interface';
 import { AnnotationToolContext, ToolType } from '../../../core/annotation-tool-context.interface';
 import { useROI } from '../../../providers/region-of-interest-provider/region-of-interest-provider.component';
@@ -127,8 +126,6 @@ export const EditPolygon = ({
                     <Annotation annotation={annotation} />
                 </TranslateShape>
             </svg>
-
-            {shape.points.length > 0 && !isBrushSubTool && <Labels annotation={{ ...annotation, shape }} />}
 
             {disablePoints === false && !isBrushSubTool ? (
                 <svg

@@ -31,6 +31,8 @@ export const EditBoundingBox = ({
 }: EditBoundingBoxProps): JSX.Element => {
     const [shape, setShape] = useState(annotation.shape);
 
+    const ariaLabel = `${annotation.isSelected ? 'Selected' : 'Not selected'} shape ${annotation.id}`;
+
     useEffect(() => setShape(annotation.shape), [annotation.shape]);
 
     const onComplete = () => {
@@ -66,20 +68,23 @@ export const EditBoundingBox = ({
                     translateShape={translate}
                     onComplete={onComplete}
                 >
-                    <g id={`canvas-annotation-${annotation.id}`}>
+                    <g
+                        id={`canvas-annotation-${annotation.id}`}
+                        fill={annotation.color || '#0095ca'}
+                        fillOpacity='var(--annotation-fill-opacity, 0.2)'
+                        stroke={annotation.color || '#0095ca'}
+                        strokeWidth={2 / zoom}
+                        strokeOpacity='var(--annotation-border-opacity, 0.8)'
+                        strokeLinecap='round'
+                        strokeDasharray='0'
+                        strokeDashoffset='0'
+                    >
                         <rect
                             x={shape.x}
                             y={shape.y}
                             width={shape.width}
                             height={shape.height}
-                            fill={annotation.color || 'var(--intel-blue, #0068b5)'}
-                            fillOpacity='var(--annotation-fill-opacity, 0.2)'
-                            stroke={annotation.color || 'var(--intel-blue, #0068b5)'}
-                            strokeWidth={2 / zoom}
-                            strokeOpacity='var(--annotation-border-opacity, 0.8)'
-                            strokeLinecap='round'
-                            strokeDasharray='0'
-                            strokeDashoffset='0'
+                            aria-label={ariaLabel}
                         />
                     </g>
                 </TranslateShape>

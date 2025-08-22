@@ -11,7 +11,6 @@ import { Annotation as AnnotationType, RegionOfInterest } from '../../../../../c
 import { Point } from '../../../../../core/annotations/shapes.interface';
 import { ShapeType } from '../../../../../core/annotations/shapetype.enum';
 import { Annotation } from '../../../annotation/annotation.component';
-import { Labels } from '../../../annotation/labels/labels.component';
 import { AnnotationToolContext } from '../../../core/annotation-tool-context.interface';
 import { useROI } from '../../../providers/region-of-interest-provider/region-of-interest-provider.component';
 import { useZoom } from '../../../zoom/zoom-provider.component';
@@ -134,8 +133,6 @@ export const EditCircle = ({
                     strokeDasharray={ANCHOR_SIZE / zoom}
                 />
             </svg>
-
-            <Labels annotation={{ ...annotation, shape }} />
 
             {disablePoints === false ? (
                 <svg
