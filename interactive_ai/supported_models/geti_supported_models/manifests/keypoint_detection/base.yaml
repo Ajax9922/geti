@@ -6,7 +6,7 @@ hyperparameters:
   dataset_preparation:
     augmentation:
       random_affine:
-        enable: false
+        enable: true
         affine_transforms_prob: 1.0
       gaussian_blur:
         enable: false
