@@ -22,7 +22,6 @@ hyperparameters:
         fill: 0
       iou_random_crop:
         enable: true
-        prob: 1.0
       random_affine:
         enable: false
         max_rotate_degree: 10.0

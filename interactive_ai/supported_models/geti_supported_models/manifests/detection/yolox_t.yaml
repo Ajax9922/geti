@@ -28,7 +28,6 @@ hyperparameters:
     augmentation:
       iou_random_crop:
         enable: false
-        prob: 1.0
       mosaic:
         enable: true
       random_affine:

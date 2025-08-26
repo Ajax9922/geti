@@ -5,7 +5,7 @@ capabilities:
 hyperparameters:
   dataset_preparation:
     augmentation:
-      random_affine:
+      topdown_affine:
         enable: true
         affine_transforms_prob: 1.0
       gaussian_blur:
