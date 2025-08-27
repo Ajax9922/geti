@@ -10,7 +10,7 @@ class RandomResizeCrop(BaseModelNoExtra):
     enable: bool = Field(
         default=False,
         title="Enable random resize crop",
-        description="Whether to apply random resize and crop to the image. " \
+        description="Whether to apply random resize and crop to the image. "
         "Note: this augmentation is not supported when Tiling algorithm is enabled.",
     )
     # Exclude fields as they are supported yet by OTX
@@ -97,7 +97,7 @@ class RandomIOUCrop(BaseModelNoExtra):
     enable: bool = Field(
         default=False,
         title="Enable random IoU crop",
-        description="Whether to apply random cropping based on IoU criteria. " \
+        description="Whether to apply random cropping based on IoU criteria. "
         "Note: this augmentation is not supported when Tiling algorithm is enabled.",
     )
 

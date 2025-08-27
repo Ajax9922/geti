@@ -3,12 +3,17 @@
 
 from .augmentation import (
     AugmentationParameters,
-    CenterCrop,
     GaussianBlur,
     RandomAffine,
     RandomHorizontalFlip,
     RandomResizeCrop,
     Tiling,
+    ColorJitter,
+    TopdownAffine,
+    PhotometricDistort,
+    RandomVerticalFlip,
+    RandomIOUCrop,
+    GaussianNoise,
 )
 from .hyperparameters import (
     DatasetPreparationParameters,
@@ -21,7 +26,6 @@ from .hyperparameters import (
 
 __all__ = [
     "AugmentationParameters",
-    "CenterCrop",
     "DatasetPreparationParameters",
     "EarlyStopping",
     "EvaluationParameters",
@@ -33,4 +37,10 @@ __all__ = [
     "RandomResizeCrop",
     "Tiling",
     "TrainingHyperParameters",
+    "ColorJitter",
+    "TopdownAffine",
+    "PhotometricDistort",
+    "RandomVerticalFlip",
+    "RandomIOUCrop",
+    "GaussianNoise",
 ]
