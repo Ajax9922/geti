@@ -270,17 +270,80 @@ class Tiling(BaseModelNoExtra):
     )
 
 
+class Mosaic(BaseModelNoExtra):
+    enable: bool = Field(
+        default=True,
+        title="Enable mosaic",
+        description="Whether to apply mosaic augmentation (combines 4 images into one)",
+    )
+
+
+class Mixup(BaseModelNoExtra):
+    enable: bool = Field(
+        default=True,
+        title="Enable mixup",
+        description="Whether to apply mixup augmentation (blends two images and their labels)",
+    )
+    prob: float = Field(
+        default=0.5,
+        ge=0.0,
+        le=1.0,
+        title="Probability",
+        description="Probability of applying mixup augmentation",
+    )
+
+
+class HSVRandomAug(BaseModelNoExtra):
+    enable: bool = Field(
+        default=True,
+        title="Enable HSV random augmentation",
+        description="Whether to apply random HSV (Hue, Saturation, Value) augmentation",
+    )
+    hue_delta: int = Field(
+        default=5,
+        ge=0,
+        title="Hue delta",
+        description="Maximum delta for hue adjustment",
+    )
+    saturation_delta: int = Field(
+        default=30,
+        ge=0,
+        title="Saturation delta",
+        description="Maximum delta for saturation adjustment",
+    )
+    value_delta: int = Field(
+        default=30,
+        ge=0,
+        title="Value delta",
+        description="Maximum delta for value (brightness) adjustment",
+    )
+
+
 class AugmentationParameters(BaseModelNoExtra):
     """Configuration parameters for data augmentation during training."""
 
     topdown_affine: TopdownAffine | None = Field(
         default=None, title="Topdown affine", description="Settings for topdown affine transformations"
     )
+    iou_random_crop: RandomIOUCrop | None = Field(
+        default=None,
+        title="IoU random crop",
+        description="Randomly crop images based on Intersection over Union (IoU) criteria",
+    )
+    mosaic: Mosaic | None = Field(
+        default=None, title="Mosaic", description="Settings for mosaic augmentation"
+    )
     random_resize_crop: RandomResizeCrop | None = Field(
         default=None, title="Random resize crop", description="Settings for random resize and crop augmentation"
     )
     random_affine: RandomAffine | None = Field(
         default=None, title="Random affine", description="Settings for random affine transformations"
+    )
+    mixup: Mixup | None = Field(
+        default=None, title="Mixup", description="Settings for mixup augmentation"
+    )
+    hsv_random_aug: HSVRandomAug | None = Field(
+        default=None, title="HSV random augmentation", description="Settings for HSV random augmentation"
     )
     random_horizontal_flip: RandomHorizontalFlip | None = Field(
         default=None,
@@ -291,11 +354,6 @@ class AugmentationParameters(BaseModelNoExtra):
         default=None,
         title="Random vertical flip",
         description="Randomly flip images vertically along the horizontal axis (swap top and bottom)",
-    )
-    random_iou_crop: RandomIOUCrop | None = Field(
-        default=None,
-        title="Random IoU crop",
-        description="Randomly crop images based on Intersection over Union (IoU) criteria",
     )
     color_jitter: ColorJitter | None = Field(
         default=None,

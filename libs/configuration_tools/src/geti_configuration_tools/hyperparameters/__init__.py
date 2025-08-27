@@ -14,6 +14,9 @@ from .augmentation import (
     RandomVerticalFlip,
     RandomIOUCrop,
     GaussianNoise,
+    Mosaic,
+    Mixup,
+    HSVRandomAug,
 )
 from .hyperparameters import (
     DatasetPreparationParameters,
@@ -43,4 +46,7 @@ __all__ = [
     "RandomVerticalFlip",
     "RandomIOUCrop",
     "GaussianNoise",
+    "Mosaic",
+    "Mixup",
+    "HSVRandomAug",
 ]
