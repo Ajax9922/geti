@@ -13,17 +13,25 @@ class RandomResizeCrop(BaseModelNoExtra):
         description="Whether to apply random resize and crop to the image. "
         "Note: this augmentation is not supported when Tiling algorithm is enabled.",
     )
-    # Exclude fields as they are supported yet by OTX
     crop_ratio_range: tuple[float, float] | None = Field(
         default=None,
         title="Crop resize ratio range",
-        description="Ratio of original dimensions to apply during resize crop operation",
+        description=(
+            "Range (min, max) of crop ratios to apply during resize crop operation. "
+            "Specifies the fraction of the original image dimensions to retain after cropping. "
+            "For example, (0.8, 1.0) will randomly crop between 80% and 100% of the original size. "
+            "Both values should be between 0.0 and 1.0."
+        ),
         exclude=True,
     )
     aspect_ratio_range: tuple[float, float] | None = Field(
         default=None,
         title="Aspect ratio range",
-        description="Range of aspect ratios to apply during resize crop operation",
+        description=(
+            "Range (min, max) of aspect ratios to apply during resize crop operation. "
+            "Aspect ratio is defined as width divided by height. "
+            "For example, (0.75, 1.33) allows the crop to have an aspect ratio between 3:4 and 4:3."
+        ),
     )
 
 
@@ -33,33 +41,43 @@ class RandomAffine(BaseModelNoExtra):
         title="Enable random affine",
         description="Whether to apply random affine transformations to the image",
     )
-    # Exclude fields as they are supported yet by OTX
     max_rotate_degree: float | None = Field(
         ge=0.0,
         default=10.0,
         title="Rotation degrees",
-        description="Maximum rotation angle in degrees",
+        description=(
+            "Maximum rotation angle in degrees for affine transformation. "
+            "A random angle in the range [-max_rotate_degree, max_rotate_degree] will be applied. "
+            "For example, max_rotate_degree=10 allows up to ±10 degrees rotation."
+        ),
     )
     max_translate_ratio: float | None = Field(
         default=0.1,
         ge=0.0,
         lt=1.0,
         title="Horizontal translation",
-        description="Maximum horizontal translation as a fraction of image width",
+        description=(
+            "Maximum translation as a fraction of image width or height. "
+            "A random translation in the range [-max_translate_ratio, max_translate_ratio] "
+            "will be applied along both axes. For example, 0.1 allows up to ±10% translation."
+        ),
     )
     scaling_ratio_range: tuple[float, float] | None = Field(
         default=(0.5, 1.5),
         title="Scaling ratio range",
         description=(
             "Range (min, max) of scaling factors to apply during affine transformation. "
-            "Both values should be > 0.0 and < 1.0. "
+            "Both values should be > 0.0. "
             "For example, (0.8, 1.2) will randomly scale the image between 80% and 120% of its original size."
         ),
     )
     max_shear_degree: float | None = Field(
         default=2.0,
         title="Maximum shear degree",
-        description="Maximum absolute shear angle in degrees to apply during affine transformation",
+        description=(
+            "Maximum absolute shear angle in degrees to apply during affine transformation. "
+            "A random shear in the range [-max_shear_degree, max_shear_degree] will be applied."
+        ),
     )
 
 
@@ -74,7 +92,10 @@ class RandomHorizontalFlip(BaseModelNoExtra):
         ge=0.0,
         le=1.0,
         title="Probability",
-        description="Probability of applying horizontal flip",
+        description=(
+            "Probability of applying horizontal flip. "
+            "A value of 0.5 means each image has a 50% chance to be flipped horizontally."
+        ),
     )
 
 
@@ -89,7 +110,10 @@ class RandomVerticalFlip(BaseModelNoExtra):
         ge=0.0,
         le=1.0,
         title="Probability",
-        description="Probability of applying vertical flip",
+        description=(
+            "Probability of applying vertical flip. "
+            "A value of 0.5 means each image has a 50% chance to be flipped vertically."
+        ),
     )
 
 
@@ -97,8 +121,11 @@ class RandomIOUCrop(BaseModelNoExtra):
     enable: bool = Field(
         default=False,
         title="Enable random IoU crop",
-        description="Whether to apply random cropping based on IoU criteria. "
-        "Note: this augmentation is not supported when Tiling algorithm is enabled.",
+        description=(
+            "Whether to apply random cropping based on IoU criteria. "
+            "A random crop is selected such that the minimum IoU with any object is above a threshold. "
+            "Note: this augmentation is not supported when Tiling algorithm is enabled."
+        ),
     )
 
 
@@ -113,7 +140,10 @@ class TopdownAffine(BaseModelNoExtra):
         ge=0.0,
         le=1.0,
         title="Affine transforms probability",
-        description="Probability of applying affine transformations",
+        description=(
+            "Probability of applying affine transformations for keypoint detection. "
+            "A value of 1.0 means affine transformation is always applied."
+        ),
     )
 
 
@@ -127,19 +157,30 @@ class GaussianBlur(BaseModelNoExtra):
         gt=0,
         default=5,
         title="Kernel size",
-        description="Size of the Gaussian kernel",
+        description=(
+            "Size of the Gaussian kernel. "
+            "Larger kernel sizes result in stronger blurring. "
+            "Must be a positive odd integer."
+        ),
     )
     sigma: tuple[float, float] = Field(
         default=(0.1, 2.0),
         title="Sigma range",
-        description="Range of sigma values for Gaussian blur",
+        description=(
+            "Range (min, max) of sigma values for Gaussian blur. "
+            "Sigma controls the amount of blurring. "
+            "A random value from this range will be used for each image."
+        ),
     )
     prob: float = Field(
         default=0.5,
         ge=0.0,
         le=1.0,
         title="Probability",
-        description="Probability of applying Gaussian blur",
+        description=(
+            "Probability of applying Gaussian blur. "
+            "A value of 0.5 means each image has a 50% chance to be blurred."
+        ),
     )
 
 
@@ -152,29 +193,48 @@ class ColorJitter(BaseModelNoExtra):
     brightness: tuple[float, float] = Field(
         default=(0.875, 1.125),
         title="Brightness range",
-        description="Range of brightness adjustment factors",
+        description=(
+            "Range (min, max) of brightness adjustment factors. "
+            "A random factor from this range will be multiplied with the image brightness. "
+            "For example, (0.8, 1.2) means brightness can be reduced by 20% or increased by 20%."
+        ),
     )
     contrast: tuple[float, float] = Field(
         default=(0.5, 1.5),
         title="Contrast range",
-        description="Range of contrast adjustment factors",
+        description=(
+            "Range (min, max) of contrast adjustment factors. "
+            "A random factor from this range will be multiplied with the image contrast. "
+            "For example, (0.5, 1.5) means contrast can be halved or increased by up to 50%."
+        ),
     )
     saturation: tuple[float, float] = Field(
         default=(0.5, 1.5),
         title="Saturation range",
-        description="Range of saturation adjustment factors",
+        description=(
+            "Range (min, max) of saturation adjustment factors. "
+            "A random factor from this range will be multiplied with the image saturation. "
+            "For example, (0.5, 1.5) means saturation can be halved or increased by up to 50%."
+        ),
     )
     hue: tuple[float, float] = Field(
         default=(-0.05, 0.05),
         title="Hue range",
-        description="Range of hue adjustment values",
+        description=(
+            "Range (min, max) of hue adjustment values. "
+            "A random value from this range will be added to the image hue. "
+            "For example, (-0.05, 0.05) means hue can be shifted by up to ±0.05."
+        ),
     )
     p: float = Field(
         default=0.5,
         ge=0.0,
         le=1.0,
         title="Probability",
-        description="Probability of applying color jitter",
+        description=(
+            "Probability of applying color jitter. "
+            "A value of 0.5 means each image has a 50% chance to be color jittered."
+        ),
     )
 
 
@@ -187,20 +247,30 @@ class GaussianNoise(BaseModelNoExtra):
     mean: float = Field(
         default=0.0,
         title="Mean",
-        description="Mean of the Gaussian noise",
+        description=(
+            "Mean of the Gaussian noise to be added to the image. "
+            "Typically set to 0.0 for zero-mean noise."
+        ),
     )
     sigma: float = Field(
         default=0.1,
         ge=0.0,
         title="Standard deviation",
-        description="Standard deviation of the Gaussian noise",
+        description=(
+            "Standard deviation of the Gaussian noise. "
+            "Controls the intensity of the noise. "
+            "Higher values result in noisier images."
+        ),
     )
     prob: float = Field(
         default=0.5,
         ge=0.0,
         le=1.0,
         title="Probability",
-        description="Probability of applying Gaussian noise",
+        description=(
+            "Probability of applying Gaussian noise. "
+            "A value of 0.5 means each image has a 50% chance to have noise added."
+        ),
     )
 
 
@@ -214,22 +284,43 @@ class PhotometricDistort(BaseModelNoExtra):
         default=32,
         ge=0,
         title="Brightness delta",
-        description="Maximum delta for brightness adjustment",
+        description=(
+            "Maximum delta for brightness adjustment. "
+            "A random value in [-brightness_delta, brightness_delta] will be added to the pixel values. "
+            "For example, brightness_delta=32 means the pixel values can "
+            "be randomly increased or decreased by up to 32. "
+            "There is no strict upper limit, but values much larger than 32 may cause unnatural images."
+        ),
     )
     contrast: tuple[float, float] = Field(
         default=(0.5, 1.5),
         title="Contrast range",
-        description="Range of contrast adjustment factors",
+        description=(
+            "Range of contrast adjustment factors. "
+            "A random factor will be chosen from this range and multiplied with the pixel values. "
+            "For example, (0.5, 1.5) means the image contrast can be halved or increased by up to 50%. "
+            "Both values should be positive and reasonable to avoid extreme contrast changes."
+        ),
     )
     saturation: tuple[float, float] = Field(
         default=(0.5, 1.5),
         title="Saturation range",
-        description="Range of saturation adjustment factors",
+        description=(
+            "Range of saturation adjustment factors. "
+            "A random factor from this range will be applied to the image's saturation. "
+            "For example, (0.5, 1.5) means saturation can be reduced by half or increased by up to 50%. "
+            "Values should be positive and not extreme to keep images realistic."
+        ),
     )
     hue_delta: int = Field(
         default=18,
         title="Hue delta",
-        description="Maximum delta for hue adjustment",
+        description=(
+            "Maximum delta for hue adjustment. "
+            "A random value in [-hue_delta, hue_delta] will be added to the hue channel. "
+            "For example, hue_delta=18 means the hue can be shifted by up to ±18 units. "
+            "There is no strict upper limit, but large values may cause unnatural color shifts."
+        ),
     )
     p: float = Field(
         default=0.5,
