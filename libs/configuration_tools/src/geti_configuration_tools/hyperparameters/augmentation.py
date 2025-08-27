@@ -330,18 +330,14 @@ class AugmentationParameters(BaseModelNoExtra):
         title="IoU random crop",
         description="Randomly crop images based on Intersection over Union (IoU) criteria",
     )
-    mosaic: Mosaic | None = Field(
-        default=None, title="Mosaic", description="Settings for mosaic augmentation"
-    )
+    mosaic: Mosaic | None = Field(default=None, title="Mosaic", description="Settings for mosaic augmentation")
     random_resize_crop: RandomResizeCrop | None = Field(
         default=None, title="Random resize crop", description="Settings for random resize and crop augmentation"
     )
     random_affine: RandomAffine | None = Field(
         default=None, title="Random affine", description="Settings for random affine transformations"
     )
-    mixup: Mixup | None = Field(
-        default=None, title="Mixup", description="Settings for mixup augmentation"
-    )
+    mixup: Mixup | None = Field(default=None, title="Mixup", description="Settings for mixup augmentation")
     hsv_random_aug: HSVRandomAug | None = Field(
         default=None, title="HSV random augmentation", description="Settings for HSV random augmentation"
     )
