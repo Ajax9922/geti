@@ -60,7 +60,13 @@ RUN apt-get update && \
     g++ \
     gcc \
     make \
+    curl \
+    pkg-config \
+    libssl-dev \
+    && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y \
     && rm -rf /var/lib/apt/lists/*
+
+ENV PATH="/root/.cargo/bin:${PATH}"
 
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
