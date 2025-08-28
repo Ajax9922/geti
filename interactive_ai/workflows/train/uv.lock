@@ -10,6 +10,7 @@ resolution-markers = [
 [manifest]
 overrides = [
     { name = "cuda-bindings", marker = "sys_platform == 'never'" },
+    { name = "decord", marker = "sys_platform == 'never'" },
     { name = "nltk", marker = "sys_platform == 'never'" },
     { name = "ovmsclient", marker = "sys_platform == 'never'" },
     { name = "portalocker", marker = "sys_platform == 'never'" },

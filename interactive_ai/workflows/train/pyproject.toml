@@ -88,6 +88,7 @@ exclude = ["trainer/"]
 override-dependencies = [
     # Exclude unnecessary subdependencies from datumaro
     "cuda-bindings; sys_platform == 'never'",
+    "decord; sys_platform == 'never'",
     "nltk; sys_platform == 'never'",
     "ovmsclient; sys_platform == 'never'",
     "portalocker; sys_platform == 'never'",

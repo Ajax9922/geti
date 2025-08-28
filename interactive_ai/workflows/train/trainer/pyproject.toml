@@ -18,6 +18,7 @@ dependencies = [
 geti-kafka-tools = { path = "../../../../libs/kafka_tools" }
 geti-telemetry-tools = { path = "../../../../libs/telemetry_tools" }
 otx = { git = "https://github.com/open-edge-platform/training_extensions.git", branch = "albert/new-dataset-support" }
+datumaro = { git = "https://github.com/open-edge-platform/datumaro.git", branch = "albert/datumaro-otx-integration" }
 
 [dependency-groups]
 dev = [
@@ -75,3 +76,8 @@ max-args=7
 python_version = "3.10"
 ignore_missing_imports = true
 show_error_codes = true
+
+[tool.uv]
+override-dependencies = [
+    "decord; sys_platform == 'never'",
+]
