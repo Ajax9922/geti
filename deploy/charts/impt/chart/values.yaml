@@ -58,14 +58,6 @@ global:
   docker_namespace: impp
   forceNamespace:
     flyte: flyte
-  debian: 
-    registry: docker.io
-    repository: bitnamilegacy
-    name: os-shell:12-debian-12-r47
-  kubectl: 
-    registry: docker.io
-    repository: bitnamilegacy
-    name: kubectl:1.31.0
   credit_system_enabled: false
   seaweed_fs_enabled: true
   busybox:
