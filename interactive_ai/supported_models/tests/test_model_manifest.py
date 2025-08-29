@@ -133,7 +133,7 @@ class TestModelManifest:
             # Verify hiyapyco.load was called with the correct paths
             mock_load.assert_called_once_with(
                 *expected_paths,
-                method=hiyapyco.METHOD_MERGE,
+                method=hiyapyco.METHOD_SUBSTITUTE,
                 interpolate=True,
                 failonmissingfiles=True,
                 none_behavior=hiyapyco.NONE_BEHAVIOR_OVERRIDE,

@@ -22,7 +22,6 @@ class RandomResizeCrop(BaseModelNoExtra):
             "For example, (0.8, 1.0) will randomly crop between 80% and 100% of the original size. "
             "Both values should be between 0.0 and 1.0."
         ),
-        exclude=True,
     )
     aspect_ratio_range: tuple[float, float] | None = Field(
         default=None,
