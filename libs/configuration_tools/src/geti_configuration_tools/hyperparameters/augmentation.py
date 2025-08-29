@@ -410,11 +410,32 @@ class HSVRandomAug(BaseModelNoExtra):
     )
 
 
+class RandomZoomOut(BaseModelNoExtra):
+    enable: bool = Field(
+        default=True,
+        title="Enable random zoom out",
+        description="Whether to apply random zoom out augmentation to the image",
+    )
+    fill: int = Field(
+        default=0,
+        ge=0,
+        le=255,
+        title="Fill value",
+        description=(
+            "Fill value for the area outside the image when zooming out. "
+            "Typically 0 for black padding. Value should be between 0 and 255."
+        ),
+    )
+
+
 class AugmentationParameters(BaseModelNoExtra):
     """Configuration parameters for data augmentation during training."""
 
     topdown_affine: TopdownAffine | None = Field(
         default=None, title="Topdown affine", description="Settings for topdown affine transformations"
+    )
+    random_zoom_out: RandomZoomOut | None = Field(
+        default=None, title="Random zoom out", description="Settings for random zoom out augmentation"
     )
     iou_random_crop: RandomIOUCrop | None = Field(
         default=None,

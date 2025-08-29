@@ -15,6 +15,7 @@ from .augmentation import (
     RandomIOUCrop,
     RandomResizeCrop,
     RandomVerticalFlip,
+    RandomZoomOut,
     Tiling,
     TopdownAffine,
 )
@@ -46,6 +47,7 @@ __all__ = [
     "RandomIOUCrop",
     "RandomResizeCrop",
     "RandomVerticalFlip",
+    "RandomZoomOut",
     "Tiling",
     "TopdownAffine",
     "TrainingHyperParameters",
