@@ -25,7 +25,7 @@ hyperparameters:
         max_shear_degree: 2.0
       mixup:
         enable: true
-        prob: 0.5
+        probability: 0.5
       hsv_random_aug:
         enable: true
         hue_delta: 5
@@ -33,17 +33,17 @@ hyperparameters:
         value_delta: 30
       random_horizontal_flip:
         enable: true
-        prob: 0.5
+        probability: 0.5
       random_vertical_flip:
         enable: false
-        prob: 0.5
+        probability: 0.5
       gaussian_blur:
         enable: false
         kernel_size: 5
         sigma:
           - 0.1
           - 2.0
-        prob: 0.5
+        probability: 0.5
       color_jitter:
         enable: false
         brightness:
@@ -58,12 +58,12 @@ hyperparameters:
         hue:
           - -0.05
           - 0.05
-        p: 0.5
+        probability: 0.5
       gaussian_noise:
         enable: false
         mean: 0.0
         sigma: 0.1
-        prob: 0.5
+        probability: 0.5
   training:
     learning_rate: 0.001
     input_size_width: 640

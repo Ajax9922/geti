@@ -87,7 +87,7 @@ class RandomHorizontalFlip(BaseModelNoExtra):
         title="Enable random horizontal flip",
         description="Whether to apply random flip images horizontally along the vertical axis (swap left and right)",
     )
-    prob: float = Field(
+    probability: float = Field(
         default=0.5,
         ge=0.0,
         le=1.0,
@@ -105,7 +105,7 @@ class RandomVerticalFlip(BaseModelNoExtra):
         title="Enable random vertical flip",
         description="Whether to apply random flip images vertically along the horizontal axis (swap top and bottom)",
     )
-    prob: float = Field(
+    probability: float = Field(
         default=0.5,
         ge=0.0,
         le=1.0,
@@ -135,7 +135,7 @@ class TopdownAffine(BaseModelNoExtra):
         title="Enable topdown affine",
         description="Whether to apply topdown affine transformations for keypoint detection",
     )
-    affine_transforms_prob: float = Field(
+    affine_transforms_probability: float = Field(
         default=1.0,
         ge=0.0,
         le=1.0,
@@ -172,7 +172,7 @@ class GaussianBlur(BaseModelNoExtra):
             "A random value from this range will be used for each image."
         ),
     )
-    prob: float = Field(
+    probability: float = Field(
         default=0.5,
         ge=0.0,
         le=1.0,
@@ -226,7 +226,7 @@ class ColorJitter(BaseModelNoExtra):
             "For example, (-0.05, 0.05) means hue can be shifted by up to ±0.05."
         ),
     )
-    p: float = Field(
+    probability: float = Field(
         default=0.5,
         ge=0.0,
         le=1.0,
@@ -262,7 +262,7 @@ class GaussianNoise(BaseModelNoExtra):
             "Higher values result in noisier images."
         ),
     )
-    prob: float = Field(
+    probability: float = Field(
         default=0.5,
         ge=0.0,
         le=1.0,
@@ -322,7 +322,7 @@ class PhotometricDistort(BaseModelNoExtra):
             "There is no strict upper limit, but large values may cause unnatural color shifts."
         ),
     )
-    p: float = Field(
+    probability: float = Field(
         default=0.5,
         ge=0.0,
         le=1.0,
@@ -375,7 +375,7 @@ class Mixup(BaseModelNoExtra):
         title="Enable mixup",
         description="Whether to apply mixup augmentation (blends two images and their labels)",
     )
-    prob: float = Field(
+    probability: float = Field(
         default=0.5,
         ge=0.0,
         le=1.0,
