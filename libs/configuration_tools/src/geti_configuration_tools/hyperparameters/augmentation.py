@@ -135,7 +135,7 @@ class TopdownAffine(BaseModelNoExtra):
         title="Enable topdown affine",
         description="Whether to apply topdown affine transformations for keypoint detection",
     )
-    affine_transforms_probability: float = Field(
+    probability: float = Field(
         default=1.0,
         ge=0.0,
         le=1.0,
