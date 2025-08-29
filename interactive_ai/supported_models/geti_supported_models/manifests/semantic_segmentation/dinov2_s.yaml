@@ -12,6 +12,7 @@ stats:
 
 hyperparameters:
   dataset_preparation:
+    augmentation:
       random_resize_crop:
         enable: true
         crop_ratio_range:
