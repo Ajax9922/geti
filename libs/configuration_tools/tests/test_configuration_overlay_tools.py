@@ -6,11 +6,11 @@ from geti_types import ID
 from geti_configuration_tools import ConfigurationOverlayTools
 from geti_configuration_tools.hyperparameters import (
     AugmentationParameters,
-    RandomResizeCrop,
     DatasetPreparationParameters,
     EarlyStopping,
     EvaluationParameters,
     Hyperparameters,
+    RandomResizeCrop,
     TrainingHyperParameters,
 )
 from geti_configuration_tools.training_configuration import (

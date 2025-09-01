@@ -5,6 +5,7 @@ from pydantic import ValidationError
 
 from geti_configuration_tools.hyperparameters import (
     AugmentationParameters,
+    ColorJitter,
     DatasetPreparationParameters,
     EarlyStopping,
     EvaluationParameters,
@@ -13,12 +14,11 @@ from geti_configuration_tools.hyperparameters import (
     PartialHyperparameters,
     RandomAffine,
     RandomHorizontalFlip,
+    RandomIOUCrop,
     RandomResizeCrop,
+    RandomVerticalFlip,
     Tiling,
     TrainingHyperParameters,
-    ColorJitter,
-    RandomIOUCrop,
-    RandomVerticalFlip,
 )
 
 
@@ -295,7 +295,8 @@ class TestHyperparameters:
         )
 
         # Verify that nested fields are set correctly
-        assert nested_partial_hyperparams.dataset_preparation.augmentation.random_resize_crop.crop_ratio_range == [0.2, 0.75]
+        assert (nested_partial_hyperparams.dataset_preparation.augmentation.random_resize_crop.crop_ratio_range 
+                == [0.2, 0.75])
         assert nested_partial_hyperparams.dataset_preparation.augmentation.random_resize_crop.enable is None
 
         # Test with a full configuration
