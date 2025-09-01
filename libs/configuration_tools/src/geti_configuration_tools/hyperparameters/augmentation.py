@@ -1,7 +1,7 @@
 # Copyright (C) 2022-2025 Intel Corporation
 # LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
-from pydantic import Field
+from pydantic import Field, model_validator
 
 from .base_model_no_extra import BaseModelNoExtra
 
@@ -32,6 +32,30 @@ class RandomResizeCrop(BaseModelNoExtra):
             "For example, (0.75, 1.33) allows the crop to have an aspect ratio between 3:4 and 4:3."
         ),
     )
+
+    @model_validator(mode="after")
+    def validate_crop_range(self) -> "RandomResizeCrop":
+        if self.crop_ratio_range is None:
+            return self
+        if len(self.crop_ratio_range) != 2:
+            raise ValueError("crop_ratio_range must be a list of exactly two float values")
+        if self.crop_ratio_range[0] >= self.crop_ratio_range[1]:
+            raise ValueError("The first value in crop_ratio_range must be less than the second value")
+        if not (0 <= self.crop_ratio_range[0] <= 1) or not (0 <= self.crop_ratio_range[1] <= 1):
+            raise ValueError("Values in crop_ratio_range must be between 0 and 1")
+        return self
+
+    @model_validator(mode="after")
+    def validate_aspect_ratio_range(self) -> "RandomResizeCrop":
+        if self.aspect_ratio_range is None:
+            return self
+        if len(self.aspect_ratio_range) != 2:
+            raise ValueError("aspect_ratio_range must be a list of exactly two float values")
+        if self.aspect_ratio_range[0] >= self.aspect_ratio_range[1]:
+            raise ValueError("The first value in aspect_ratio_range must be less than the second value")
+        if self.aspect_ratio_range[0] <= 0 or self.aspect_ratio_range[1] <= 0:
+            raise ValueError("Values in aspect_ratio_range must be greater than 0")
+        return self
 
 
 class RandomAffine(BaseModelNoExtra):
@@ -78,6 +102,18 @@ class RandomAffine(BaseModelNoExtra):
             "A random shear in the range [-max_shear_degree, max_shear_degree] will be applied."
         ),
     )
+
+    @model_validator(mode="after")
+    def validate_scaling_ratio_range(self) -> "RandomAffine":
+        if self.scaling_ratio_range is None:
+            return self
+        if len(self.scaling_ratio_range) != 2:
+            raise ValueError("scaling_ratio_range must be a list of exactly two float values")
+        if self.scaling_ratio_range[0] >= self.scaling_ratio_range[1]:
+            raise ValueError("The first value in scaling_ratio_range must be less than the second value")
+        if self.scaling_ratio_range[0] <= 0 or self.scaling_ratio_range[1] <= 0:
+            raise ValueError("Values in scaling_ratio_range must be greater than 0")
+        return self
 
 
 class RandomHorizontalFlip(BaseModelNoExtra):
@@ -181,6 +217,24 @@ class GaussianBlur(BaseModelNoExtra):
         ),
     )
 
+    @model_validator(mode="after")
+    def validate_kernel_size(self) -> "GaussianBlur":
+        if self.kernel_size is not None and self.kernel_size % 2 == 0:
+            raise ValueError("kernel_size must be a positive odd integer")
+        return self
+
+    @model_validator(mode="after")
+    def validate_sigma_range(self) -> "GaussianBlur":
+        if self.sigma is None:
+            return self
+        if len(self.sigma) != 2:
+            raise ValueError("sigma must be a list of exactly two float values")
+        if self.sigma[0] >= self.sigma[1]:
+            raise ValueError("The first value in sigma must be less than the second value")
+        if self.sigma[0] < 0 or self.sigma[1] < 0:
+            raise ValueError("Values in sigma must be non-negative")
+        return self
+
 
 class ColorJitter(BaseModelNoExtra):
     enable: bool = Field(
@@ -234,6 +288,52 @@ class ColorJitter(BaseModelNoExtra):
             "A value of 0.5 means each image has a 50% chance to be color jittered."
         ),
     )
+
+    @model_validator(mode="after")
+    def validate_brightness_range(self) -> "ColorJitter":
+        if self.brightness is None:
+            return self
+        if len(self.brightness) != 2:
+            raise ValueError("brightness must be a list of exactly two float values")
+        if self.brightness[0] >= self.brightness[1]:
+            raise ValueError("The first value in brightness must be less than the second value")
+        if self.brightness[0] < 0:
+            raise ValueError("Values in brightness must be non-negative")
+        return self
+
+    @model_validator(mode="after")
+    def validate_contrast_range(self) -> "ColorJitter":
+        if self.contrast is None:
+            return self
+        if len(self.contrast) != 2:
+            raise ValueError("contrast must be a list of exactly two float values")
+        if self.contrast[0] >= self.contrast[1]:
+            raise ValueError("The first value in contrast must be less than the second value")
+        if self.contrast[0] < 0:
+            raise ValueError("Values in contrast must be non-negative")
+        return self
+
+    @model_validator(mode="after")
+    def validate_saturation_range(self) -> "ColorJitter":
+        if self.saturation is None:
+            return self
+        if len(self.saturation) != 2:
+            raise ValueError("saturation must be a list of exactly two float values")
+        if self.saturation[0] >= self.saturation[1]:
+            raise ValueError("The first value in saturation must be less than the second value")
+        if self.saturation[0] < 0:
+            raise ValueError("Values in saturation must be non-negative")
+        return self
+
+    @model_validator(mode="after")
+    def validate_hue_range(self) -> "ColorJitter":
+        if self.hue is None:
+            return self
+        if len(self.hue) != 2:
+            raise ValueError("hue must be a list of exactly two float values")
+        if self.hue[0] >= self.hue[1]:
+            raise ValueError("The first value in hue must be less than the second value")
+        return self
 
 
 class GaussianNoise(BaseModelNoExtra):
@@ -324,6 +424,30 @@ class PhotometricDistort(BaseModelNoExtra):
         title="Probability",
         description="Probability of applying photometric distortion",
     )
+
+    @model_validator(mode="after")
+    def validate_contrast_range(self) -> "PhotometricDistort":
+        if self.contrast is None:
+            return self
+        if len(self.contrast) != 2:
+            raise ValueError("contrast must be a list of exactly two float values")
+        if self.contrast[0] >= self.contrast[1]:
+            raise ValueError("The first value in contrast must be less than the second value")
+        if self.contrast[0] <= 0 or self.contrast[1] <= 0:
+            raise ValueError("Values in contrast must be positive")
+        return self
+
+    @model_validator(mode="after")
+    def validate_saturation_range(self) -> "PhotometricDistort":
+        if self.saturation is None:
+            return self
+        if len(self.saturation) != 2:
+            raise ValueError("saturation must be a list of exactly two float values")
+        if self.saturation[0] >= self.saturation[1]:
+            raise ValueError("The first value in saturation must be less than the second value")
+        if self.saturation[0] <= 0 or self.saturation[1] <= 0:
+            raise ValueError("Values in saturation must be positive")
+        return self
 
 
 class Tiling(BaseModelNoExtra):
