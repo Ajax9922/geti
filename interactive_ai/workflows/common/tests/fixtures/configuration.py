@@ -5,12 +5,12 @@ import pytest
 from attr import attrs
 from geti_configuration_tools.hyperparameters import (
     AugmentationParameters,
-    RandomResizeCrop,
-    RandomAffine,
     DatasetPreparationParameters,
     EarlyStopping,
     EvaluationParameters,
     Hyperparameters,
+    RandomAffine,
+    RandomResizeCrop,
     TrainingHyperParameters,
 )
 from geti_configuration_tools.training_configuration import (
