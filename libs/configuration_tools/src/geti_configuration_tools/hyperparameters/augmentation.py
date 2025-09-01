@@ -333,10 +333,10 @@ class Tiling(BaseModelNoExtra):
         description="Whether to apply tiling to the image",
     )
     adaptive_tiling: bool | None = Field(
-        default=None, title="Adaptive tiling", description="Whether to use adaptive tiling based on image content"
+        default=False, title="Adaptive tiling", description="Whether to use adaptive tiling based on image content"
     )
     tile_size: int | None = Field(
-        default=None,
+        default=128,
         gt=0,
         title="Tile size",
         description=(
@@ -348,7 +348,7 @@ class Tiling(BaseModelNoExtra):
         ),
     )
     tile_overlap: float | None = Field(
-        default=None,
+        default=0.5,
         ge=0.0,
         lt=1.0,
         title="Tile overlap",
