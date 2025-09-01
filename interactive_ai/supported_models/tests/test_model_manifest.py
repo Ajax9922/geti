@@ -113,7 +113,7 @@ class TestModelManifest:
             "hyperparameters": {
                 "dataset_preparation": {
                     "augmentation": {
-                        "gaussian_blur": {"kernel_size": 2},
+                        "gaussian_blur": {"kernel_size": 5},
                         "tiling": {"adaptive_tiling": True, "tile_size": 100, "tile_overlap": 0.3},
                     }
                 },
