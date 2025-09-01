@@ -96,7 +96,7 @@ def ftx_hyperparameters():
     yield Hyperparameters(
         dataset_preparation=DatasetPreparationParameters(
             augmentation=AugmentationParameters(
-                random_resize_crop=RandomResizeCrop(enable=True, crop_ratio_range=[0.1, 1.5]),
+                random_resize_crop=RandomResizeCrop(enable=True, crop_ratio_range=[0.1, 0.8]),
             )
         ),
         training=TrainingHyperParameters(
