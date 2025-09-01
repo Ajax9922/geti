@@ -333,12 +333,8 @@ def fxt_training_configuration_full_rest_view(
 ):
     # Full configuration combines task level and manifest level configurations
     yield {
-        "task_id": str(
-            fxt_partial_training_configuration_manifest_level.task_id
-        ),
-        "model_manifest_id": (
-            fxt_partial_training_configuration_manifest_level.model_manifest_id
-        ),
+        "task_id": str(fxt_partial_training_configuration_manifest_level.task_id),
+        "model_manifest_id": (fxt_partial_training_configuration_manifest_level.model_manifest_id),
         "dataset_preparation": {
             "augmentation": {
                 "random_resize_crop": [
@@ -384,9 +380,7 @@ def fxt_training_configuration_full_rest_view(
                         "key": "enable",
                         "name": "Enable random affine",
                         "type": "bool",
-                        "description": (
-                            "Whether to apply random affine transformations to the image"
-                        ),
+                        "description": ("Whether to apply random affine transformations to the image"),
                         "value": True,
                         "default_value": False,
                     },
@@ -501,9 +495,7 @@ def fxt_training_configuration_full_rest_view(
                         "key": "enable",
                         "name": "Enable color jitter",
                         "type": "bool",
-                        "description": (
-                            "Whether to apply random color jitter to the image"
-                        ),
+                        "description": ("Whether to apply random color jitter to the image"),
                         "value": False,
                         "default_value": False,
                     },
@@ -574,9 +566,7 @@ def fxt_training_configuration_full_rest_view(
                         "key": "enable",
                         "name": "Enable Gaussian blur",
                         "type": "bool",
-                        "description": (
-                            "Whether to apply Gaussian blur to the image"
-                        ),
+                        "description": ("Whether to apply Gaussian blur to the image"),
                         "value": True,
                         "default_value": False,
                     },
@@ -624,9 +614,7 @@ def fxt_training_configuration_full_rest_view(
                         "key": "enable",
                         "name": "Enable Gaussian noise",
                         "type": "bool",
-                        "description": (
-                            "Whether to apply Gaussian noise to the image"
-                        ),
+                        "description": ("Whether to apply Gaussian noise to the image"),
                         "value": False,
                         "default_value": False,
                     },
@@ -802,9 +790,7 @@ def fxt_training_configuration_full_rest_view(
                 },
                 {
                     "default_value": None,
-                    "description": (
-                        "Total size of the dataset (read-only parameter, not configurable by users)"
-                    ),
+                    "description": ("Total size of the dataset (read-only parameter, not configurable by users)"),
                     "key": "dataset_size",
                     "max_value": None,
                     "min_value": 0,
@@ -863,9 +849,7 @@ def fxt_training_configuration_full_rest_view(
                 "early_stopping": [
                     {
                         "default_value": True,
-                        "description": (
-                            "Whether to stop training early when performance stops improving"
-                        ),
+                        "description": ("Whether to stop training early when performance stops improving"),
                         "key": "enable",
                         "name": "Enable early stopping",
                         "type": "bool",
@@ -873,9 +857,7 @@ def fxt_training_configuration_full_rest_view(
                     },
                     {
                         "default_value": 7,
-                        "description": (
-                            "Number of epochs with no improvement after which training will be stopped"
-                        ),
+                        "description": ("Number of epochs with no improvement after which training will be stopped"),
                         "key": "patience",
                         "max_value": None,
                         "min_value": 0,
