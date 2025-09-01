@@ -41,7 +41,7 @@ RUN useradd -l -u 10001 non-root && \
 
 # Copy the application from the builder
 COPY --link --from=build --chown=10001 /interactive_ai/services/auto_train /interactive_ai/services/auto_train
-COPY --link --from=build --chown=10001 /training_extensions/src/otx/tools/templates /model_templates
+COPY --link --from=build --chown=10001 /training_extensions/lib/src/otx/tools/templates /model_templates
 
 # Place executables in the environment at the front of the path
 ENV PATH="/interactive_ai/services/auto_train/.venv/bin:$PATH"
