@@ -40,7 +40,6 @@ ENV UV_LINK_MODE=copy
 # Disable Python downloads, because we want to use the system interpreter across both images.
 ENV UV_PYTHON_DOWNLOADS=0
 
-# Copy the service dependencies
 COPY --link --from=libs . libs
 
 WORKDIR /interactive_ai/workflows/train/trainer
