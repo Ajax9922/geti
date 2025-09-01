@@ -59,9 +59,9 @@ class TestHyperparameters:
                     "dataset_preparation": {
                         "augmentation": {
                             "random_resize_crop": {
-                                "enable": True, 
+                                "enable": True,
                                 "crop_ratio_range": [0.2, 1.0],
-                                "aspect_ratio_range": [0.5, 2.0]
+                                "aspect_ratio_range": [0.5, 2.0],
                             },
                             "random_affine": {
                                 "enable": True,
@@ -82,17 +82,12 @@ class TestHyperparameters:
                                 "probability": 0.5,
                             },
                             "gaussian_blur": {
-                                "enable": True, 
+                                "enable": True,
                                 "kernel_size": 3,
                                 "sigma": [0.1, 2.0],
                                 "probability": 0.5,
                             },
-                            "tiling": {
-                                "enable": True, 
-                                "adaptive_tiling": True, 
-                                "tile_size": 224, 
-                                "tile_overlap": 0.15
-                            },
+                            "tiling": {"enable": True, "adaptive_tiling": True, "tile_size": 224, "tile_overlap": 0.15},
                         }
                     },
                     "training": {
@@ -109,14 +104,12 @@ class TestHyperparameters:
                     dataset_preparation=DatasetPreparationParameters(
                         augmentation=AugmentationParameters(
                             random_resize_crop=RandomResizeCrop(
-                                enable=True, 
-                                crop_ratio_range=[0.2, 1.0],
-                                aspect_ratio_range=[0.5, 2.0]
+                                enable=True, crop_ratio_range=[0.2, 1.0], aspect_ratio_range=[0.5, 2.0]
                             ),
                             random_affine=RandomAffine(
-                                enable=True, 
-                                max_rotate_degree=30.0, 
-                                max_translate_ratio=0.1, 
+                                enable=True,
+                                max_rotate_degree=30.0,
+                                max_translate_ratio=0.1,
                                 scaling_ratio_range=[0.5, 1.5],
                                 max_shear_degree=2.0,
                             ),
@@ -132,7 +125,7 @@ class TestHyperparameters:
                                 probability=0.5,
                             ),
                             gaussian_blur=GaussianBlur(
-                                enable=True, 
+                                enable=True,
                                 kernel_size=3,
                                 sigma=[0.1, 2.0],
                                 probability=0.5,
@@ -156,10 +149,7 @@ class TestHyperparameters:
                 {
                     "dataset_preparation": {
                         "augmentation": {
-                            "random_resize_crop": {
-                                "enable": True, 
-                                "crop_ratio_range": [0.1, 1.0]
-                            },
+                            "random_resize_crop": {"enable": True, "crop_ratio_range": [0.1, 1.0]},
                             "random_horizontal_flip": {"enable": False},
                         }
                     },
@@ -295,8 +285,10 @@ class TestHyperparameters:
         )
 
         # Verify that nested fields are set correctly
-        assert (nested_partial_hyperparams.dataset_preparation.augmentation.random_resize_crop.crop_ratio_range 
-                == [0.2, 0.75])
+        assert nested_partial_hyperparams.dataset_preparation.augmentation.random_resize_crop.crop_ratio_range == [
+            0.2,
+            0.75,
+        ]
         assert nested_partial_hyperparams.dataset_preparation.augmentation.random_resize_crop.enable is None
 
         # Test with a full configuration
