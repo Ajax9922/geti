@@ -5,7 +5,7 @@ import pytest
 from attr import attrs
 from geti_configuration_tools.hyperparameters import (
     AugmentationParameters,
-    CenterCrop,
+    RandomResizeCrop,
     DatasetPreparationParameters,
     EarlyStopping,
     EvaluationParameters,
@@ -96,7 +96,7 @@ def ftx_hyperparameters():
     yield Hyperparameters(
         dataset_preparation=DatasetPreparationParameters(
             augmentation=AugmentationParameters(
-                center_crop=CenterCrop(enable=True, ratio=0.6),
+                random_resize_crop=RandomResizeCrop(enable=True, crop_ratio_range=[0.1, 1.5]),
             )
         ),
         training=TrainingHyperParameters(
