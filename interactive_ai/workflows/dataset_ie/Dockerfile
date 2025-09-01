@@ -49,7 +49,7 @@ RUN apt-get update && \
 
 # Copy the application from the builder
 COPY --link --from=build --chown=10001 /interactive_ai/workflows/workflow /interactive_ai/workflows/workflow
-COPY --link --from=build --chown=10001 /training_extensions/lib/src/otx/tools/templates /model_templates
+COPY --link --from=build --chown=10001 /lib/src/otx/tools/templates /model_templates
 
 ENV MODEL_TEMPLATES_DIR=/model_templates
 

@@ -46,7 +46,7 @@ RUN apt-get update && \
 
 # Copy the application from the builder
 COPY --link --from=build --chown=10001 /interactive_ai/services/resource /interactive_ai/services/resource
-COPY --link --from=build --chown=10001 /training_extensions/lib/src/otx/tools/templates /model_templates
+COPY --link --from=build --chown=10001 /lib/src/otx/tools/templates /model_templates
 COPY --link --from=schemas . /interactive_ai/services/api
 
 ENV MODEL_TEMPLATES_DIR=/model_templates
