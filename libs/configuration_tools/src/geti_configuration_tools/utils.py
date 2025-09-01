@@ -46,10 +46,7 @@ def partial_model(model: type[BaseModel]) -> type[BaseModel]:
         is_already_optional = not new_field.exclude and not new_field.is_required()
         if is_already_optional and (optional_annotation := get_args(new_field.annotation)):
             # Field is already optional, but still need to handle nested fields
-            try:
-                field_type, _ = optional_annotation  # tuple (annotation_type, None)
-            except:
-                breakpoint()
+            field_type, _ = optional_annotation  # tuple (annotation_type, None)
             new_field.annotation = field_type
             partial_fields[field_name] = new_field
         if type(new_field.annotation) is type(BaseModel):
