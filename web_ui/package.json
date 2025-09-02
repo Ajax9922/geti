@@ -149,7 +149,7 @@
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-playwright": "^2.2.0",
     "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-hooks": "^6.0.0-rc.2",
     "http-proxy-middleware": "^3.0.3",
     "https-proxy-agent": "^7.0.6",
     "jest-canvas-mock": "^2.5.2",
