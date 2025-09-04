@@ -8,6 +8,8 @@ import { Flex, NumberField, RangeSlider, RangeValue } from '@geti/ui';
 import { ArrayParameter } from '../../../../../../../core/configurable-parameters/services/configuration.interface';
 import { getFloatingPointStep } from '../utils';
 
+import classes from './range-parameter-field.module.scss';
+
 type RangeParameterFieldProps = Pick<ArrayParameter, 'type' | 'value' | 'name' | 'defaultValue'> & {
     onChange: (value: number[]) => void;
     isDisabled?: boolean;
@@ -37,12 +39,35 @@ export const RangeParameterField: FC<RangeParameterFieldProps> = ({
 
     const fieldStep = getStep({ step, maxValue: value[1], minValue: value[0] });
 
+    const handleRangeChangeEnd = (): void => {
+        onChange([parameterValue.start, parameterValue.end]);
+    };
+
     const handleRangeChange = (inputValue: RangeValue<number>): void => {
-        setParameterValue(inputValue);
-        onChange([inputValue.start, inputValue.end]);
+        let { start, end } = inputValue;
+
+        // Prevent start and end from being equal
+        if (start === end) {
+            if (start === parameterValue.start) {
+                end = start + fieldStep;
+            } else if (end === parameterValue.end) {
+                start = end - fieldStep;
+            }
+        }
+
+        setParameterValue({ start, end });
     };
 
     const handleNumberChange = (start: number, end: number): void => {
+        // Prevent start and end from being equal
+        if (start === end) {
+            if (start === parameterValue.start) {
+                end = start + fieldStep;
+            } else if (end === parameterValue.end) {
+                start = end - fieldStep;
+            }
+        }
+
         setParameterValue({ start, end });
         onChange([start, end]);
     };
@@ -65,18 +90,20 @@ export const RangeParameterField: FC<RangeParameterFieldProps> = ({
                 onChange={(start) => handleNumberChange(start, parameterValue.end)}
                 isDisabled={isDisabled}
                 aria-label={`Change ${name} start range value`}
+                formatOptions={{ maximumFractionDigits: 5 }}
             />
             <RangeSlider
                 value={parameterValue}
                 minValue={defaultValue[0]}
                 maxValue={defaultValue[1]}
                 defaultValue={{ start: defaultValue[0], end: defaultValue[1] }}
-                onChange={setParameterValue}
-                onChangeEnd={handleRangeChange}
+                onChange={handleRangeChange}
+                onChangeEnd={handleRangeChangeEnd}
                 step={fieldStep}
                 flex={1}
                 isDisabled={isDisabled}
                 aria-label={`Change ${name} range value`}
+                UNSAFE_className={classes.rangeSlider}
             />
             <NumberField
                 isQuiet
