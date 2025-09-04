@@ -19,11 +19,7 @@ const getStep = ({ step, maxValue, minValue }: { step?: number; minValue: number
         return step;
     }
 
-    const abc = getFloatingPointStep(minValue, maxValue);
-    if (isNaN(abc)) {
-        return 1;
-    }
-    return abc;
+    return getFloatingPointStep(minValue, maxValue);
 };
 
 export const RangeParameterField: FC<RangeParameterFieldProps> = ({
