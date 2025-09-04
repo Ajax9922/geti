@@ -36,8 +36,8 @@ export const RangeParameterField: FC<RangeParameterFieldProps> = ({
         start: value[0],
         end: value[1],
     });
-
     const fieldStep = getStep({ step, maxValue: value[1], minValue: value[0] });
+    const decimalPlaces = (fieldStep.toString().split('.')[1] || '').length;
 
     const handleRangeChangeEnd = (): void => {
         onChange([parameterValue.start, parameterValue.end]);
@@ -45,31 +45,18 @@ export const RangeParameterField: FC<RangeParameterFieldProps> = ({
 
     const handleRangeChange = (inputValue: RangeValue<number>): void => {
         let { start, end } = inputValue;
-
         // Prevent start and end from being equal
-        if (start === end) {
-            if (start === parameterValue.start) {
-                end = start + fieldStep;
-            } else if (end === parameterValue.end) {
-                start = end - fieldStep;
-            }
+        if (end - start > fieldStep) {
+            setParameterValue({ start, end });
         }
-
-        setParameterValue({ start, end });
     };
 
     const handleNumberChange = (start: number, end: number): void => {
         // Prevent start and end from being equal
-        if (start === end) {
-            if (start === parameterValue.start) {
-                end = start + fieldStep;
-            } else if (end === parameterValue.end) {
-                start = end - fieldStep;
-            }
+        if (end - start > fieldStep) {
+            setParameterValue({ start, end });
+            onChange([start, end]);
         }
-
-        setParameterValue({ start, end });
-        onChange([start, end]);
     };
 
     useEffect(() => {
@@ -90,7 +77,7 @@ export const RangeParameterField: FC<RangeParameterFieldProps> = ({
                 onChange={(start) => handleNumberChange(start, parameterValue.end)}
                 isDisabled={isDisabled}
                 aria-label={`Change ${name} start range value`}
-                formatOptions={{ maximumFractionDigits: 5 }}
+                formatOptions={{ maximumFractionDigits: decimalPlaces }}
             />
             <RangeSlider
                 value={parameterValue}
@@ -114,6 +101,7 @@ export const RangeParameterField: FC<RangeParameterFieldProps> = ({
                 onChange={(end) => handleNumberChange(parameterValue.start, end)}
                 isDisabled={isDisabled}
                 aria-label={`Change ${name} end range value`}
+                formatOptions={{ maximumFractionDigits: decimalPlaces }}
             />
         </Flex>
     );
