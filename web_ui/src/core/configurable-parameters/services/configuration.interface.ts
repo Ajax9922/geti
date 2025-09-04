@@ -14,6 +14,11 @@ export interface NumberParameter extends ParameterBase {
     maxValue: number | null;
     defaultValue: number;
 }
+export interface ArrayParameter extends ParameterBase {
+    type: 'array';
+    value: number[];
+    defaultValue: number[];
+}
 
 export interface BoolParameter extends ParameterBase {
     type: 'bool';
@@ -34,7 +39,7 @@ export interface StaticParameter extends ParameterBase {
 
 export type EnumConfigurationParameter = EnumParameter<number>;
 
-export type ConfigurationParameter = BoolParameter | NumberParameter | EnumConfigurationParameter;
+export type ConfigurationParameter = BoolParameter | NumberParameter | EnumConfigurationParameter | ArrayParameter;
 
 interface ProjectConfigurationTaskConfigsTraining {
     constraints: ConfigurationParameter[];
