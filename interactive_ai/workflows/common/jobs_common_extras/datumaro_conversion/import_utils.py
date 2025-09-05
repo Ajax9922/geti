@@ -87,7 +87,25 @@ class ImportUtils:
             intersection = list(set(ex.formats) & set(FORMAT_NAME_MAP.keys()))
             if len(intersection) == 1:
                 dataset_format = intersection[0]
+            elif len(intersection) == 0:
+                # No supported formats in the conflicting formats
+                # Check if 'datumaro' format can handle this dataset as a fallback
+                try:
+                    dm.Dataset.import_from(path, "datumaro")
+                    dataset_format = "datumaro"
+                    logger.info(
+                        f"Multiple unsupported formats detected ({ex.formats}), "
+                        f"successfully resolved to 'datumaro' format as fallback"
+                    )
+                except Exception:
+                    # If datumaro fallback fails, provide more informative error
+                    raise MultipleFormatsMatchError(
+                        f"Failed to detect dataset format automatically: data matches more than one format: "
+                        f"{','.join(ex.formats)}. None of these formats are supported. "
+                        f"Supported formats are: {', '.join(FORMAT_NAME_MAP.keys())}"
+                    )
             else:
+                # Multiple supported formats detected - still ambiguous
                 raise
 
         if dataset_format not in FORMAT_NAME_MAP:
