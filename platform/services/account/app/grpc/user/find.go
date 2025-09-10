@@ -280,7 +280,9 @@ func filterUserRoles(ctx context.Context, userData *pb.UserData, userRolesMap Us
 		if isAuthTokenPresent {
 			logger.Debug("auth token present, filtering by permissions...")
 			var err error
+			logger.Debugf("1 - Returning filtered roles %v for user %v", filteredRoles, authTokenData.UserID)
 			filteredRoles, err = common.FilterRolesByCurrentUserPermissions(authTokenData.UserID, filteredRoles)
+			logger.Debugf("2 - Returning filtered roles %v for user %v", filteredRoles, authTokenData.UserID)
 			if err != nil {
 				logger.Errorf("error during filtering roles: %v", err)
 				return status.Errorf(codes.Unknown, "unexpected error")
@@ -365,7 +367,7 @@ func (s *GRPCServer) Find(ctx context.Context, findRequest *pb.FindUserRequest) 
 		return nil, err
 	}
 
-	if len(findRequest.ResourceType) > 0 || findRequest.Role != "" || findRequest.ResourceId != "" {
+	if (len(findRequest.ResourceType) > 0 && findRequest.ResourceId != "") || findRequest.Role != "" {
 		users = filterUsersByRole(findRequest, users, userRolesMap)
 		response.TotalMatchedCount = int32(len(users))
 	}
