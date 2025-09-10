@@ -280,9 +280,7 @@ func filterUserRoles(ctx context.Context, userData *pb.UserData, userRolesMap Us
 		if isAuthTokenPresent {
 			logger.Debug("auth token present, filtering by permissions...")
 			var err error
-			logger.Debugf("1 - Returning filtered roles %v for user %v", filteredRoles, authTokenData.UserID)
 			filteredRoles, err = common.FilterRolesByCurrentUserPermissions(authTokenData.UserID, filteredRoles)
-			logger.Debugf("2 - Returning filtered roles %v for user %v", filteredRoles, authTokenData.UserID)
 			if err != nil {
 				logger.Errorf("error during filtering roles: %v", err)
 				return status.Errorf(codes.Unknown, "unexpected error")
