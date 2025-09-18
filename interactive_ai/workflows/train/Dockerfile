@@ -8,7 +8,7 @@ ARG OTX_RELEASE_TAG=release/2.6
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     git
-RUN git clone --branch $OTX_RELEASE_TAG --single-branch https://github.com/open-edge-platform/training_extensions.git
+RUN git clone --branch $OTX_RELEASE_TAG --single-branch https://github.com/ashwinvaidya17/training_extensions.git
 
 ENV UV_COMPILE_BYTECODE=1
 ENV UV_LINK_MODE=copy

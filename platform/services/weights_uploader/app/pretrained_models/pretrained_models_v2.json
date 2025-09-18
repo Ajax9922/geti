@@ -375,5 +375,17 @@
     "target": "/home/non-root/.cache/torch/hub/checkpoints/deim_dfine_hgnetv2_l_coco_50e.pth",
     "sha_sum": "a9ac1f9bf51a41a7ec02c373c85e0109f84908dde11d80759b43248dcb638baa",
     "template_ids": ["Object_Detection_Deim_DFine_L"]
+  },
+  {
+    "url": "https://github.com/ultralytics/assets/releases/download/v8.3.0/yolo11n.pt",
+    "target": "/home/non-root/.cache/torch/hub/checkpoints/yolo11n.pt",
+    "sha_sum": "0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1",
+    "template_ids": ["YOLO_Ultralytics_v11n"]
+  },
+  {
+    "url": "https://github.com/ultralytics/assets/releases/download/v8.3.0/yolov8n.pt",
+    "target": "/home/non-root/.cache/torch/hub/checkpoints/yolov8n.pt",
+    "sha_sum": "f59b3d833e2ff32e194b5bb8e08d211dc7c5bdf144b90d2c8412c47ccfc83b36",
+    "template_ids": ["YOLO_Ultralytics_v8n"]
   }
 ]
