@@ -3,7 +3,7 @@ FROM python:3.10-slim-bookworm@sha256:f72a1f1edc9431c288fe27af1e68c433f64ff9e595
 FROM base AS build
 
 # Install Git and clone the OTX at the specified tag
-ARG OTX_RELEASE_TAG=release/2.6
+ARG OTX_RELEASE_TAG=ashwin/demo/ultralytics
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
