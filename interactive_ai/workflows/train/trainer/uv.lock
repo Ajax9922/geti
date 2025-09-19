@@ -1908,6 +1908,7 @@ dependencies = [
     { name = "numpy" },
     { name = "otx" },
     { name = "requests" },
+    { name = "setuptools" },
     { name = "tqdm" },
 ]
 
@@ -1934,6 +1935,7 @@ requires-dist = [
     { name = "numpy", specifier = "==1.26.4" },
     { name = "otx", git = "https://github.com/ashwinvaidya17/training_extensions.git?subdirectory=lib&branch=ashwin%2Fdemo%2Fultralytics" },
     { name = "requests", specifier = "==2.32.4" },
+    { name = "setuptools", specifier = "==69.5.1" },
     { name = "tqdm", specifier = "==4.67.1" },
 ]
 
