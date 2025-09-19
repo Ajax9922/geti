@@ -123,8 +123,9 @@ export interface UsersQueryParamsDTO
                 | 'userPhoto'
             >
         >,
-        Partial<RoleResourceDTO>,
+        Omit<Partial<RoleResourceDTO>, 'resourceType'>,
         QueryParametersDTO<keyof UserDTO> {
+    resourceType?: ResourceTypeDTO | ResourceTypeDTO[];
     lastSuccessfulLoginFrom?: string;
     lastSuccessfulLoginTo?: string;
 }
@@ -193,8 +194,9 @@ export interface UsersQueryParams
                 | 'userPhoto'
             > & { name: string }
         >,
-        Partial<RoleResource>,
+        Omit<Partial<RoleResource>, 'resourceType'>,
         QueryParameters<keyof User> {
+    resourceType?: RESOURCE_TYPE | RESOURCE_TYPE[];
     lastSuccessfulLoginFrom?: string;
     lastSuccessfulLoginTo?: string;
 }

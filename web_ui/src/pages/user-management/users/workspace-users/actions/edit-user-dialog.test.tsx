@@ -16,7 +16,7 @@ import { applicationRender as render } from '../../../../../test-utils/applicati
 import { getMockedWorkspaceIdentifier } from '../../../../../test-utils/mocked-items-factory/mocked-identifiers';
 import { getMockedAdminUser, getMockedUser } from '../../../../../test-utils/mocked-items-factory/mocked-users';
 import { getMockedWorkspace } from '../../../../../test-utils/mocked-items-factory/mocked-workspace';
-import { EditUserDialog } from './edit-user-dialog.component';
+import { EditWorkspaceUserDialog } from './edit-workspace-user-dialog.component';
 
 const mockedWorkspaceIdentifier = getMockedWorkspaceIdentifier({ workspaceId: 'testing-workspace' });
 const mockedAdminUser = getMockedAdminUser(
@@ -33,11 +33,62 @@ jest.mock('../../../../../providers/workspaces-provider/workspaces-provider.comp
     })),
 }));
 
-describe('EditUserDialog', () => {
+describe('EditWorkspaceUserDialog', () => {
+    it('allows organization admin who is only a workspace contributor to edit another user\'s workspace role (regression test)', async () => {
+        const orgAdminWorkspaceContributor = getMockedUser({
+            roles: [
+                {
+                    role: USER_ROLE.ORGANIZATION_ADMIN,
+                    resourceType: RESOURCE_TYPE.ORGANIZATION,
+                    resourceId: mockedWorkspaceIdentifier.organizationId,
+                },
+                {
+                    role: USER_ROLE.WORKSPACE_CONTRIBUTOR,
+                    resourceType: RESOURCE_TYPE.WORKSPACE,
+                    resourceId: mockedWorkspaceIdentifier.workspaceId,
+                },
+            ],
+            id: 'org-admin-contributor',
+            firstName: 'Org',
+            lastName: 'Admin',
+        });
+        const targetUser = getMockedUser({
+            roles: [
+                {
+                    role: USER_ROLE.WORKSPACE_CONTRIBUTOR,
+                    resourceType: RESOURCE_TYPE.WORKSPACE,
+                    resourceId: mockedWorkspaceIdentifier.workspaceId,
+                },
+            ],
+            id: 'target-user',
+            firstName: 'Target',
+            lastName: 'User',
+        });
+
+        await render(
+            <EditWorkspaceUserDialog
+                organizationId={mockedWorkspaceIdentifier.organizationId}
+                workspaceId={mockedWorkspaceIdentifier.workspaceId}
+                user={targetUser}
+                isSaasEnvironment
+                closeDialog={jest.fn()}
+                activeUser={orgAdminWorkspaceContributor}
+                users={[orgAdminWorkspaceContributor, targetUser]}
+            />, { featureFlags: { FEATURE_FLAG_WORKSPACE_ACTIONS: false, FEATURE_FLAG_MANAGE_USERS_ROLES: true } }
+        );
+
+        // Role button should be present and enabled (org admin even if not workspace admin)
+        const roleButton = screen.getByRole('button', { name: /role/i });
+        expect(roleButton).toBeInTheDocument();
+        await userEvent.click(roleButton);
+        // Both roles visible
+        expect(screen.getByRole('option', { name: /Contributor/ })).toBeInTheDocument();
+        expect(screen.getByRole('option', { name: /Admin/ })).toBeInTheDocument();
+    });
     describe('WORKSPACE_ACTION FF enabled', () => {
         it('save button is disabled when member data has not been changed', async () => {
             await render(
-                <EditUserDialog
+                <EditWorkspaceUserDialog
                     organizationId={mockedWorkspaceIdentifier.organizationId}
                     workspaceId={mockedWorkspaceIdentifier.workspaceId}
                     user={mockedAdminUser}
@@ -54,7 +105,7 @@ describe('EditUserDialog', () => {
 
         it('Check edit dialog on SaaS environment', async () => {
             await render(
-                <EditUserDialog
+                <EditWorkspaceUserDialog
                     organizationId={mockedWorkspaceIdentifier.organizationId}
                     workspaceId={mockedWorkspaceIdentifier.workspaceId}
                     user={mockedAdminUser}
@@ -85,7 +136,7 @@ describe('EditUserDialog', () => {
 
         it('Check edit dialog on on-prem environment', async () => {
             await render(
-                <EditUserDialog
+                <EditWorkspaceUserDialog
                     organizationId={mockedWorkspaceIdentifier.organizationId}
                     workspaceId={mockedWorkspaceIdentifier.workspaceId}
                     user={mockedAdminUser}
@@ -123,7 +174,7 @@ describe('EditUserDialog', () => {
                 usersService.updateRoles = jest.fn();
 
                 await render(
-                    <EditUserDialog
+                    <EditWorkspaceUserDialog
                         organizationId={mockedWorkspaceIdentifier.organizationId}
                         workspaceId={mockedWorkspaceIdentifier.workspaceId}
                         user={mockedAdminUser}
@@ -185,7 +236,7 @@ describe('EditUserDialog', () => {
     describe('WORKSPACE_ACTION FF disabled', () => {
         it('save button is disabled when member data has not been changed', async () => {
             await render(
-                <EditUserDialog
+                <EditWorkspaceUserDialog
                     organizationId={mockedWorkspaceIdentifier.organizationId}
                     workspaceId={mockedWorkspaceIdentifier.workspaceId}
                     user={mockedAdminUser}
@@ -202,7 +253,7 @@ describe('EditUserDialog', () => {
 
         it('Check edit dialog on SaaS environment', async () => {
             await render(
-                <EditUserDialog
+                <EditWorkspaceUserDialog
                     organizationId={mockedWorkspaceIdentifier.organizationId}
                     workspaceId={mockedWorkspaceIdentifier.workspaceId}
                     user={mockedAdminUser}
@@ -243,7 +294,7 @@ describe('EditUserDialog', () => {
                 usersService.updateMemberRole = jest.fn();
 
                 await render(
-                    <EditUserDialog
+                    <EditWorkspaceUserDialog
                         organizationId={mockedWorkspaceIdentifier.organizationId}
                         workspaceId={mockedWorkspaceIdentifier.workspaceId}
                         user={mockedAdminUser}
@@ -298,7 +349,7 @@ describe('EditUserDialog', () => {
                 ],
             });
             await render(
-                <EditUserDialog
+                <EditWorkspaceUserDialog
                     organizationId={mockedWorkspaceIdentifier.organizationId}
                     workspaceId={mockedWorkspaceIdentifier.workspaceId}
                     user={mockedAdminUser}
@@ -327,7 +378,7 @@ describe('EditUserDialog', () => {
             });
 
             await render(
-                <EditUserDialog
+                <EditWorkspaceUserDialog
                     organizationId={mockedWorkspaceIdentifier.organizationId}
                     workspaceId={mockedWorkspaceIdentifier.workspaceId}
                     user={mockedAdminUser}
@@ -356,7 +407,7 @@ describe('EditUserDialog', () => {
             });
 
             await render(
-                <EditUserDialog
+                <EditWorkspaceUserDialog
                     organizationId={mockedWorkspaceIdentifier.organizationId}
                     workspaceId={mockedWorkspaceIdentifier.workspaceId}
                     user={memberContributor}
@@ -378,7 +429,7 @@ describe('EditUserDialog', () => {
 
         it('active member can edit member their role when there are more admins than one', async () => {
             await render(
-                <EditUserDialog
+                <EditWorkspaceUserDialog
                     organizationId={mockedWorkspaceIdentifier.organizationId}
                     workspaceId={mockedWorkspaceIdentifier.workspaceId}
                     user={mockedAdminUser}

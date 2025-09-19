@@ -117,6 +117,13 @@ export const UsersTable = ({
                     if (overrideRoleColumn) {
                         return overrideRoleColumn(data);
                     }
+                    // Organization-level view (no specific workspace selected)
+                    if (isEmpty(resourceId)) {
+                        const isOrgAdminUser = isOrganizationAdmin(data.rowData, organizationId);
+                        if (isOrgAdminUser) {
+                            return <CasualCell {...data} cellData='N/A' />;
+                        }
+                    }
                     return isProjectUsersTable ? (
                         <ProjectRoleCell {...data} roles={data.rowData.roles} projectId={resourceId as string} />
                     ) : (

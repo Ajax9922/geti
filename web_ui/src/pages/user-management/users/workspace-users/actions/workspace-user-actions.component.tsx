@@ -17,19 +17,20 @@ import { MenuAction } from '../../../../../shared/components/action-menu/menu-ac
 import { HasPermission } from '../../../../../shared/components/has-permission/has-permission.component';
 import { OPERATION } from '../../../../../shared/components/has-permission/has-permission.interface';
 import { checkStatusFlowValidity } from '../../utils';
-import { EditUserDialog } from './edit-user-dialog.component';
-import { RemoveUserDialog } from './remove-user-dialog.component';
+import { EditWorkspaceUserDialog } from './edit-workspace-user-dialog.component';
+import { EditOrganizationUserDialog } from '../../actions/edit-organization-user-dialog.component';
+import { RemoveFromWorkspaceDialog } from './remove-from-workspace-dialog.component';
 
 enum USER_ACTIONS_OPTIONS {
-    DELETE = 'Delete',
     EDIT = 'Edit',
+    REMOVE_FROM_WORKSPACE = 'Remove from workspace',
 }
 
 interface UserActionsProps {
     activeUser: User;
     user: User;
     users: User[];
-    workspaceId?: string; // selected workspace id from picker
+    workspaceId?: string;
 }
 
 export const WorkspaceUserActions = ({ activeUser, user, users, workspaceId }: UserActionsProps) => {
@@ -53,9 +54,9 @@ export const WorkspaceUserActions = ({ activeUser, user, users, workspaceId }: U
         icon: <Edit />,
     };
 
-    const deleteAction = {
-        id: USER_ACTIONS_OPTIONS.DELETE,
-        name: USER_ACTIONS_OPTIONS.DELETE,
+    const removeFromWorkspaceAction = {
+        id: USER_ACTIONS_OPTIONS.REMOVE_FROM_WORKSPACE,
+        name: USER_ACTIONS_OPTIONS.REMOVE_FROM_WORKSPACE,
         icon: <Delete />,
     };
 
@@ -63,16 +64,24 @@ export const WorkspaceUserActions = ({ activeUser, user, users, workspaceId }: U
     const canEditUserRole =
         isActiveUserOrgAdmin || canContributorEdit || activeUser.isAdmin || isActiveUserWorkspaceAdmin;
 
-    const canDeleteUser =
-        isActiveUserOrgAdmin &&
-        !isActiveMemberWorkspaceContributor &&
+    const workspaceAdmins = workspaceId
+        ? users.filter((u) => isWorkspaceAdmin(u, workspaceId))
+        : [];
+    const isTargetWorkspaceAdmin = workspaceId ? isWorkspaceAdmin(user, workspaceId) : false;
+    const isLastWorkspaceAdmin = workspaceId && isTargetWorkspaceAdmin && workspaceAdmins.length === 1;
+
+    const canRemoveFromWorkspace =
+        !!workspaceId &&
+        (isActiveUserWorkspaceAdmin || isActiveUserOrgAdmin) &&
         !isOwnAccount &&
-        checkStatusFlowValidity(user.status, AccountStatus.DELETED);
+        (!isLastWorkspaceAdmin || !isTargetWorkspaceAdmin);
 
     const editActionItem = canEditUserRole ? editAction : undefined;
-    const deleteActionItem = canDeleteUser ? deleteAction : undefined;
+    const removeFromWorkspaceItem = canRemoveFromWorkspace ? removeFromWorkspaceAction : undefined;
 
-    const items = [editActionItem, deleteActionItem].filter((item) => !!item) as MenuAction<USER_ACTIONS_OPTIONS>[];
+    const items = [editActionItem, removeFromWorkspaceItem].filter(
+        (item) => !!item
+    ) as MenuAction<USER_ACTIONS_OPTIONS>[];
 
     if (isEmpty(items)) {
         return <></>;
@@ -82,8 +91,15 @@ export const WorkspaceUserActions = ({ activeUser, user, users, workspaceId }: U
     return (
         <HasPermission
             operations={[OPERATION.MANAGE_USER]}
-            // Allow showing the menu for self OR when user is workspace admin of current workspace
-            specialCondition={isOwnAccount || isActiveUserWorkspaceAdmin || (!workspaceId && isActiveUserOrgAdmin)}
+            // Allow showing the menu for:
+            //  - the active user (self)
+            //  - workspace admins of the current workspace
+            //  - organization admins (even if only a workspace contributor)
+            specialCondition={
+                isOwnAccount ||
+                isActiveUserWorkspaceAdmin ||
+                isActiveUserOrgAdmin
+            }
         >
             <ActionMenu
                 items={items}
@@ -92,19 +108,35 @@ export const WorkspaceUserActions = ({ activeUser, user, users, workspaceId }: U
                 ariaLabel={`${user.email} action menu`}
             />
             <DialogContainer onDismiss={clearAction}>
-                {action === USER_ACTIONS_OPTIONS.DELETE && (
-                    <RemoveUserDialog organizationId={organizationId} user={user} activeUser={activeUser} />
-                )}
-                {action === USER_ACTIONS_OPTIONS.EDIT && (
-                    <EditUserDialog
+                {action === USER_ACTIONS_OPTIONS.REMOVE_FROM_WORKSPACE && workspaceId && (
+                    <RemoveFromWorkspaceDialog
                         organizationId={organizationId}
                         workspaceId={workspaceId}
                         user={user}
-                        activeUser={activeUser}
-                        closeDialog={clearAction}
-                        isSaasEnvironment={isSaasEnvironment}
-                        users={users}
+                        onAfterRemove={clearAction}
                     />
+                )}
+                {action === USER_ACTIONS_OPTIONS.EDIT && (
+                    workspaceId ? (
+                        <EditWorkspaceUserDialog
+                            organizationId={organizationId}
+                            workspaceId={workspaceId}
+                            user={user}
+                            activeUser={activeUser}
+                            closeDialog={clearAction}
+                            isSaasEnvironment={isSaasEnvironment}
+                            users={users}
+                        />
+                    ) : (
+                        <EditOrganizationUserDialog
+                            organizationId={organizationId}
+                            user={user}
+                            users={users}
+                            activeUser={activeUser}
+                            isSaasEnvironment={isSaasEnvironment}
+                            closeDialog={clearAction}
+                        />
+                    )
                 )}
             </DialogContainer>
         </HasPermission>

@@ -142,16 +142,16 @@ export const UserManagement = () => {
                 ),
             },
             {
-                id: `${UserManagementTabs.WORKSPACES}-user-page`,
-                key: UserManagementTabs.WORKSPACES,
-                name: capitalize(UserManagementTabs.WORKSPACES),
-                children: <Workspaces />,
-            },
-            {
                 id: `${UserManagementTabs.USERS}-user-page`,
                 key: UserManagementTabs.USERS,
                 name: capitalize(UserManagementTabs.USERS),
                 children: <UsersTab activeUser={activeUser as User} />,
+            },
+            {
+                id: `${UserManagementTabs.WORKSPACES}-user-page`,
+                key: UserManagementTabs.WORKSPACES,
+                name: capitalize(UserManagementTabs.WORKSPACES),
+                children: <Workspaces />,
             },
             {
                 id: `${UserManagementTabs.PERSONAL_ACCESS_TOKEN}-user-page`,

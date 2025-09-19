@@ -14,7 +14,7 @@ import { isEqual } from 'lodash-es';
 
 import { useWorkspaces } from '../../../../../providers/workspaces-provider/workspaces-provider.component';
 import { RolePicker } from '../../old-project-users/role-picker.component';
-import { getAvailableRoles } from './roles-validation';
+import { getAvailableWorkspaceRoles } from './roles-validation';
 import { UserSummary } from './user-summary.component';
 import { mapRolesToWorkspaceRoles } from './workspace-roles/utils';
 
@@ -24,6 +24,7 @@ interface EditWorkspaceUserDialogProps extends Omit<WorkspaceIdentifier, 'worksp
     user: User;
     activeUser: User;
     users: User[];
+    isSaasEnvironment: boolean; // kept for API consistency (unused after trimming)
     closeDialog: () => void;
     workspaceId: WorkspaceIdentifier['workspaceId'];
 }
@@ -34,6 +35,7 @@ export const EditWorkspaceUserDialog = ({
     user,
     activeUser,
     closeDialog,
+    isSaasEnvironment: _isSaasEnvironment,
     users,
 }: EditWorkspaceUserDialogProps) => {
     const { workspaces } = useWorkspaces();
@@ -45,17 +47,17 @@ export const EditWorkspaceUserDialog = ({
         .map(({ resourceId }) => resourceId);
     const { useUpdateUserRoles } = useUsers();
     const updateRoles = useUpdateUserRoles();
-    useFeatureFlags(); // still invoke to keep consistent flag hooks (can be removed if not needed)
+    useFeatureFlags();
     const [workspaceRoles, setWorkspaceRoles] = useState<WorkspaceRole[]>(() =>
         mapRolesToWorkspaceRoles(user.roles, workspaces).filter((wr) => wr.workspace.id === workspaceId)
     );
 
-    const isAccountOwner = activeUser.id === user.id;
-    const rolesOptions = getAvailableRoles({
+    const rolesOptions = getAvailableWorkspaceRoles({
         activeMember: activeUser,
+        targetMember: user,
         members: users,
         workspaceId,
-        isAccountOwner,
+        organizationId,
     });
 
     const areRolesEqual = isEqual(
@@ -125,9 +127,7 @@ export const EditWorkspaceUserDialog = ({
                         roles={rolesOptions}
                         selectedRole={workspaceRoles[0]?.role}
                         setSelectedRole={changeRoleHandler}
-                        isDisabled={
-                            !(isOrgAdmin || adminWorkspaceIds.includes(workspaceId)) || rolesOptions.length === 0
-                        }
+                        isDisabled={rolesOptions.length === 0}
                     />
                     <ButtonGroup align={'end'} marginTop={'size-350'}>
                         <Button variant='secondary' onPress={closeDialog} id={'cancel-edit-user'}>
