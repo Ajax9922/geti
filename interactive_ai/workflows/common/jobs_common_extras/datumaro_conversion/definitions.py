@@ -26,6 +26,7 @@ ANNOTATION_TYPE_TO_SUPPORTED_DOMAINS: dict[dm.AnnotationType, list[Domain]] = {
     ],
     dm.AnnotationType.bbox: [
         Domain.DETECTION,
+        Domain.ULTRALYTICS_DETECTION,
         Domain.SEGMENTATION,  # Geti tool supports rectangle(which is same to bbox) tool for seg., ins-seg.
         Domain.INSTANCE_SEGMENTATION,
     ],
@@ -61,6 +62,7 @@ class GetiProjectType(Enum):
     CLASSIFICATION = auto()
     HIERARCHICAL_CLASSIFICATION = auto()
     DETECTION = auto()
+    ULTRALYTICS_DETECTION = auto()
     SEGMENTATION = auto()
     INSTANCE_SEGMENTATION = auto()
     ANOMALY_CLASSIFICATION = auto()

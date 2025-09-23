@@ -741,9 +741,9 @@ class ImportUtils:
         if len(task_types) == 1:
             project_type = GetiProjectType[task_types[0].name]
         elif len(task_types) == 2:
-            if task_types == [TaskType.DETECTION, TaskType.CLASSIFICATION]:
+            if task_types == [TaskType.DETECTION, TaskType.ULTRALYTICS_DETECTION, TaskType.CLASSIFICATION]:
                 project_type = GetiProjectType.CHAINED_DETECTION_CLASSIFICATION
-            elif task_types == [TaskType.DETECTION, TaskType.SEGMENTATION]:
+            elif task_types == [TaskType.DETECTION, TaskType.ULTRALYTICS_DETECTION, TaskType.SEGMENTATION]:
                 project_type = GetiProjectType.CHAINED_DETECTION_SEGMENTATION
 
         return project_type
@@ -761,6 +761,7 @@ class ImportUtils:
         mapper = {
             GetiProjectType.CLASSIFICATION: [TaskType.CLASSIFICATION],
             GetiProjectType.DETECTION: [TaskType.DETECTION],
+            GetiProjectType.ULTRALYTICS_DETECTION: [TaskType.ULTRALYTICS_DETECTION],
             GetiProjectType.SEGMENTATION: [TaskType.SEGMENTATION],
             GetiProjectType.ANOMALY_CLASSIFICATION: [TaskType.ANOMALY],  # Legacy Geti project type
             GetiProjectType.ANOMALY_DETECTION: [TaskType.ANOMALY],  # Legacy Geti project type
@@ -811,6 +812,7 @@ class ImportUtils:
             GetiProjectType.CLASSIFICATION: Domain.CLASSIFICATION,
             GetiProjectType.HIERARCHICAL_CLASSIFICATION: Domain.CLASSIFICATION,
             GetiProjectType.DETECTION: Domain.DETECTION,
+            GetiProjectType.ULTRALYTICS_DETECTION: Domain.DETECTION,
             GetiProjectType.SEGMENTATION: Domain.SEGMENTATION,
             GetiProjectType.ANOMALY: Domain.ANOMALY,
             GetiProjectType.ANOMALY_CLASSIFICATION: Domain.ANOMALY,  # Legacy Geti project type
@@ -859,6 +861,7 @@ class ImportUtils:
         supported_types = [
             TaskType.CLASSIFICATION,
             TaskType.DETECTION,
+            TaskType.ULTRALYTICS_DETECTION,
             TaskType.SEGMENTATION,
             TaskType.INSTANCE_SEGMENTATION,
             TaskType.ANOMALY,

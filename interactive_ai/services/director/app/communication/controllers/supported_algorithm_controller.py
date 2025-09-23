@@ -23,6 +23,11 @@ class SupportedAlgorithmRESTController:
         :param include_obsolete: If True, include obsolete (no longer supported) algorithms
         :return: Rest view containing the supported algorithms and default algorithms
         """
+        _task_types = (
+            set(*task_types, TaskType.ULTRALYTICS_DETECTION)
+            if TaskType.ULTRALYTICS_DETECTION in task_types
+            else task_types
+        )
         supported_model_templates = [
             model_template
             for model_template in ModelTemplateList().get_all()

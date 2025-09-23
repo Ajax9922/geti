@@ -737,7 +737,10 @@ class AnnotationRestValidator(RestApiValidator):
         """
         task_type = task.task_properties.task_type
         annotation_type = annotation_rest[SHAPE][TYPE]
-        if task_type == TaskType.DETECTION and annotation_type != RestShapeType.RECTANGLE.name:
+        if (
+            task_type in [TaskType.DETECTION, TaskType.ULTRALYTICS_DETECTION]
+            and annotation_type != RestShapeType.RECTANGLE.name
+        ):
             raise BadRequestException("Only rectangle annotations are allowed for a detection task.")
         if task_type == TaskType.ROTATED_DETECTION:
             if annotation_type == RestShapeType.RECTANGLE.name:
