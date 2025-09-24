@@ -90,9 +90,9 @@ class ImportUtils:
         if len(task_types) == 1:
             project_type = GetiProjectType[task_types[0].name]
         elif len(task_types) == 2:
-            if task_types == [TaskType.DETECTION, TaskType.ULTRALYTICS_DETECTION, TaskType.CLASSIFICATION]:
+            if task_types == [TaskType.DETECTION, TaskType.CLASSIFICATION]:
                 project_type = GetiProjectType.CHAINED_DETECTION_CLASSIFICATION
-            elif task_types == [TaskType.DETECTION, TaskType.ULTRALYTICS_DETECTION, TaskType.SEGMENTATION]:
+            elif task_types == [TaskType.DETECTION, TaskType.SEGMENTATION]:
                 project_type = GetiProjectType.CHAINED_DETECTION_SEGMENTATION
 
         return project_type
@@ -121,7 +121,6 @@ class ImportUtils:
         supported_types = [
             TaskType.CLASSIFICATION,
             TaskType.DETECTION,
-            TaskType.ULTRALYTICS_DETECTION,
             TaskType.SEGMENTATION,
             TaskType.INSTANCE_SEGMENTATION,
             TaskType.ANOMALY,
