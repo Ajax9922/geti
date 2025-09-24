@@ -26,6 +26,9 @@ def download_file_from_url(object_name: str, file_path: str) -> None:
         # Try to download the file from the Internet
         url = f"{os.environ.get('WEIGHTS_URL')}/{object_name}"
         resp = requests.get(url, timeout=600)
+        if resp.status_code != 200:
+            url = f"https://github.com/ultralytics/assets/releases/download/v8.3.0/{object_name}"
+            resp = requests.get(url, timeout=600)
         if resp.status_code == 200:
             with open(file_path, "wb") as f:
                 for chunk in resp.iter_content(chunk_size=512):
