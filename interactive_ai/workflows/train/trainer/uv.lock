@@ -1874,7 +1874,7 @@ wheels = [
 [[package]]
 name = "otx"
 version = "2.6.0.dev0"
-source = { git = "https://github.com/ashwinvaidya17/training_extensions.git?subdirectory=lib&branch=ashwin%2Fdemo%2Fultralytics#58acde79cfeed8b616313def62f35d2bb864a5ca" }
+source = { git = "https://github.com/ashwinvaidya17/training_extensions.git?subdirectory=lib&branch=ashwin%2Fdemo%2Fultralytics#11ee33168c608816e3477cdd1b474644e50d6173" }
 dependencies = [
     { name = "anomalib", extra = ["core"] },
     { name = "datumaro" },
