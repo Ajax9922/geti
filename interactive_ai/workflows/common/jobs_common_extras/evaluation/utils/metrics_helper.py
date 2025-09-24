@@ -39,7 +39,7 @@ class MetricsHelper:
                 prediction_dataset=prediction_dataset,
                 label_schema=label_schema,
             )
-        if task_type in [TaskType.DETECTION, TaskType.ULTRALYTICS_DETECTION, TaskType.ROTATED_DETECTION]:
+        if task_type in [TaskType.DETECTION, TaskType.ROTATED_DETECTION]:
             return FMeasureMetric(
                 ground_truth_dataset=ground_truth_dataset,
                 prediction_dataset=prediction_dataset,

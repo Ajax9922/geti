@@ -239,11 +239,6 @@ class TaskType(Enum):
         TaskInfo(domain=Domain.ANOMALY, is_trainable=True, is_anomaly=True, is_global=True, is_local=False),
     )
 
-    ULTRALYTICS_DETECTION = (
-        16,
-        TaskInfo(domain=Domain.DETECTION, is_trainable=True, is_anomaly=False, is_global=False, is_local=True),
-    )
-
     def __str__(self) -> str:
         """Returns name."""
         return self.name
@@ -268,7 +263,6 @@ def task_type_to_label_domain(task_type: TaskType) -> Domain:
     mapping = {
         TaskType.CLASSIFICATION: Domain.CLASSIFICATION,
         TaskType.DETECTION: Domain.DETECTION,
-        TaskType.ULTRALYTICS_DETECTION: Domain.DETECTION,
         TaskType.SEGMENTATION: Domain.SEGMENTATION,
         TaskType.INSTANCE_SEGMENTATION: Domain.INSTANCE_SEGMENTATION,
         TaskType.ANOMALY: Domain.ANOMALY,
@@ -622,7 +616,6 @@ ANOMALY_TASK_TYPES: Sequence[TaskType] = (TaskType.ANOMALY,)
 TRAINABLE_TASK_TYPES: Sequence[TaskType] = (
     TaskType.CLASSIFICATION,
     TaskType.DETECTION,
-    TaskType.ULTRALYTICS_DETECTION,
     TaskType.SEGMENTATION,
     TaskType.INSTANCE_SEGMENTATION,
     TaskType.ANOMALY,
