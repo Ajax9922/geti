@@ -3,12 +3,12 @@ FROM python:3.10-slim-bookworm@sha256:f72a1f1edc9431c288fe27af1e68c433f64ff9e595
 FROM base AS build
 
 # Install Git and clone the OTX at the specified tag
-ARG OTX_RELEASE_TAG=release/2.6
+ARG OTX_RELEASE_TAG=ashwin/demo/ultralytics
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     git
-RUN git clone --branch $OTX_RELEASE_TAG --single-branch https://github.com/open-edge-platform/training_extensions.git
+RUN git clone --branch $OTX_RELEASE_TAG --single-branch https://github.com/ashwinvaidya17/training_extensions.git
 
 ENV UV_COMPILE_BYTECODE=1
 ENV UV_LINK_MODE=copy
