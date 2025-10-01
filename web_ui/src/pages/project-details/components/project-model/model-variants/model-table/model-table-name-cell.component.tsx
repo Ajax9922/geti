@@ -1,7 +1,7 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
-import { Flex, Text , TruncatedText } from '@geti/ui';
+import { Flex, Text, TruncatedText } from '@geti/ui';
 
 import { OptimizedModel, TrainedModel } from '../../../../../../core/models/optimized-models.interface';
 import { isNonEmptyString } from '../../../../../../shared/utils';
