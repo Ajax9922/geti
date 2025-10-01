@@ -1,4 +1,5 @@
 ---
+{{- if not .Values.auth_proxy.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -6,3 +7,4 @@ metadata:
   namespace: {{ include "gateway.namespace" . }}
 data:
 {{ .Values.api_gateway.feature_flags_data | toYaml | indent 2 }}
+{{- end }}
