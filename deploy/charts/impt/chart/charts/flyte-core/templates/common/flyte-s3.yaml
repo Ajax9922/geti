@@ -51,8 +51,6 @@ stringData:
         delete-resource-on-finalize: true
         default-env-vars:
         - FLYTE_AWS_ENDPOINT: http://impt-seaweed-fs.impt:8333
-        - FLYTE_AWS_ACCESS_KEY_ID: {{ $flyteAccessKey }}
-        - FLYTE_AWS_SECRET_ACCESS_KEY: {{ $flyteSecretKey }}
         - KAFKA_ADDRESS: impt-kafka.impt:9092
         - SPICEDB_ADDRESS: impt-spice-db.impt:50051
         - SPICEDB_CREDENTIALS: "token_and_ca"

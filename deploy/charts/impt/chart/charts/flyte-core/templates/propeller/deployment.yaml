@@ -69,6 +69,16 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
+        - name: FLYTE_AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: impt-seaweed-fs
+              key: flyte_access_key
+        - name: FLYTE_AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: impt-seaweed-fs
+              key: flyte_secret_key
         image: "{{ .Values.flytepropeller.image.registry }}/{{ if .Values.flytepropeller.image.repository }}{{ .Values.flytepropeller.image.repository }}/{{ end }}{{ .Values.flytepropeller.image.name }}"
         imagePullPolicy: "{{ .Values.flytepropeller.imagePullPolicy }}"
         {{- if .Values.flytepropeller.manager }}

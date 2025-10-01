@@ -41,6 +41,7 @@ from platform_stages.steps.deploy_reloader import deploy_reloader_chart
 from platform_stages.steps.deploy_seaweed_fs import deploy_seaweed_fs_chart
 from platform_stages.steps.extract_registry_data import extract_registry_data
 from platform_stages.steps.load_images import load_images
+from platform_stages.steps.deploy_replicator import deploy_replicator_chart
 
 
 def upgrade_platform(config: UpgradeConfig) -> None:
@@ -59,6 +60,7 @@ def upgrade_platform(config: UpgradeConfig) -> None:
         partial(configure_gpu, config=config),
         deploy_initial_manifests,
         partial(deploy_reloader_chart, config=config),
+        partial(deploy_replicator_chart, config=config),
         partial(deploy_kubelet_csr_approver_chart, config=config),
         partial(deploy_crds_chart, config=config),
         partial(deploy_pv_chart, config=config),

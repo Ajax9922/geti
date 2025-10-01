@@ -128,3 +128,9 @@ RELOADER_CHART = ChartDefinition(
     values_file="reloader-values.yaml",
     values_template_file="reloader-values.yaml.j2",
 )
+
+KUBERNETES_REPLICATOR = ChartDefinition(
+    name="kubernetes-replicator",
+    namespace="impt",
+    directory="kubernetes-replicator",
+)

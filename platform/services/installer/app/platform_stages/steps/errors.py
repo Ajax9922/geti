@@ -252,3 +252,8 @@ class ReloaderInstallationError(ChartInstallationError):
     """
     Error raised by function used to deploy IstioD chart.
     """
+
+class ReplicatorInstallationError(ChartInstallationError):
+    """
+    Error raised by function used to deploy IstioD chart.
+    """
