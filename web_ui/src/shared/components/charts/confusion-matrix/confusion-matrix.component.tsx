@@ -1,9 +1,8 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
-import { Flex, Grid, minmax, repeat, Text } from '@geti/ui';
+import { Flex, Grid, minmax, repeat, Text, TruncatedTextWithTooltip } from '@geti/ui';
 
-import { TruncatedTextWithTooltip } from '../../truncated-text/truncated-text.component';
 import { convertColorToFadedColor, HexKeysType } from '../utils';
 import { ConfusionMatrixProps } from './confusion-matrix.interface';
 

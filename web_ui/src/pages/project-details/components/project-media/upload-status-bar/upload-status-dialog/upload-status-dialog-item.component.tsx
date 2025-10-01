@@ -12,6 +12,7 @@ import {
     Text,
     Tooltip,
     TooltipTrigger,
+    TruncatedTextWithTooltip,
     View,
     type IconColorValue,
 } from '@geti/ui';
@@ -26,7 +27,6 @@ import {
     SuccessListItem,
 } from '../../../../../../providers/media-upload-provider/media-upload.interface';
 import { ThinProgressBar } from '../../../../../../shared/components/thin-progress-bar/thin-progress-bar.component';
-import { TruncatedTextWithTooltip } from '../../../../../../shared/components/truncated-text/truncated-text.component';
 import { getFileSize } from '../../../../../../shared/utils';
 import { useDatasetMediaUpload } from '../../../project-dataset/hooks/dataset-media-upload';
 import { UploadStatusErrorDialog } from './upload-status-error-dialog.component';

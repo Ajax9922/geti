@@ -1,7 +1,7 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
-import { Flex, Text, View } from '@geti/ui';
+import { Flex, Text, TruncatedTextWithTooltip, View } from '@geti/ui';
 import { isEmpty } from 'lodash-es';
 
 import {
@@ -10,7 +10,6 @@ import {
 } from '../../../../../core/labels/label-tree-view.interface';
 import { getLabelId } from '../../../../../core/labels/utils';
 import { LabelColorThumb } from '../../../label-color-thumb/label-color-thumb.component';
-import { TruncatedTextWithTooltip } from '../../../truncated-text/truncated-text.component';
 import { HotkeyLabel } from './hotkey-name-field/hotkey-label.component';
 
 const attrs = {

@@ -3,11 +3,11 @@
 
 import { useEffect, useRef } from 'react';
 
+import { TruncatedText } from '@geti/ui';
 import { isFunction } from 'lodash-es';
 
 import { Label } from '../../../../../../core/labels/label.interface';
 import { LabelColorThumb } from '../../../../../../shared/components/label-color-thumb/label-color-thumb.component';
-import { TruncatedText } from '../../../../../../shared/components/truncated-text/truncated-text.component';
 import { LabelShortcutButton } from './label-shortcut-button.component';
 
 interface LabelShortcutItemProps {

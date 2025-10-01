@@ -1,13 +1,20 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
-import { Flex, PressableElement, Tooltip, TooltipTrigger, View } from '@geti/ui';
+import {
+    Flex,
+    PressableElement,
+    Tooltip,
+    TooltipTrigger,
+    TruncatedText,
+    TruncatedTextWithTooltip,
+    View,
+} from '@geti/ui';
 import { isNil } from 'lodash-es';
 
 import { DOMAIN } from '../../../../core/projects/core.interface';
 import { formatJobsCreationTime, isNonEmptyString, pluralize } from '../../../utils';
 import { DomainName } from '../../domain-name/domain-name.component';
-import { TruncatedText, TruncatedTextWithTooltip } from '../../truncated-text/truncated-text.component';
 import { getNameFromJob } from './utils';
 
 import classes from './jobs.module.scss';

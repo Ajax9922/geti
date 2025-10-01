@@ -1,14 +1,13 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
-import { Flex, Text, View } from '@geti/ui';
+import { Flex, Text, TruncatedTextWithTooltip, View } from '@geti/ui';
 import { AiIcon } from '@geti/ui/icons';
 import { useNumberFormatter } from 'react-aria';
 
 import { AnnotationLabel } from '../../../../core/annotations/annotation.interface';
 import { KeypointNode } from '../../../../core/annotations/shapes.interface';
 import { isPrediction } from '../../../../core/labels/utils';
-import { TruncatedTextWithTooltip } from '../../../../shared/components/truncated-text/truncated-text.component';
 
 interface NodeLabelProps {
     point: KeypointNode;

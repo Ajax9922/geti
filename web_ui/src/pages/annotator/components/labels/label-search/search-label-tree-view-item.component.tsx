@@ -3,7 +3,7 @@
 
 import { ReactNode, useState } from 'react';
 
-import { ActionButton, Flex, Grid, Text, View } from '@geti/ui';
+import { ActionButton, Flex, Grid, Text, TruncatedTextWithTooltip, View } from '@geti/ui';
 import { Expanded } from '@geti/ui/icons';
 import { isEmpty } from 'lodash-es';
 import { useHover, usePress } from 'react-aria';
@@ -12,7 +12,6 @@ import { LabelTreeLabelProps } from '../../../../../core/labels/label-tree-view.
 import { Label } from '../../../../../core/labels/label.interface';
 import { getLabelId } from '../../../../../core/labels/utils';
 import { LabelColorThumb } from '../../../../../shared/components/label-color-thumb/label-color-thumb.component';
-import { TruncatedTextWithTooltip } from '../../../../../shared/components/truncated-text/truncated-text.component';
 
 import classes from './search-label-tree-view-item.module.scss';
 

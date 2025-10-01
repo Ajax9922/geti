@@ -3,7 +3,7 @@
 
 import { useEffect, useMemo, useRef } from 'react';
 
-import { ActionButton, Flex, ProgressCircle, removeToast, Text, toast } from '@geti/ui';
+import { ActionButton, Flex, ProgressCircle, removeToast, Text, toast, TruncatedTextWithTooltip } from '@geti/ui';
 import { useOverlayTriggerState } from '@react-stately/overlays';
 
 import {
@@ -12,7 +12,6 @@ import {
 } from '../../../../../providers/media-upload-provider/media-upload.interface';
 import { getElapsedTimeText, getTotalProgress } from '../../../../../providers/media-upload-provider/utils';
 import { ThinProgressBar } from '../../../../../shared/components/thin-progress-bar/thin-progress-bar.component';
-import { TruncatedTextWithTooltip } from '../../../../../shared/components/truncated-text/truncated-text.component';
 import { getPlural } from '../../../../../shared/utils';
 import { UploadStatusDialog } from './upload-status-dialog/upload-status-dialog.component';
 

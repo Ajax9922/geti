@@ -1,10 +1,8 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
-import { useMediaQuery, View } from '@geti/ui';
+import { TruncatedTextWithTooltip, useMediaQuery, View } from '@geti/ui';
 import { isLargeSizeQuery } from '@geti/ui/theme';
-
-import { TruncatedTextWithTooltip } from '../../../../shared/components/truncated-text/truncated-text.component';
 
 import classes from './annotator-footer.module.scss';
 

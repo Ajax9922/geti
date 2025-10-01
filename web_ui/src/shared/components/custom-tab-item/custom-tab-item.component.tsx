@@ -1,13 +1,12 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
-import { Flex, View } from '@geti/ui';
+import { Flex, TruncatedText, View } from '@geti/ui';
 import { MoreMenu } from '@geti/ui/icons';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import { DATASET_NAME_MAX_WIDTH } from '../../../pages/project-details/components/project-dataset/utils';
 import { ANIMATION_PARAMETERS } from '../../animation-parameters/animation-parameters';
-import { TruncatedText } from '../truncated-text/truncated-text.component';
 
 import classes from './custom-tab-item.module.scss';
 

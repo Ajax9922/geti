@@ -4,7 +4,7 @@
 import { Key } from 'react';
 
 import { useNavigateToAnnotatorRoute } from '@geti/core/src/services/use-navigate-to-annotator-route.hook';
-import { Button, Flex, Item, TabList, TabPanels, Tabs, View } from '@geti/ui';
+import { Button, Flex, Item, TabList, TabPanels, Tabs, TruncatedText, View } from '@geti/ui';
 import { isEmpty } from 'lodash-es';
 import { useNavigate } from 'react-router-dom';
 import { useOverlayTriggerState } from 'react-stately';
@@ -15,7 +15,6 @@ import { FUX_NOTIFICATION_KEYS } from '../../../../core/user-settings/dtos/user-
 import { CoachMark } from '../../../../shared/components/coach-mark/coach-mark.component';
 import { TooltipWithDisableButton } from '../../../../shared/components/custom-tooltip/tooltip-with-disable-button';
 import { TabItem } from '../../../../shared/components/tabs/tabs.interface';
-import { TruncatedText } from '../../../../shared/components/truncated-text/truncated-text.component';
 import { useActiveTab } from '../../../../shared/hooks/use-active-tab.hook';
 import { useDatasetIdentifier } from '../../../annotator/hooks/use-dataset-identifier.hook';
 import { useMedia } from '../../../media/providers/media-provider.component';

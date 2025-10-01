@@ -1,9 +1,7 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
-import { View } from '@geti/ui';
-
-import { TruncatedTextWithTooltip } from '../../../../shared/components/truncated-text/truncated-text.component';
+import { TruncatedTextWithTooltip, View } from '@geti/ui';
 
 import classes from './annotator-footer.module.scss';
 

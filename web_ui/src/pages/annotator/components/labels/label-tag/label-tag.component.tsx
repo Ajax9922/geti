@@ -1,11 +1,10 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
-import { Flex, PressableElement, Tooltip, TooltipTrigger } from '@geti/ui';
+import { Flex, PressableElement, Tooltip, TooltipTrigger, TruncatedText } from '@geti/ui';
 
 import { Label } from '../../../../../core/labels/label.interface';
 import { LabelColorThumb } from '../../../../../shared/components/label-color-thumb/label-color-thumb.component';
-import { TruncatedText } from '../../../../../shared/components/truncated-text/truncated-text.component';
 
 interface LabelTagProps {
     id?: string;

@@ -3,14 +3,13 @@
 
 import { Fragment } from 'react';
 
-import { Flex } from '@geti/ui';
+import { Flex, TruncatedTextWithTooltip } from '@geti/ui';
 import { AiIcon, CaretRightIcon } from '@geti/ui/icons';
 import { isEmpty } from 'lodash-es';
 
 import { Annotation, AnnotationLabel } from '../../../../../core/annotations/annotation.interface';
 import { Label } from '../../../../../core/labels/label.interface';
 import { isPrediction, showLabelScore } from '../../../../../core/labels/utils';
-import { TruncatedTextWithTooltip } from '../../../../../shared/components/truncated-text/truncated-text.component';
 import { useTask } from '../../../providers/task-provider/task-provider.component';
 import { DEFAULT_LABEL_WIDTH } from '../../labels/label.component';
 

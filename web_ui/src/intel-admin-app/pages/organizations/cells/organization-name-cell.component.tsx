@@ -1,9 +1,8 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
-import { Flex, PhotoPlaceholder, PressableElement, Tooltip, TooltipTrigger } from '@geti/ui';
+import { Flex, PhotoPlaceholder, PressableElement, Tooltip, TooltipTrigger, TruncatedText } from '@geti/ui';
 
-import { TruncatedText } from '../../../../shared/components/truncated-text/truncated-text.component';
 import { OrganizationAdminsCopyText } from './organization-admins-copy-text.component';
 
 interface OrganizationNameCellProps {

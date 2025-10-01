@@ -4,7 +4,17 @@
 import { Key, useRef, useState } from 'react';
 
 import { useUsers } from '@geti/core/src/users/hook/use-users.hook';
-import { Checkbox, Divider, Flex, Grid, minmax, PressableElement, Tooltip, TooltipTrigger } from '@geti/ui';
+import {
+    Checkbox,
+    Divider,
+    Flex,
+    Grid,
+    minmax,
+    PressableElement,
+    Tooltip,
+    TooltipTrigger,
+    TruncatedText,
+} from '@geti/ui';
 import dayjs from 'dayjs';
 import { delay } from 'lodash-es';
 import { usePress } from 'react-aria';
@@ -13,7 +23,6 @@ import { MediaItem } from '../../../../core/media/media.interface';
 import { isVideo } from '../../../../core/media/video.interface';
 import { useOrganizationIdentifier } from '../../../../hooks/use-organization-identifier/use-organization-identifier.hook';
 import { MediaItemView } from '../../../../shared/components/media-item-view/media-item-view.component';
-import { TruncatedText } from '../../../../shared/components/truncated-text/truncated-text.component';
 import { getFileSize } from '../../../../shared/utils';
 import { getFullNameFromUser } from '../../../user-management/users/users-table/utils';
 import { MediaItemActions } from './media-item-actions/media-item-actions.component';
