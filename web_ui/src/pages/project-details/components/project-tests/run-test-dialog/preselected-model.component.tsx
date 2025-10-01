@@ -2,8 +2,7 @@
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
 import { Divider, Flex, Tag } from '@geti/ui';
-
-import { idMatchingFormat } from '../../../../../test-utils/id-utils';
+import { idMatchingFormat } from '@geti/ui/utils';
 
 interface PreselectedModelProps {
     taskName: string;

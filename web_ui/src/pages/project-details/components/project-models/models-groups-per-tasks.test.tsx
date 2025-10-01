@@ -1,6 +1,7 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
+import { idMatchingFormat } from '@geti/ui/utils';
 import { fireEvent, screen, waitForElementToBeRemoved, within } from '@testing-library/react';
 
 import { useGetRunningJobs } from '../../../../core/jobs/hooks/use-jobs.hook';
@@ -10,7 +11,6 @@ import { DOMAIN } from '../../../../core/projects/core.interface';
 import { PerformanceType } from '../../../../core/projects/task.interface';
 import { getLegacyMockedSupportedAlgorithm } from '../../../../core/supported-algorithms/services/test-utils';
 import { TaskWithSupportedAlgorithms } from '../../../../core/supported-algorithms/supported-algorithms.interface';
-import { idMatchingFormat } from '../../../../test-utils/id-utils';
 import { getMockedProjectIdentifier } from '../../../../test-utils/mocked-items-factory/mocked-identifiers';
 import { getMockedJob } from '../../../../test-utils/mocked-items-factory/mocked-jobs';
 import {

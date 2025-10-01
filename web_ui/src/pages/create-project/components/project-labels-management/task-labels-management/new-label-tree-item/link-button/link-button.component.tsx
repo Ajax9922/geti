@@ -4,9 +4,9 @@
 import { ReactNode } from 'react';
 
 import { Flex, Link, type FlexStyleProps } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 
 import { InfoTooltip } from '../../../../../../../shared/components/info-tooltip/info-tooltip.component';
-import { idMatchingFormat } from '../../../../../../../test-utils/id-utils';
 
 interface LinkButtonProps extends FlexStyleProps {
     text: string;

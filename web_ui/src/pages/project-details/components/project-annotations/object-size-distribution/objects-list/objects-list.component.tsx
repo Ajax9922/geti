@@ -4,9 +4,9 @@
 import { Dispatch, Key, SetStateAction } from 'react';
 
 import { Flex, Heading, Item, Picker, PressableElement, Text, Tooltip, TooltipTrigger, View } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 import { capitalize, isEmpty } from 'lodash-es';
 
-import { idMatchingFormat } from '../../../../../../test-utils/id-utils';
 import { NEAR_MEAN_TOOLTIP_MSG } from '../utils';
 import { DistributionLabels } from './objects-list.interface';
 

@@ -4,6 +4,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { Flex, PressableElement, Switch, Text, TextField, TextFieldRef, Tooltip, TooltipTrigger } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 import { isEmpty } from 'lodash-es';
 import { ValidationError } from 'yup';
 
@@ -11,7 +12,6 @@ import { LabelItemType, LabelTreeGroupProps } from '../../../../../core/labels/l
 import { LabelsRelationType } from '../../../../../core/labels/label.interface';
 import { newLabelNameSchema } from '../../../../../pages/create-project/components/utils';
 import { isYupValidationError } from '../../../../../pages/user-management/profile-page/utils';
-import { idMatchingFormat } from '../../../../../test-utils/id-utils';
 import { ValidationErrorMsg } from '../../../validation-error-msg/validation-error-msg.component';
 import { getEditedItem } from '../../utils';
 import { ItemEditionState } from '../item-edition-state/item-edition-state.component';

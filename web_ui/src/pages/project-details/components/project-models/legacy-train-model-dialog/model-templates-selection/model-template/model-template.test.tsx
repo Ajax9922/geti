@@ -2,6 +2,7 @@
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
 import { ThemeProvider } from '@geti/ui/theme';
+import { idMatchingFormat } from '@geti/ui/utils';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 
 import {
@@ -9,7 +10,6 @@ import {
     PerformanceCategory,
 } from '../../../../../../../core/supported-algorithms/dtos/supported-algorithms.interface';
 import { getLegacyMockedSupportedAlgorithm } from '../../../../../../../core/supported-algorithms/services/test-utils';
-import { idMatchingFormat } from '../../../../../../../test-utils/id-utils';
 import { checkTooltip } from '../../../../../../../test-utils/utils';
 import { ModelTemplate } from './model-template.component';
 

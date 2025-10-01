@@ -5,6 +5,7 @@ import { paths } from '@geti/core';
 import { RESOURCE_TYPE } from '@geti/core/src/users/users.interface';
 import { Flex, Text } from '@geti/ui';
 import { Datasets, Deployments, Model, Shield, Tag, Users } from '@geti/ui/icons';
+import { idMatchingFormat } from '@geti/ui/utils';
 
 import { DOMAIN } from '../../../../core/projects/core.interface';
 import { ProjectProps } from '../../../../core/projects/project.interface';
@@ -17,7 +18,6 @@ import { MenuItemImage } from '../../../../shared/components/menu-item-image/men
 import { MenuOption, MenuOptionTextAndIcon } from '../../../../shared/components/menu-option.interface';
 import { SidebarMenu } from '../../../../shared/components/sidebar-menu/sidebar-menu.component';
 import { isNotCropDomain } from '../../../../shared/utils';
-import { idMatchingFormat } from '../../../../test-utils/id-utils';
 import { useDatasetIdentifier } from '../../../annotator/hooks/use-dataset-identifier.hook';
 import { ProjectThumbnail } from '../../../landing-page/landing-page-workspace/components/projects-list/components/project/project-thumbnail.component';
 import { Performance } from './performance.component';

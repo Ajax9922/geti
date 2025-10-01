@@ -16,6 +16,7 @@ import {
 import QUERY_KEYS from '@geti/core/src/requests/query-keys';
 import { useApplicationServices } from '@geti/core/src/services/application-services-provider.component';
 import { toast } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 import { useQueryClient } from '@tanstack/react-query';
 import { AxiosError, HttpStatusCode } from 'axios';
 import { isEmpty, noop } from 'lodash-es';
@@ -32,7 +33,6 @@ import { getRandomDistinctColor } from '../../pages/create-project/components/di
 import { getImportDatasetToNewProjectKey } from '../../shared/local-storage-keys';
 import { MissingProviderError } from '../../shared/missing-provider-error';
 import { getFileSize, isNonEmptyString, runWhenTruthy } from '../../shared/utils';
-import { idMatchingFormat } from '../../test-utils/id-utils';
 import { matchStatus } from '../dataset-import-to-existing-project-provider/utils';
 import { useTusUpload } from '../tus-upload-provider/tus-upload-provider.component';
 import { getUploadId, onErrorMessage, throttleProgress } from '../tus-upload-provider/util';

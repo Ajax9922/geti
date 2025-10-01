@@ -2,12 +2,12 @@
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
 import { View } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 
 import {
     ConfigurableParametersProps,
     ConfigurableParametersType,
 } from '../../../core/configurable-parameters/services/configurable-parameters.interface';
-import { idMatchingFormat } from '../../../test-utils/id-utils';
 import { TabItem } from '../tabs/tabs.interface';
 import { CPGroupsList } from './cp-groups-list/cp-groups-list.component';
 import { CPParamsList } from './cp-list/cp-list.component';

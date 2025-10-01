@@ -18,11 +18,11 @@ import {
     toast,
     type RangeValue,
 } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 import { DateValue, getLocalTimeZone, today } from '@internationalized/date';
 import dayjs from 'dayjs';
 
 import { downloadFile, getDateTimeInISOAndUTCOffsetFormat, getDownloadNotificationMessage } from '../../shared/utils';
-import { idMatchingFormat } from '../../test-utils/id-utils';
 import { DownloadButton } from './download-button.component';
 
 const NOW = today(getLocalTimeZone());

@@ -6,13 +6,13 @@ import { useFeatureFlags } from '@geti/core/src/feature-flags/hooks/use-feature-
 import { Flex, useMediaQuery, View } from '@geti/ui';
 import { InfoOutline, ProjectsIcon, UserIcon } from '@geti/ui/icons';
 import { isLargeSizeQuery } from '@geti/ui/theme';
+import { idMatchingFormat } from '@geti/ui/utils';
 
 import { useFirstWorkspaceIdentifier } from '../../../providers/workspaces-provider/use-first-workspace-identifier.hook';
 import { MenuItemImage } from '../../../shared/components/menu-item-image/menu-item-image.component';
 import { MenuOption } from '../../../shared/components/menu-option.interface';
 import { ShowForOnPrem } from '../../../shared/components/show-for-onprem/show-for-onprem.component';
 import { SidebarMenu } from '../../../shared/components/sidebar-menu/sidebar-menu.component';
-import { idMatchingFormat } from '../../../test-utils/id-utils';
 import { OrganizationsPicker } from './organizations-picker/organizations-picker.component';
 import { StorageUsage } from './storage-usage/storage-usage.component';
 

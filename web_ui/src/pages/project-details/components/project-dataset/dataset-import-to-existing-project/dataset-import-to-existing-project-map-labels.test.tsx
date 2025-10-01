@@ -1,13 +1,13 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
+import { idMatchingFormat } from '@geti/ui/utils';
 import { fireEvent, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 
 import { DATASET_IMPORT_STATUSES } from '../../../../../core/datasets/dataset.enum';
 import { DatasetImportToExistingProjectItem } from '../../../../../core/datasets/dataset.interface';
 import { Label } from '../../../../../core/labels/label.interface';
-import { idMatchingFormat } from '../../../../../test-utils/id-utils';
 import { getMockedLabel } from '../../../../../test-utils/mocked-items-factory/mocked-labels';
 import { providersRender as render } from '../../../../../test-utils/required-providers-render';
 import { DatasetImportToExistingProjectMapLabels } from './dataset-import-to-existing-project-map-labels.component';

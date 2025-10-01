@@ -1,6 +1,7 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
+import { idMatchingFormat } from '@geti/ui/utils';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 
 import { createApiModelConfigParametersService } from '../../../../../core/configurable-parameters/services/api-model-config-parameters-service';
@@ -11,7 +12,6 @@ import { ProjectProps } from '../../../../../core/projects/project.interface';
 import { createInMemoryProjectService } from '../../../../../core/projects/services/in-memory-project-service';
 import { PerformanceCategory } from '../../../../../core/supported-algorithms/dtos/supported-algorithms.interface';
 import { createInMemorySupportedAlgorithmsService } from '../../../../../core/supported-algorithms/services/in-memory-supported-algorithms-service';
-import { idMatchingFormat } from '../../../../../test-utils/id-utils';
 import {
     getMockedConfigurationParameter,
     getMockedTrainingConfiguration,

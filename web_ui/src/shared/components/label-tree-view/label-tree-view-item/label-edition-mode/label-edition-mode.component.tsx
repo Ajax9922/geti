@@ -4,6 +4,7 @@
 import { useEffect, useRef } from 'react';
 
 import { ColorPickerDialog } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 import { isEmpty } from 'lodash-es';
 
 import {
@@ -17,7 +18,6 @@ import { useUsedAnnotatorHotkeys } from '../../../../../pages/create-project/com
 import { newLabelHotkeySchema, newLabelNameSchema } from '../../../../../pages/create-project/components/utils';
 import { getUnremovedLabels } from '../../../../../pages/project-details/components/project-labels/utils';
 import { isYupValidationError } from '../../../../../pages/user-management/profile-page/utils';
-import { idMatchingFormat } from '../../../../../test-utils/id-utils';
 import { ValidationErrorMsg } from '../../../validation-error-msg/validation-error-msg.component';
 import { getEditedItem } from '../../utils';
 import { ItemEditionState } from '../item-edition-state/item-edition-state.component';

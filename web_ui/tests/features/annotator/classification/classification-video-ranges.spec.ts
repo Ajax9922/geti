@@ -1,9 +1,9 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
+import { idMatchingFormat } from '@geti/ui/utils';
 import { expect, Page } from '@playwright/test';
 
-import { idMatchingFormat } from '../../../../src/test-utils/id-utils';
 import { test } from '../../../fixtures/base-test';
 import { OpenApiFixtures } from '../../../fixtures/open-api';
 import { hierarchicalLabelsProject, multiLabelProject, singeLabelProject } from '../../../mocks/classification/mocks';

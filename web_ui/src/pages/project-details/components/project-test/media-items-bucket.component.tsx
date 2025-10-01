@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 import { Divider, Flex, Heading, MediaViewModes, Text, useMediaQuery, useViewMode, ViewModes } from '@geti/ui';
 import { isLargeSizeQuery } from '@geti/ui/theme';
+import { idMatchingFormat } from '@geti/ui/utils';
 import { useParams } from 'react-router-dom';
 
 import { AdvancedFilterOptions, SearchRuleField } from '../../../../core/media/media-filter.interface';
@@ -13,7 +14,6 @@ import { useTests } from '../../../../core/tests/hooks/use-tests.hook';
 import { TestMediaItem } from '../../../../core/tests/test-media.interface';
 import { useProjectIdentifier } from '../../../../hooks/use-project-identifier/use-project-identifier';
 import { SortByAttribute } from '../../../../shared/components/sort-by-attribute/sort-by-attribute.component';
-import { idMatchingFormat } from '../../../../test-utils/id-utils';
 import { getMatchedMediaCounts } from '../../utils';
 import { MediaItemsBucketTitle, MediaItemsBucketType } from './media-items-bucket.interface';
 import { TestMediaItemsList } from './test-media-items-list.component';

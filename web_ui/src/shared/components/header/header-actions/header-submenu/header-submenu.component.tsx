@@ -4,8 +4,7 @@
 import { ComponentProps, Key, ReactNode } from 'react';
 
 import { ActionButton, Item, Menu, MenuTrigger, Section, Text } from '@geti/ui';
-
-import { idMatchingFormat } from '../../../../../test-utils/id-utils';
+import { idMatchingFormat } from '@geti/ui/utils';
 
 import classes from './header-submenu.module.scss';
 

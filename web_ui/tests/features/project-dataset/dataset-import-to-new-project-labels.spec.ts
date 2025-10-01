@@ -1,6 +1,7 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
+import { idMatchingFormat } from '@geti/ui/utils';
 import { expect, Page } from '@playwright/test';
 import { MockedResponse, ResponseComposition, RestContext } from 'msw';
 
@@ -11,7 +12,6 @@ import {
 } from '../../../src/core/datasets/dtos/dataset.interface';
 import { JobState } from '../../../src/core/jobs/jobs.const';
 import { OpenApiRequest } from '../../../src/core/server/types';
-import { idMatchingFormat } from '../../../src/test-utils/id-utils';
 import { test } from '../../fixtures/base-test';
 import { project as keypointProject, supportedProjectType } from '../../mocks/keypoint-detection/mocks';
 import { setTusProgress } from '../../utils/api';

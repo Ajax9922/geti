@@ -2,10 +2,10 @@
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
 import { Tag } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 import { capitalize } from 'lodash-es';
 
 import { PerformanceCategory } from '../../../../../../core/supported-algorithms/dtos/supported-algorithms.interface';
-import { idMatchingFormat } from '../../../../../../test-utils/id-utils';
 
 import classes from './model-card.module.scss';
 

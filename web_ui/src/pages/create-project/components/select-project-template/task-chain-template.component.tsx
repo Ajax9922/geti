@@ -5,11 +5,11 @@ import { useEffect } from 'react';
 
 import { Flex, Heading, Radio, RadioGroup, Text, useMediaQuery, View } from '@geti/ui';
 import { isLargeSizeQuery } from '@geti/ui/theme';
+import { idMatchingFormat } from '@geti/ui/utils';
 import { isEqual } from 'lodash-es';
 
 import { DOMAIN } from '../../../../core/projects/core.interface';
 import { Arrow } from '../../../../shared/components/arrow/arrow.component';
-import { idMatchingFormat } from '../../../../test-utils/id-utils';
 import { Card } from '../card.component';
 import { TaskChainMetadata, TaskChainTemplateProps } from './project-template.interface';
 

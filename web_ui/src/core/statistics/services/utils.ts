@@ -1,9 +1,9 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
+import { idMatchingFormat } from '@geti/ui/utils';
 import { groupBy } from 'lodash-es';
 
-import { idMatchingFormat } from '../../../test-utils/id-utils';
 import { AllTaskDatasetStatisticsDTO, DatasetStatisticsDTO } from '../dtos/dataset-statistics.interface';
 import {
     ModelStatisticsBarDataDTO,

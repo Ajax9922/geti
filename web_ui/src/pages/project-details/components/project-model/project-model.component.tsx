@@ -5,6 +5,7 @@ import { Key, useState } from 'react';
 
 import { paths } from '@geti/core';
 import { Flex, Loading } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 import { useMatch, useNavigate } from 'react-router-dom';
 
 import { isVisualPromptModelGroup } from '../../../../core/annotations/services/visual-prompt-service';
@@ -16,7 +17,6 @@ import { useModelIdentifier } from '../../../../hooks/use-model-identifier/use-m
 import { PageLayout } from '../../../../shared/components/page-layout/page-layout.component';
 import { Tabs } from '../../../../shared/components/tabs/tabs.component';
 import { TabItem } from '../../../../shared/components/tabs/tabs.interface';
-import { idMatchingFormat } from '../../../../test-utils/id-utils';
 import { useProject } from '../../providers/project-provider/project-provider.component';
 import { ModelCardMenu } from '../project-models/models-container/model-card/model-card-menu.component';
 import { useOptimizedModels } from './hooks/use-optimized-models/use-optimized-models.hook';

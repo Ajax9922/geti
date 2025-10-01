@@ -1,13 +1,13 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
+import { idMatchingFormat } from '@geti/ui/utils';
 import { fireEvent, screen } from '@testing-library/react';
 
 import { DOMAIN } from '../../../../../core/projects/core.interface';
 import { FEATURES_KEYS } from '../../../../../core/user-settings/dtos/user-settings.interface';
 import { UserProjectSettings, UseSettings } from '../../../../../core/user-settings/services/user-settings.interface';
 import { initialAnnotatorConfig } from '../../../../../core/user-settings/utils';
-import { idMatchingFormat } from '../../../../../test-utils/id-utils';
 import { getMockedUserProjectSettingsObject } from '../../../../../test-utils/mocked-items-factory/mocked-settings';
 import { getMockedTask, mockedTaskContextProps } from '../../../../../test-utils/mocked-items-factory/mocked-tasks';
 import { useTask } from '../../../providers/task-provider/task-provider.component';

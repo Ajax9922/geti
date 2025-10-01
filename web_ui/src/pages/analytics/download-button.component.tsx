@@ -3,8 +3,7 @@
 
 import { ActionButton, Flex, Text, View } from '@geti/ui';
 import { DownloadIcon } from '@geti/ui/icons';
-
-import { idMatchingFormat } from '../../test-utils/id-utils';
+import { idMatchingFormat } from '@geti/ui/utils';
 
 import classes from './analytics.module.scss';
 

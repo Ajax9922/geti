@@ -1,9 +1,8 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
+import { idMatchingFormat } from '@geti/ui/utils';
 import { expect, Page } from '@playwright/test';
-
-import { idMatchingFormat } from '../../../src/test-utils/id-utils';
 
 export const expectLabelToExist = async (page: Page, labelName: string, group?: boolean) => {
     const testId = group ? `${labelName}-project-label-group-input-id` : `label-tree-${labelName}-name-input`;

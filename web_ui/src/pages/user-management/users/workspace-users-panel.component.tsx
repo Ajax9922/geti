@@ -5,10 +5,10 @@ import { Key, useEffect } from 'react';
 
 import { useFeatureFlags } from '@geti/core/src/feature-flags/hooks/use-feature-flags.hook';
 import { Flex, Item, Picker, Text } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 
 import { useWorkspaces } from '../../../providers/workspaces-provider/workspaces-provider.component';
 import { hasEqualId } from '../../../shared/utils';
-import { idMatchingFormat } from '../../../test-utils/id-utils';
 
 const ALL_WORKSPACES = {
     id: '',

@@ -2,9 +2,9 @@
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
 import { Divider, Heading, View } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 
 import { Task } from '../../../../../core/projects/task.interface';
-import { idMatchingFormat } from '../../../../../test-utils/id-utils';
 import { TrainingProgress } from './training-progress.component';
 import { useTrainingProgress } from './use-training-progress/use-training-progress.hook';
 

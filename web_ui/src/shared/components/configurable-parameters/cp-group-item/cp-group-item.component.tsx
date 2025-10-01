@@ -5,12 +5,12 @@ import { useState } from 'react';
 
 import { ActionButton, Flex, Text, View } from '@geti/ui';
 import { ChevronRightSmallLight, ChevronUpLight } from '@geti/ui/icons';
+import { idMatchingFormat } from '@geti/ui/utils';
 
 import {
     ConfigParameterItemProp,
     ConfigurableParametersGroups,
 } from '../../../../core/configurable-parameters/services/configurable-parameters.interface';
-import { idMatchingFormat } from '../../../../test-utils/id-utils';
 import { CPParamsList } from '../cp-list/cp-list.component';
 
 import classes from './cp-group-item.module.scss';

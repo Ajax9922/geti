@@ -18,6 +18,7 @@ import {
 } from '@geti/ui';
 import { NotFound } from '@geti/ui/icons';
 import { isLargeSizeQuery } from '@geti/ui/theme';
+import { idMatchingFormat } from '@geti/ui/utils';
 import { isEmpty } from 'lodash-es';
 
 import { isKeypointDetection } from '../../../../core/projects/domains';
@@ -36,7 +37,6 @@ import {
 } from '../../../../shared/components/media-items-list/media-items-list.component';
 import { TutorialCardBuilder } from '../../../../shared/components/tutorial-card/tutorial-card-builder.component';
 import { VALID_MEDIA_TYPES_DISPLAY } from '../../../../shared/media-utils';
-import { idMatchingFormat } from '../../../../test-utils/id-utils';
 import { MediaFilterChips } from '../../../media/components/media-filter-chips.component';
 import { useMedia } from '../../../media/providers/media-provider.component';
 import { disabledKeypointFilterRules, getMediaId } from '../../../media/utils';

@@ -1,9 +1,8 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
+import { idMatchingFormat } from '@geti/ui/utils';
 import { expect, Page } from '@playwright/test';
-
-import { idMatchingFormat } from '../../../src/test-utils/id-utils';
 
 export class ConfigurationParametersPage {
     constructor(private page: Page) {}

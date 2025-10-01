@@ -5,11 +5,11 @@ import { Key } from 'react';
 
 import { Icon, Item, Menu, MenuTrigger as MenuTriggerSpectrum, Section, Text } from '@geti/ui';
 import { SortDown, SortUp, SortUpDown } from '@geti/ui/icons';
+import { idMatchingFormat } from '@geti/ui/utils';
 import { isEmpty } from 'lodash-es';
 
 import { AdvancedFilterSortingOptions, SortMenuActionKey } from '../../../core/media/media-filter.interface';
 import { ButtonWithSpectrumTooltip } from '../../../shared/components/button-with-tooltip/button-with-tooltip.component';
-import { idMatchingFormat } from '../../../test-utils/id-utils';
 import { SORT_MEDIA_LABEL } from '../../project-details/components/project-media/utils';
 
 interface MediaSortingProps {

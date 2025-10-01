@@ -1,10 +1,10 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
+import { idMatchingFormat } from '@geti/ui/utils';
 import { fireEvent, screen } from '@testing-library/react';
 
 import { mockedEditableConfigTaskChainData } from '../../../../../../core/configurable-parameters/services/test-utils';
-import { idMatchingFormat } from '../../../../../../test-utils/id-utils';
 import { providersRender as render } from '../../../../../../test-utils/required-providers-render';
 import { RESHUFFLE_SUBSETS_TOOLTIP_MSG } from '../utils';
 import { TrainConfigurableParameters } from './train-configurable-parameters.component';

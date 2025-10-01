@@ -4,9 +4,9 @@
 import { Key } from 'react';
 
 import { Item, Loading, Picker, Text, View } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 
 import { hasEqualId } from '../../../../shared/utils';
-import { idMatchingFormat } from '../../../../test-utils/id-utils';
 import { SelectableOptimizationType } from '../../project-details.interface';
 
 interface SelectOptimizationProps {

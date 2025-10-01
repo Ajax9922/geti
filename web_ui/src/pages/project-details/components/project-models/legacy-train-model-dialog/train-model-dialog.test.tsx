@@ -1,6 +1,7 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
+import { idMatchingFormat } from '@geti/ui/utils';
 import { fireEvent, RenderResult, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
 
 import { createInMemoryModelsService } from '../../../../../core/models/services/in-memory-models-service';
@@ -9,7 +10,6 @@ import { createInMemoryProjectService } from '../../../../../core/projects/servi
 import { createInMemorySupportedAlgorithmsService } from '../../../../../core/supported-algorithms/services/in-memory-supported-algorithms-service';
 import { getLegacyMockedSupportedAlgorithm } from '../../../../../core/supported-algorithms/services/test-utils';
 import { LegacySupportedAlgorithm } from '../../../../../core/supported-algorithms/supported-algorithms.interface';
-import { idMatchingFormat } from '../../../../../test-utils/id-utils';
 import {
     getMockedModelsGroup,
     getMockedModelVersion,

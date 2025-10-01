@@ -4,8 +4,7 @@
 import { FC } from 'react';
 
 import { Tag } from '@geti/ui';
-
-import { idMatchingFormat } from '../../../../../../test-utils/id-utils';
+import { idMatchingFormat } from '@geti/ui/utils';
 
 import classes from './model-card.module.scss';
 

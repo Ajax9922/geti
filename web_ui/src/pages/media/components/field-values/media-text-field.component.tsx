@@ -4,10 +4,10 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { TextField } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 
 import { SearchRuleValue } from '../../../../core/media/media-filter.interface';
 import { useDebouncedCallback } from '../../../../hooks/use-debounced-callback/use-debounced-callback.hook';
-import { idMatchingFormat } from '../../../../test-utils/id-utils';
 import { textRegex } from '../../utils';
 
 interface MediaTextFieldProps {

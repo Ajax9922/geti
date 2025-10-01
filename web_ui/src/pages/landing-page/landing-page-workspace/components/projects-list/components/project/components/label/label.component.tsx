@@ -1,12 +1,11 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
-import { Flex, View } from '@geti/ui';
+import { Flex, TruncatedTextWithTooltip, View } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 
 import { Label as LabelInterface } from '../../../../../../../../../core/labels/label.interface';
 import { LabelColorThumb } from '../../../../../../../../../shared/components/label-color-thumb/label-color-thumb.component';
-import { TruncatedTextWithTooltip } from '../../../../../../../../../shared/components/truncated-text/truncated-text.component';
-import { idMatchingFormat } from '../../../../../../../../../test-utils/id-utils';
 
 export const Label = ({ label, projectName }: { label: LabelInterface; projectName: string }) => {
     return (

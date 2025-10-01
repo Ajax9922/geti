@@ -6,11 +6,11 @@ import { FC } from 'react';
 import { Flex, Loading, Text, View } from '@geti/ui';
 import { CanceledIcon, CheckCircleOutlined, ExclamationCircleOutlined, SkippedIcon, WaitingIcon } from '@geti/ui/icons';
 import { COLOR_MODE } from '@geti/ui/theme';
+import { idMatchingFormat } from '@geti/ui/utils';
 import { isEmpty } from 'lodash-es';
 
 import { JobStepState } from '../../../../core/jobs/jobs.const';
 import { Job, JobStep } from '../../../../core/jobs/jobs.interface';
-import { idMatchingFormat } from '../../../../test-utils/id-utils';
 import { ThinProgressBar } from '../../thin-progress-bar/thin-progress-bar.component';
 import { getStepProgress, getStepProgressNumber } from './utils';
 

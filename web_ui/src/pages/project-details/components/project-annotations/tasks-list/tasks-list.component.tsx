@@ -4,8 +4,8 @@
 import { Dispatch, Key, SetStateAction } from 'react';
 
 import { Item, Picker, Text, type StyleProps } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 
-import { idMatchingFormat } from '../../../../../test-utils/id-utils';
 import { TasksItems } from '../../project-models/project-models.interface';
 
 interface TasksListProps {

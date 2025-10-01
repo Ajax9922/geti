@@ -5,10 +5,10 @@ import { Key, useMemo } from 'react';
 
 import { useNavigateToAnnotatorRoute } from '@geti/core/src/services/use-navigate-to-annotator-route.hook';
 import { Item, Picker, Text } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 
 import { Dataset } from '../../../../../../core/projects/dataset.interface';
 import { isAnomalyDomain } from '../../../../../../core/projects/domains';
-import { idMatchingFormat } from '../../../../../../test-utils/id-utils';
 import { useSelectedDataset } from '../../../../../project-details/components/project-dataset/use-selected-dataset/use-selected-dataset.hook';
 import { useProject } from '../../../../../project-details/providers/project-provider/project-provider.component';
 import { useDataset } from '../../../../providers/dataset-provider/dataset-provider.component';

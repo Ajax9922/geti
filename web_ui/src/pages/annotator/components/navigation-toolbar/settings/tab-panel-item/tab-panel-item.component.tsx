@@ -2,6 +2,7 @@
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
 import { Flex, Switch } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 
 import {
     AnnotatorSettingsConfig,
@@ -9,7 +10,6 @@ import {
     SettingsFeature,
 } from '../../../../../../core/user-settings/dtos/user-settings.interface';
 import { InfoTooltip } from '../../../../../../shared/components/info-tooltip/info-tooltip.component';
-import { idMatchingFormat } from '../../../../../../test-utils/id-utils';
 
 interface TabPanelItemProps {
     label: string;

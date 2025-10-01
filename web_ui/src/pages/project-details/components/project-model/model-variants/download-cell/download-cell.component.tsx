@@ -3,9 +3,9 @@
 
 import { ActionButtonProps } from '@geti/ui';
 import { DownloadIcon } from '@geti/ui/icons';
+import { idMatchingFormat } from '@geti/ui/utils';
 
 import { ButtonWithSpectrumTooltip } from '../../../../../../shared/components/button-with-tooltip/button-with-tooltip.component';
-import { idMatchingFormat } from '../../../../../../test-utils/id-utils';
 
 interface DownloadCellInterface extends ActionButtonProps {
     id: string;

@@ -15,11 +15,11 @@ import {
     View,
 } from '@geti/ui';
 import { ChevronRightSmallLight, LabelGroup, NotFound } from '@geti/ui/icons';
+import { idMatchingFormat } from '@geti/ui/utils';
 import { differenceBy, intersectionBy, isEmpty, uniqBy } from 'lodash-es';
 
 import { DATASET_IMPORT_TASK_TYPE } from '../../../../../core/datasets/dataset.enum';
 import { DatasetImportLabel, DatasetImportToNewProjectItem } from '../../../../../core/datasets/dataset.interface';
-import { idMatchingFormat } from '../../../../../test-utils/id-utils';
 import { getLabelFullPath, getLabelsStructureFromPaths, isTaskChainedProject } from './utils';
 
 import classes from './dataset-import-to-new-project.module.scss';

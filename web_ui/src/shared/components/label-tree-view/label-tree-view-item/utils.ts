@@ -1,9 +1,10 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
+import { idMatchingFormat } from '@geti/ui/utils';
+
 import { getLowestLevelGroupName } from '../../../../core/labels/annotator-utils/group-utils';
 import { LabelItemEditionState, LabelItemType, LabelTreeItem } from '../../../../core/labels/label-tree-view.interface';
-import { idMatchingFormat } from '../../../../test-utils/id-utils';
 
 export const setRemovedStateToChildren = (currentItem: LabelTreeItem): LabelTreeItem[] => {
     return currentItem.children.map((child) => {

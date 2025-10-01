@@ -16,10 +16,9 @@ import {
     Text,
     TextField,
 } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 import { OverlayTriggerState } from '@react-stately/overlays';
 import { capitalize, isEmpty } from 'lodash-es';
-
-import { idMatchingFormat } from '../../../test-utils/id-utils';
 
 import classes from './edit-name-dialog.module.scss';
 

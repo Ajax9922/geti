@@ -3,12 +3,12 @@
 
 import { ReactElement } from 'react';
 
+import { idMatchingFormat } from '@geti/ui/utils';
 import { fireEvent, screen, waitForElementToBeRemoved } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 
 import { DOMAIN, ProjectIdentifier } from '../../../../core/projects/core.interface';
 import { PerformanceType } from '../../../../core/projects/task.interface';
-import { idMatchingFormat } from '../../../../test-utils/id-utils';
 import { getMockedProjectIdentifier } from '../../../../test-utils/mocked-items-factory/mocked-identifiers';
 import { getMockedProject } from '../../../../test-utils/mocked-items-factory/mocked-project';
 import { providersRender } from '../../../../test-utils/required-providers-render';

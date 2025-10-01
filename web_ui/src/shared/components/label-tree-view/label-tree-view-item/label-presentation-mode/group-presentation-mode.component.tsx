@@ -2,13 +2,13 @@
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
 import { Flex, Tag, Text } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 
 import {
     LabelTreeGroupProps,
     TreeItemPresentationModeProps,
 } from '../../../../../core/labels/label-tree-view.interface';
 import { LabelsRelationType } from '../../../../../core/labels/label.interface';
-import { idMatchingFormat } from '../../../../../test-utils/id-utils';
 import { ItemEditionState } from '../item-edition-state/item-edition-state.component';
 
 import classes from './label-presentation-mode.module.scss';

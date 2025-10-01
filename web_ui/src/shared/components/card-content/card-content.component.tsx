@@ -15,9 +15,9 @@ import {
     type StyleProps,
 } from '@geti/ui';
 import { Info } from '@geti/ui/icons';
+import { idMatchingFormat } from '@geti/ui/utils';
 import { isEmpty } from 'lodash-es';
 
-import { idMatchingFormat } from '../../../test-utils/id-utils';
 import { DownloadGraphMenu } from '../download-graph-menu/download-graph-menu.component';
 import { DownloadableData } from '../download-graph-menu/export-csv-utils';
 

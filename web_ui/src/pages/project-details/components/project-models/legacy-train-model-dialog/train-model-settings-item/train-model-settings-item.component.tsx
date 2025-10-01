@@ -4,9 +4,9 @@
 import { FC } from 'react';
 
 import { Checkbox, Flex } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 
 import { InfoTooltip } from '../../../../../../shared/components/info-tooltip/info-tooltip.component';
-import { idMatchingFormat } from '../../../../../../test-utils/id-utils';
 
 import classes from './train-model-settings-item.module.scss';
 

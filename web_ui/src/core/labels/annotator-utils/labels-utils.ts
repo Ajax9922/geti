@@ -1,10 +1,10 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
+import { idMatchingFormat } from '@geti/ui/utils';
 import { groupBy, isEqual, isString, uniq, uniqBy } from 'lodash-es';
 
 import { hasEqualId, hasEqualSize } from '../../../shared/utils';
-import { idMatchingFormat } from '../../../test-utils/id-utils';
 import {
     LabelItemEditionState,
     LabelItemType,

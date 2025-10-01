@@ -1,9 +1,9 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
+import { idMatchingFormat } from '@geti/ui/utils';
 import { negate, overSome } from 'lodash-es';
 
-import { idMatchingFormat } from '../../test-utils/id-utils';
 import { AnnotationLabel } from '../annotations/annotation.interface';
 import { DOMAIN } from '../projects/core.interface';
 import { isAnomalyDomain, isClassificationDomain } from '../projects/domains';

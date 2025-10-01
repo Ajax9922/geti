@@ -5,8 +5,8 @@ import { RefObject, useState } from 'react';
 
 import { toast, useUnwrapDOMRef, type BackgroundColorValue, type DOMRefValue } from '@geti/ui';
 import { DownloadIcon } from '@geti/ui/icons';
+import { idMatchingFormat } from '@geti/ui/utils';
 
-import { idMatchingFormat } from '../../../test-utils/id-utils';
 import { runWhenTruthy } from '../../utils';
 import { MenuTriggerList } from '../menu-trigger-list/menu-trigger-list.component';
 import {

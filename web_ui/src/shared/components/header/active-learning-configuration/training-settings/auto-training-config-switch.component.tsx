@@ -4,9 +4,9 @@
 import { FC } from 'react';
 
 import { Flex, Switch, Text } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 
 import { Task } from '../../../../../core/projects/task.interface';
-import { idMatchingFormat } from '../../../../../test-utils/id-utils';
 
 interface AutoTrainingConfigSwitchProps {
     task: Task;

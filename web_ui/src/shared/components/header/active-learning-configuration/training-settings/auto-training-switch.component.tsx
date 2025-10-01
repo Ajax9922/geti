@@ -5,6 +5,7 @@ import { FC } from 'react';
 
 import { paths } from '@geti/core';
 import { Divider, Flex, Text, View } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 import { isEmpty, isEqual } from 'lodash-es';
 
 import {
@@ -22,7 +23,6 @@ import { isActiveModel } from '../../../../../core/models/utils';
 import { ProjectIdentifier } from '../../../../../core/projects/core.interface';
 import { Task } from '../../../../../core/projects/task.interface';
 import { useRequiredAnnotations } from '../../../../../pages/annotator/hooks/use-required-annotations.hook';
-import { idMatchingFormat } from '../../../../../test-utils/id-utils';
 import { formatDate } from '../../../../utils';
 import { LinkNewTab } from '../../../link-new-tab/link-new-tab.component';
 import { getAllJobs } from '../../jobs-management/utils';

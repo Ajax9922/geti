@@ -2,8 +2,8 @@
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
 import { dimensionValue, Flex, Text } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 
-import { idMatchingFormat } from '../../../../../test-utils/id-utils';
 import { Accordion } from '../../../accordion/accordion.component';
 import { SelectableManyTasksProps } from '../selectable-many-tasks.interface';
 import { SelectableTab } from '../selectable-tab/selectable-tab.component';

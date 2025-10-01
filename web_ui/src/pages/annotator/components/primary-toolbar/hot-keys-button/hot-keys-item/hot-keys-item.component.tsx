@@ -4,10 +4,10 @@
 import { ReactNode } from 'react';
 
 import { Flex, Keyboard, Text } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 import { isString } from 'lodash-es';
 
 import { getKeyName } from '../../../../../../shared/hotkeys';
-import { idMatchingFormat } from '../../../../../../test-utils/id-utils';
 
 import classes from './hot-keys-item.module.scss';
 

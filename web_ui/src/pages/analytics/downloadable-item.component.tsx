@@ -4,8 +4,8 @@
 import { ReactNode } from 'react';
 
 import { Flex, Heading, Text, View } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 
-import { idMatchingFormat } from '../../test-utils/id-utils';
 import { DownloadServerInfo } from './download-server-info.component';
 import { ExportAnalyticsData, ExportAnalyticsType, URLType } from './export-logs.component';
 

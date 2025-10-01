@@ -4,9 +4,8 @@
 import { ReactNode } from 'react';
 
 import { Flex, View, type DimensionValue, type Responsive } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 import { usePress } from 'react-aria';
-
-import { idMatchingFormat } from '../../../../../../test-utils/id-utils';
 
 import classes from './selectable-card.module.scss';
 

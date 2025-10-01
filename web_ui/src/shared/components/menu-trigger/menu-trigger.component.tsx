@@ -2,9 +2,9 @@
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
 import { Item, Menu, MenuTrigger as MenuTriggerSpectrum, Text, TooltipTrigger } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 import { isEmpty, isFunction } from 'lodash-es';
 
-import { idMatchingFormat } from '../../../test-utils/id-utils';
 import { MenuTriggerProps } from '../upload-media/upload-media-button/upload-media-button.interface';
 
 import classes from './menu-trigger.module.scss';

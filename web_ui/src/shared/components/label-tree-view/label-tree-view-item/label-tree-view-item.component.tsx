@@ -5,6 +5,7 @@ import { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useFeatureFlags } from '@geti/core/src/feature-flags/hooks/use-feature-flags.hook';
 import { Flex } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 import { isEmpty } from 'lodash-es';
 
 import { getFullGroupName } from '../../../../core/labels/annotator-utils/group-utils';
@@ -19,7 +20,6 @@ import {
 import { filterGroups, filterLabels, getFlattenedItems } from '../../../../core/labels/utils';
 import { DOMAIN } from '../../../../core/projects/core.interface';
 import { isAnomalyDomain } from '../../../../core/projects/domains';
-import { idMatchingFormat } from '../../../../test-utils/id-utils';
 import { LabelTreeViewGroup } from './label-tree-view-group.component';
 import { Actions, LabelTreeViewItemMenu } from './label-tree-view-item-menu/label-tree-view-item-menu.component';
 import { LabelTreeViewLabel } from './label-tree-view-label.component';

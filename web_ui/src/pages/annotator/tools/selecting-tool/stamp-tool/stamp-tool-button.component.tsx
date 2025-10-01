@@ -2,6 +2,7 @@
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
 import { NoStamp, Stamp } from '@geti/ui/icons';
+import { idMatchingFormat } from '@geti/ui/utils';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useHotkeys } from 'react-hotkeys-hook';
 
@@ -9,7 +10,6 @@ import { Annotation } from '../../../../../core/annotations/annotation.interface
 import { ANIMATION_PARAMETERS } from '../../../../../shared/animation-parameters/animation-parameters';
 import { TooltipWithDisableButton } from '../../../../../shared/components/custom-tooltip/tooltip-with-disable-button';
 import { QuietToggleButton } from '../../../../../shared/components/quiet-button/quiet-toggle-button.component';
-import { idMatchingFormat } from '../../../../../test-utils/id-utils';
 import { useAnnotatorHotkeys } from '../../../hooks/use-hotkeys-configuration.hook';
 import { HOTKEY_OPTIONS } from '../../../hot-keys/utils';
 import { useSelectingState } from '../selecting-state-provider.component';
