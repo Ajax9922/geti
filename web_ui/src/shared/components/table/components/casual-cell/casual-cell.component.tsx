@@ -3,11 +3,10 @@
 
 import { ReactNode } from 'react';
 
-import { PressableElement, Tooltip, TooltipTrigger } from '@geti/ui';
+import { PressableElement, Tooltip, TooltipTrigger, TruncatedText } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 
-import { idMatchingFormat } from '../../../../../test-utils/id-utils';
 import { formatUtcToLocal } from '../../../../utils';
-import { TruncatedText } from '../../../truncated-text/truncated-text.component';
 import { TableCellProps } from '../../table.interface';
 
 interface CasualCellProps extends TableCellProps {

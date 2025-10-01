@@ -3,17 +3,16 @@
 
 import { KeyboardEvent, useEffect, useRef, useState } from 'react';
 
-import { ActionButton, Flex, Loading, TextField, TextFieldRef } from '@geti/ui';
+import { ActionButton, Flex, Loading, TextField, TextFieldRef, TruncatedTextWithTooltip } from '@geti/ui';
 import { Edit } from '@geti/ui/icons';
+import { idMatchingFormat } from '@geti/ui/utils';
 
 import { useProjectActions } from '../../../../../core/projects/hooks/use-project-actions.hook';
 import { ProjectProps } from '../../../../../core/projects/project.interface';
 import { useWorkspaceIdentifier } from '../../../../../providers/workspaces-provider/use-workspace-identifier.hook';
-import { TruncatedTextWithTooltip } from '../../../../../shared/components/truncated-text/truncated-text.component';
 import { ValidationErrorMsg } from '../../../../../shared/components/validation-error-msg/validation-error-msg.component';
 import { KeyMap } from '../../../../../shared/keyboard-events/keyboard.interface';
 import { isNotCropDomain } from '../../../../../shared/utils';
-import { idMatchingFormat } from '../../../../../test-utils/id-utils';
 import {
     MAX_NUMBER_OF_CHARACTERS_OF_PROJECT_NAME,
     projectNameSchema,

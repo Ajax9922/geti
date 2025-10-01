@@ -18,8 +18,10 @@ import {
     TableHeader,
     TableView,
     Text,
+    TruncatedTextWithTooltip,
     useCollator,
 } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 import { capitalize, isEmpty } from 'lodash-es';
 import { Link } from 'react-router-dom';
 
@@ -30,9 +32,7 @@ import { useTests } from '../../../../core/tests/hooks/use-tests.hook';
 import { isTestJobCompleted } from '../../../../core/tests/utils';
 import { useProjectIdentifier } from '../../../../hooks/use-project-identifier/use-project-identifier';
 import { ThreeDotsFlashing } from '../../../../shared/components/three-dots-flashing/three-dots-flashing.component';
-import { TruncatedTextWithTooltip } from '../../../../shared/components/truncated-text/truncated-text.component';
 import { SpectrumTableLoadingState } from '../../../../shared/utils';
-import { idMatchingFormat } from '../../../../test-utils/id-utils';
 import { useProject } from '../../providers/project-provider/project-provider.component';
 import { AccuracyTestCell } from './accuracy-test-cell.component';
 import { TestItemSubmenu } from './test-item-submenu.component';

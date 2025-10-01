@@ -4,7 +4,8 @@
 import { useState } from 'react';
 
 import { paths } from '@geti/core';
-import { Divider, Flex, Text, View } from '@geti/ui';
+import { Divider, Flex, Text, TruncatedTextWithTooltip, View } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 import dayjs from 'dayjs';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -17,9 +18,7 @@ import { EXPORT_PROJECT_MODELS_OPTIONS, ProjectProps } from '../../../../../../.
 import { useWorkspaceIdentifier } from '../../../../../../../providers/workspaces-provider/use-workspace-identifier.hook';
 import { CustomWellClickable } from '../../../../../../../shared/components/custom-well/custom-well-clickable.component';
 import { DomainName } from '../../../../../../../shared/components/domain-name/domain-name.component';
-import { TruncatedTextWithTooltip } from '../../../../../../../shared/components/truncated-text/truncated-text.component';
 import { isNotCropDomain, openNewTab } from '../../../../../../../shared/utils';
-import { idMatchingFormat } from '../../../../../../../test-utils/id-utils';
 import { ProjectListItemSkeletonLoader } from '../project-list-item-skeleton-loader.component';
 import { Label } from './components/label/label.component';
 import { ProjectActionMenu } from './components/project-action-menu/project-action-menu.component';

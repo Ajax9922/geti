@@ -3,12 +3,11 @@
 
 import { FC } from 'react';
 
-import { Flex, View } from '@geti/ui';
+import { Flex, TruncatedTextWithTooltip, View } from '@geti/ui';
+import { idMatchingFormat } from '@geti/ui/utils';
 
 import { LabeledVideoRange } from '../../../../../core/annotations/labeled-video-range.interface';
 import { Label } from '../../../../../core/labels/label.interface';
-import { TruncatedTextWithTooltip } from '../../../../../shared/components/truncated-text/truncated-text.component';
-import { idMatchingFormat } from '../../../../../test-utils/id-utils';
 import { ClassificationRanges } from './classification-ranges.component';
 import { CreateRange } from './create-range.component';
 

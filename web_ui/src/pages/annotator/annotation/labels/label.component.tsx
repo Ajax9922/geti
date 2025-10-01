@@ -2,17 +2,16 @@
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
 import { useUsers } from '@geti/core/src/users/hook/use-users.hook';
-import { Flex, PressableElement, Tooltip, TooltipTrigger } from '@geti/ui';
+import { Flex, PressableElement, Tooltip, TooltipTrigger, TruncatedText } from '@geti/ui';
 import { AiIcon, ChevronRightSmallLight } from '@geti/ui/icons';
+import { idMatchingFormat } from '@geti/ui/utils';
 import { isFunction } from 'lodash-es';
 import { useNumberFormatter, usePress } from 'react-aria';
 
 import { AnnotationLabel } from '../../../../core/annotations/annotation.interface';
 import { isPrediction, showLabelScore } from '../../../../core/labels/utils';
 import { useOrganizationIdentifier } from '../../../../hooks/use-organization-identifier/use-organization-identifier.hook';
-import { TruncatedText } from '../../../../shared/components/truncated-text/truncated-text.component';
 import { FullnameWithLoading } from '../../../../shared/components/users/fullname.component';
-import { idMatchingFormat } from '../../../../test-utils/id-utils';
 import { getForegroundColor, hexaToRGBA } from '../../../utils';
 import { useTask } from '../../providers/task-provider/task-provider.component';
 
