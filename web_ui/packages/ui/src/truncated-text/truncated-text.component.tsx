@@ -3,10 +3,13 @@
 
 import { ComponentProps, CSSProperties } from 'react';
 
-import { PressableElement, Tooltip, TooltipTrigger, useStyleProps, type StyleProps } from '@geti/ui';
+import { Tooltip, TooltipTrigger } from '@adobe/react-spectrum';
+import { useStyleProps } from '@react-spectrum/utils';
+import { type StyleProps } from '@react-types/shared';
 import { type PositionProps } from 'react-aria';
 
-import { idMatchingFormat } from '../../../test-utils/id-utils';
+import { idMatchingFormat } from '../../utils/id-utils';
+import { PressableElement } from '../pressable-element/pressable-element.component';
 
 const TruncatedTextStyles: CSSProperties = {
     display: 'block',
