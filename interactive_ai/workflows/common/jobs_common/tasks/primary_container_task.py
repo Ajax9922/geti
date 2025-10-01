@@ -14,7 +14,13 @@ from flytekit import dynamic, task
 from flytekitplugins.pod import Pod
 from geti_kafka_tools import terminate_producer
 from geti_telemetry_tools import terminate_span_exporter
-from kubernetes.client import V1ConfigMapKeySelector, V1ConfigMapVolumeSource, V1EnvVarSource, V1ObjectFieldSelector
+from kubernetes.client import (
+    V1ConfigMapKeySelector,
+    V1ConfigMapVolumeSource,
+    V1EnvVarSource,
+    V1ObjectFieldSelector,
+    V1SecretKeySelector,
+)
 from kubernetes.client.models import (
     V1Capabilities,
     V1ConfigMapEnvSource,
@@ -342,6 +348,22 @@ def get_flyte_pod_spec(
                     V1EnvVar(
                         name="SPICEDB_SSL_CERTIFICATES_DIR",
                         value=SPICEDB_TLS_SECRETS_MOUNT_PATH,
+                    ),
+                    V1EnvVar(
+                        name="FLYTE_AWS_ACCESS_KEY_ID",
+                        value_from=V1EnvVarSource(
+                            secret_key_ref=V1SecretKeySelector(
+                                name="impt-seaweed-fs", key="flyte_access_key"
+                            )
+                        ),
+                    ),
+                    V1EnvVar(
+                        name="FLYTE_AWS_SECRET_ACCESS_KEY",
+                        value_from=V1EnvVarSource(
+                            secret_key_ref=V1SecretKeySelector(
+                                name="impt-seaweed-fs", key="flyte_secret_key"
+                            )
+                        ),
                     ),
                 ],
                 env_from=[
