@@ -33,8 +33,9 @@ export default [
                 {
                     patterns: [
                         {
-                            group: ['../../**/*', '!../**/icons'],
-                            message: 'Importing files outside of the current package is not allowed except /icons.',
+                            group: ['../../**/*', '!../**/icons', '!../**/utils'],
+                            message:
+                                'Importing files outside of the current package not allowed except /icons or /utils.',
                         },
                         {
                             group: ['@geti/ui'],

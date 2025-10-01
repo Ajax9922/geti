@@ -8,7 +8,7 @@ import { useStyleProps } from '@react-spectrum/utils';
 import { type StyleProps } from '@react-types/shared';
 import { type PositionProps } from 'react-aria';
 
-import { idMatchingFormat } from '../../utils/id-utils';
+import { idMatchingFormat } from '../../utils';
 import { PressableElement } from '../pressable-element/pressable-element.component';
 
 const TruncatedTextStyles: CSSProperties = {
