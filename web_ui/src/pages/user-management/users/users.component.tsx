@@ -3,25 +3,25 @@
 
 import { ComponentProps, useState } from 'react';
 
-import { useUsers } from '@geti/core/src/users/hook/use-users.hook';
 import { useProductInfo } from '@geti/core/src/platform-utils/hooks/use-platform-utils.hook';
+import { useUsers } from '@geti/core/src/users/hook/use-users.hook';
 import { RESOURCE_TYPE, User, UsersQueryParams } from '@geti/core/src/users/users.interface';
 import { Flex } from '@geti/ui';
 import { motion } from 'framer-motion';
 import { isEmpty } from 'lodash-es';
 
+import { useIsSaasEnv } from '../../../hooks/use-is-saas-env/use-is-saas-env.hook';
 import { useOrganizationIdentifier } from '../../../hooks/use-organization-identifier/use-organization-identifier.hook';
 import { useFirstWorkspaceIdentifier } from '../../../providers/workspaces-provider/use-first-workspace-identifier.hook';
-import { useIsSaasEnv } from '../../../hooks/use-is-saas-env/use-is-saas-env.hook';
-import { HasPermission } from '../../../shared/components/has-permission/has-permission.component';
-import { OPERATION } from '../../../shared/components/has-permission/has-permission.interface';
 import { useWorkspaces } from '../../../providers/workspaces-provider/workspaces-provider.component';
 import { ANIMATION_PARAMETERS } from '../../../shared/animation-parameters/animation-parameters';
+import { HasPermission } from '../../../shared/components/has-permission/has-permission.component';
+import { OPERATION } from '../../../shared/components/has-permission/has-permission.interface';
+import { AddMemberPopup } from './add-member-popup/add-member-popup.component';
+import { InviteUserDialog } from './invite-user/invite-user.component';
 import { UsersHeader } from './users-header.component';
 import { UsersTable } from './users-table/users-table.component';
 import { AvailableWorkspaceUsers } from './workspace-users/available-workspace-users.component';
-import { AddMemberPopup } from './add-member-popup/add-member-popup.component';
-import { InviteUser } from './invite-user/invite-user.component';
 
 interface UsersProps {
     activeUser: User;
@@ -76,7 +76,7 @@ export const Users = ({
                     <AddMemberPopup organizationId={organizationId} workspaceId={firstWorkspaceId} />
                 )}
                 {shouldShowInviteUserButton && (
-                    <InviteUser
+                    <InviteUserDialog
                         isAdmin={activeUser.isAdmin}
                         id={'send-invite-btn-id'}
                         organizationId={organizationId}

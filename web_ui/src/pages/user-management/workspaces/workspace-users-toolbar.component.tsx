@@ -1,23 +1,25 @@
-// Copyright (C) 2025 Intel Corporation
+// Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
-import { Key, useMemo } from 'react';
+import { Key } from 'react';
 
+import { useFeatureFlags } from '@geti/core/src/feature-flags/hooks/use-feature-flags.hook';
+import { useActiveUser } from '@geti/core/src/users/hook/use-users.hook';
+import { isOrganizationAdmin } from '@geti/core/src/users/user-role-utils';
+import { useWorkspacesApi } from '@geti/core/src/workspaces/hooks/use-workspaces.hook';
 import { WorkspaceEntity } from '@geti/core/src/workspaces/services/workspaces.interface';
-import { ActionButton, Flex, Item, Loading, TabList, TabPanels, Tabs, Tooltip, TooltipTrigger } from '@geti/ui';
+import { ActionButton, Flex, Item, Loading, TabList, Tabs, Tooltip, TooltipTrigger } from '@geti/ui';
 import { Add } from '@geti/ui/icons';
 
 import { useOrganizationIdentifier } from '../../../hooks/use-organization-identifier/use-organization-identifier.hook';
-import { useProjectActions } from '../../../core/projects/hooks/use-project-actions.hook';
+import { CustomTabItem } from '../../../shared/components/custom-tab-item/custom-tab-item.component';
+import { EditNameDialog } from '../../../shared/components/edit-name-dialog/edit-name-dialog.component';
 import { HasPermission } from '../../../shared/components/has-permission/has-permission.component';
 import { OPERATION } from '../../../shared/components/has-permission/has-permission.interface';
-import { ActionMenu } from '../../../shared/components/action-menu/action-menu.component';
-import { useWorkspaceActions } from '../../landing-page/workspaces-tabs/hooks/use-workspace-actions.hook';
-import { WorkspaceMenuActions } from '../../landing-page/workspaces-tabs/utils';
-import { WorkspaceDeleteDialog } from '../../landing-page/workspaces-tabs/components/workspace-delete-dialog.component';
-import { EditNameDialog } from '../../../shared/components/edit-name-dialog/edit-name-dialog.component';
 import { getUniqueNameFromArray } from '../../../shared/utils';
-import { useWorkspacesApi } from '@geti/core/src/workspaces/hooks/use-workspaces.hook';
+import { WorkspaceDeleteDialog } from '../../landing-page/workspaces-tabs/components/workspace-delete-dialog.component';
+import { CustomTabItemWithMenu } from '../../landing-page/workspaces-tabs/custom-tab-item-with-menu.component';
+import { useWorkspaceActions } from '../../landing-page/workspaces-tabs/hooks/use-workspace-actions.hook';
 
 interface WorkspaceUsersToolbarProps {
     workspaces: WorkspaceEntity[];
@@ -31,30 +33,17 @@ export const WorkspaceUsersToolbar = ({
     onSelectWorkspace,
 }: WorkspaceUsersToolbarProps) => {
     const { organizationId } = useOrganizationIdentifier();
+    const { data: activeUser } = useActiveUser(organizationId);
     const { useCreateWorkspaceMutation } = useWorkspacesApi(organizationId);
     const createWorkspace = useCreateWorkspaceMutation();
 
+    const { FEATURE_FLAG_WORKSPACE_ACTIONS } = useFeatureFlags();
+
     const selectedWorkspace = workspaces.find((w) => w.id === selectedWorkspaceId);
 
-    // Query projects to know if workspace empty (for delete enablement)
-    const { useGetProjectNames } = useProjectActions();
-    const projectsQuery = selectedWorkspaceId
-        ? useGetProjectNames({ organizationId, workspaceId: selectedWorkspaceId })
-        : undefined;
-    const isWorkspaceEmpty = projectsQuery?.data?.projects.length === 0;
+    const { deleteDialog, editDialog } = useWorkspaceActions(workspaces.length, selectedWorkspaceId);
 
-    const { items, handleMenuAction, deleteDialog, editDialog, grayedOutKeys, disabledKeys } = useWorkspaceActions(
-        workspaces.length,
-        isWorkspaceEmpty ?? false,
-        selectedWorkspaceId
-    );
-
-    const actionItems = items.map((i) => ({ id: i, name: i }));
-
-    const tabItems = useMemo(
-        () => workspaces.map((w) => ({ key: w.id, name: w.name })),
-        [workspaces]
-    );
+    const tabItems = workspaces.map((w) => ({ key: w.id, name: w.name }));
 
     const handleSelection = (key: Key) => {
         onSelectWorkspace(key.toString());
@@ -76,47 +65,54 @@ export const WorkspaceUsersToolbar = ({
                 aria-label={'Workspace tabs'}
                 items={tabItems}
             >
-                <Flex alignItems={'center'} gap={'size-200'}>
+                <Flex alignItems={'center'} gap={'size-200'} UNSAFE_style={{ overflowY: 'hidden', overflowX: 'auto' }}>
                     <TabList>
-                        {(item: { key: string; name: string }) => <Item key={item.key}>{item.name}</Item>}
+                        {(item: { key: string; name: string }) => {
+                            return (
+                                <Item key={item.key} textValue={item.name}>
+                                    <Flex alignItems={'center'} gap={'size-75'}>
+                                        {item.key === selectedWorkspaceId && FEATURE_FLAG_WORKSPACE_ACTIONS ? (
+                                            <HasPermission
+                                                operations={[OPERATION.WORKSPACE_MANAGEMENT]}
+                                                resources={[{ type: 'WORKSPACE', id: item.key }] as any}
+                                                specialCondition={
+                                                    activeUser !== undefined &&
+                                                    isOrganizationAdmin(activeUser, organizationId)
+                                                }
+                                                Fallback={<CustomTabItem name={item.name} isMoreIconVisible={false} />}
+                                            >
+                                                <CustomTabItemWithMenu
+                                                    workspace={selectedWorkspace as WorkspaceEntity}
+                                                    isMoreIconVisible={item.key === selectedWorkspaceId}
+                                                    workspaces={workspaces}
+                                                    selectWorkspace={(id: string) => handleSelection(id)}
+                                                />
+                                            </HasPermission>
+                                        ) : (
+                                            <CustomTabItem isMoreIconVisible={false} name={item.name} />
+                                        )}
+                                    </Flex>
+                                </Item>
+                            );
+                        }}
                     </TabList>
-                    <HasPermission operations={[OPERATION.WORKSPACE_CREATION]}>
-                        <TooltipTrigger placement={'bottom'}>
-                            <ActionButton
-                                isQuiet
-                                aria-label={'Create workspace'}
-                                id={'create-workspace-toolbar-btn'}
-                                onPress={handleCreateWorkspace}
-                                isDisabled={createWorkspace.isPending}
-                            >
-                                {createWorkspace.isPending ? <Loading mode='inline' size={'S'} /> : <Add />}
-                            </ActionButton>
-                            <Tooltip>Create workspace</Tooltip>
-                        </TooltipTrigger>
-                    </HasPermission>
-                    {selectedWorkspace && actionItems.length > 0 && (
-                        <HasPermission
-                            operations={[OPERATION.WORKSPACE_MANAGEMENT]}
-                            resources={[{ type: 'WORKSPACE', id: selectedWorkspace.id }] as any}
-                        >
-                            <ActionMenu<WorkspaceMenuActions>
-                                id={`${selectedWorkspace.id}-workspace-actions-menu`}
-                                items={actionItems}
-                                onAction={handleMenuAction}
-                                grayedOutKeys={grayedOutKeys}
-                                disabledKeys={disabledKeys}
-                            />
+                    {FEATURE_FLAG_WORKSPACE_ACTIONS && (
+                        <HasPermission operations={[OPERATION.WORKSPACE_CREATION]}>
+                            <TooltipTrigger placement={'bottom'}>
+                                <ActionButton
+                                    isQuiet
+                                    aria-label={'Create workspace'}
+                                    id={'create-workspace-toolbar-btn'}
+                                    onPress={handleCreateWorkspace}
+                                    isDisabled={createWorkspace.isPending}
+                                >
+                                    {createWorkspace.isPending ? <Loading mode='inline' size={'S'} /> : <Add />}
+                                </ActionButton>
+                                <Tooltip>Create workspace</Tooltip>
+                            </TooltipTrigger>
                         </HasPermission>
                     )}
                 </Flex>
-                <TabPanels>
-                    {(item: { key: string }) => (
-                        <Item key={item.key}>
-                            {/* Placeholder panel content: actual workspace users content rendered outside Tabs. */}
-                            <div aria-hidden={'true'} style={{ display: 'none' }} />
-                        </Item>
-                    )}
-                </TabPanels>
             </Tabs>
             {/* Dialogs for selected workspace */}
             {selectedWorkspace && deleteDialog.deleteWorkspaceDialogState.isOpen && (
@@ -129,7 +125,7 @@ export const WorkspaceUsersToolbar = ({
                         );
                     }}
                     triggerState={deleteDialog.deleteWorkspaceDialogState}
-                    isWorkspaceEmpty={isWorkspaceEmpty ?? false}
+                    workspaceId={selectedWorkspace.id}
                 />
             )}
             {selectedWorkspace && editDialog.editWorkspaceDialogState.isOpen && (

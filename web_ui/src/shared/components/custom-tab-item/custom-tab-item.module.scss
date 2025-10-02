@@ -10,6 +10,7 @@
 
 .customTabItemMenuTrigger {
     border: none !important;
+    height: var(--spectrum-global-dimension-size-600) !important;
 
     &:hover,
     &[class*='is-selected'],

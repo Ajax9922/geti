@@ -16,9 +16,9 @@ import { ActionMenu } from '../../../../../shared/components/action-menu/action-
 import { MenuAction } from '../../../../../shared/components/action-menu/menu-action.interface';
 import { HasPermission } from '../../../../../shared/components/has-permission/has-permission.component';
 import { OPERATION } from '../../../../../shared/components/has-permission/has-permission.interface';
+import { EditOrganizationUserDialog } from '../../actions/edit-organization-user-dialog.component';
 import { checkStatusFlowValidity } from '../../utils';
 import { EditWorkspaceUserDialog } from './edit-workspace-user-dialog.component';
-import { EditOrganizationUserDialog } from '../../actions/edit-organization-user-dialog.component';
 import { RemoveFromWorkspaceDialog } from './remove-from-workspace-dialog.component';
 
 enum USER_ACTIONS_OPTIONS {
@@ -64,9 +64,7 @@ export const WorkspaceUserActions = ({ activeUser, user, users, workspaceId }: U
     const canEditUserRole =
         isActiveUserOrgAdmin || canContributorEdit || activeUser.isAdmin || isActiveUserWorkspaceAdmin;
 
-    const workspaceAdmins = workspaceId
-        ? users.filter((u) => isWorkspaceAdmin(u, workspaceId))
-        : [];
+    const workspaceAdmins = workspaceId ? users.filter((u) => isWorkspaceAdmin(u, workspaceId)) : [];
     const isTargetWorkspaceAdmin = workspaceId ? isWorkspaceAdmin(user, workspaceId) : false;
     const isLastWorkspaceAdmin = workspaceId && isTargetWorkspaceAdmin && workspaceAdmins.length === 1;
 
@@ -95,11 +93,7 @@ export const WorkspaceUserActions = ({ activeUser, user, users, workspaceId }: U
             //  - the active user (self)
             //  - workspace admins of the current workspace
             //  - organization admins (even if only a workspace contributor)
-            specialCondition={
-                isOwnAccount ||
-                isActiveUserWorkspaceAdmin ||
-                isActiveUserOrgAdmin
-            }
+            specialCondition={isOwnAccount || isActiveUserWorkspaceAdmin || isActiveUserOrgAdmin}
         >
             <ActionMenu
                 items={items}
@@ -116,8 +110,8 @@ export const WorkspaceUserActions = ({ activeUser, user, users, workspaceId }: U
                         onAfterRemove={clearAction}
                     />
                 )}
-                {action === USER_ACTIONS_OPTIONS.EDIT && (
-                    workspaceId ? (
+                {action === USER_ACTIONS_OPTIONS.EDIT &&
+                    (workspaceId ? (
                         <EditWorkspaceUserDialog
                             organizationId={organizationId}
                             workspaceId={workspaceId}
@@ -136,8 +130,7 @@ export const WorkspaceUserActions = ({ activeUser, user, users, workspaceId }: U
                             isSaasEnvironment={isSaasEnvironment}
                             closeDialog={clearAction}
                         />
-                    )
-                )}
+                    ))}
             </DialogContainer>
         </HasPermission>
     );

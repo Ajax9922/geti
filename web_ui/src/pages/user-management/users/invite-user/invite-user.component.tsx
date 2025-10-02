@@ -16,6 +16,8 @@ import {
     Flex,
     Form,
     Heading,
+    Item,
+    Picker,
     Text,
     TextField,
     TextFieldRef,
@@ -23,20 +25,28 @@ import {
 import { Info } from '@geti/ui/icons';
 
 import { useIsSaasEnv } from '../../../../hooks/use-is-saas-env/use-is-saas-env.hook';
+import { useWorkspaces } from '../../../../providers/workspaces-provider/workspaces-provider.component';
 import { isYupValidationError } from '../../profile-page/utils';
 import { ErrorMessage } from '../add-member-popup/error-message/error-message.component';
 import { RolePicker } from '../old-project-users/role-picker.component';
 import { MAX_NUMBER_OF_CHARACTERS, validateEmail, validateUserEmail } from '../utils';
 
-interface InviteUserProps extends WorkspaceIdentifier {
+interface InviteUserDialogProps extends WorkspaceIdentifier {
     id: string;
-    isAdmin: boolean;
+    isAdmin: boolean; // active user admin status used to allow selecting workspace admin role
 }
-export const InviteUser = ({ isAdmin, id, organizationId, workspaceId }: InviteUserProps) => {
-    const roles = isAdmin
+export const InviteUserDialog = ({ isAdmin, id, organizationId, workspaceId }: InviteUserDialogProps) => {
+    // Org role selection
+    const orgRoles: USER_ROLE[] = [USER_ROLE.ORGANIZATION_CONTRIBUTOR, USER_ROLE.ORGANIZATION_ADMIN];
+    const [selectedOrgRole, setSelectedOrgRole] = useState<USER_ROLE>(USER_ROLE.ORGANIZATION_CONTRIBUTOR);
+
+    // Workspace selection (only when org contributor)
+    const { workspaces } = useWorkspaces();
+    const [selectedWorkspaceId, setSelectedWorkspaceId] = useState<string | undefined>(workspaceId);
+    const workspaceRoles = isAdmin
         ? [USER_ROLE.WORKSPACE_CONTRIBUTOR, USER_ROLE.WORKSPACE_ADMIN]
         : [USER_ROLE.WORKSPACE_CONTRIBUTOR];
-    const [selectedRole, setSelectedRole] = useState<USER_ROLE>(roles[0]);
+    const [selectedWorkspaceRole, setSelectedWorkspaceRole] = useState<USER_ROLE | undefined>(workspaceRoles[0]);
 
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [email, setEmail] = useState<string>('');
@@ -71,39 +81,40 @@ export const InviteUser = ({ isAdmin, id, organizationId, workspaceId }: InviteU
 
     const handleDismiss = (): void => {
         setIsOpen(false);
-
-        email && setEmail('');
-        errorMsg && setErrorMsg('');
+        if (email) setEmail('');
+        if (errorMsg) setErrorMsg('');
+        setSelectedOrgRole(USER_ROLE.ORGANIZATION_CONTRIBUTOR);
+        setSelectedWorkspaceRole(workspaceRoles[0]);
+        setSelectedWorkspaceId(workspaceId);
     };
 
     const isSaasEnvironment = useIsSaasEnv();
 
     const handleSubmit = (event: FormEvent): void => {
         event.preventDefault();
+        const rolesPayload: { resourceId: string; resourceType: RESOURCE_TYPE; role: USER_ROLE }[] = [];
+
+        rolesPayload.push({
+            resourceId: organizationId,
+            resourceType: RESOURCE_TYPE.ORGANIZATION,
+            role: selectedOrgRole,
+        });
+
+        if (selectedOrgRole === USER_ROLE.ORGANIZATION_CONTRIBUTOR && selectedWorkspaceId && selectedWorkspaceRole) {
+            rolesPayload.push({
+                resourceId: selectedWorkspaceId,
+                resourceType: RESOURCE_TYPE.WORKSPACE,
+                role: selectedWorkspaceRole,
+            });
+        }
 
         inviteUser.mutate(
             {
                 organizationId,
                 email: email.trim(),
-                roles: [
-                    {
-                        resourceId: workspaceId,
-                        resourceType: RESOURCE_TYPE.WORKSPACE,
-                        role: selectedRole,
-                    },
-                    {
-                        resourceId: organizationId,
-                        resourceType: RESOURCE_TYPE.ORGANIZATION,
-                        role:
-                            !isSaasEnvironment && selectedRole === USER_ROLE.WORKSPACE_ADMIN
-                                ? USER_ROLE.ORGANIZATION_ADMIN
-                                : USER_ROLE.ORGANIZATION_CONTRIBUTOR,
-                    },
-                ],
+                roles: rolesPayload,
             },
-            {
-                onSuccess: handleDismiss,
-            }
+            { onSuccess: handleDismiss }
         );
     };
 
@@ -133,10 +144,52 @@ export const InviteUser = ({ isAdmin, id, organizationId, workspaceId }: InviteU
                                     validationState={!isValidEmail || errorMsg ? 'invalid' : undefined}
                                 />
                                 <RolePicker
-                                    roles={roles}
-                                    selectedRole={selectedRole}
-                                    setSelectedRole={setSelectedRole}
+                                    roles={orgRoles}
+                                    selectedRole={selectedOrgRole}
+                                    options={{ showLabel: true, labelText: 'Organization Role' } as any}
+                                    setSelectedRole={(r) => {
+                                        setSelectedOrgRole(r as USER_ROLE);
+                                        if (r === USER_ROLE.ORGANIZATION_ADMIN) {
+                                            setSelectedWorkspaceId(undefined);
+                                            setSelectedWorkspaceRole(undefined);
+                                        } else {
+                                            if (!selectedWorkspaceId && workspaces.length > 0) {
+                                                setSelectedWorkspaceId(workspaces[0].id);
+                                            }
+                                            if (!selectedWorkspaceRole) {
+                                                setSelectedWorkspaceRole(workspaceRoles[0]);
+                                            }
+                                        }
+                                    }}
                                 />
+                                {selectedOrgRole === USER_ROLE.ORGANIZATION_CONTRIBUTOR ? (
+                                    <Flex
+                                        direction={'row'}
+                                        gap={'size-400'}
+                                        marginTop={'size-150'}
+                                        justifyContent={'space-between'}
+                                    >
+                                        <Picker
+                                            label={'Workspace'}
+                                            selectedKey={selectedWorkspaceId}
+                                            onSelectionChange={(key) => setSelectedWorkspaceId(key as string)}
+                                            items={workspaces}
+                                            aria-label={'Workspace'}
+                                            width={'100%'}
+                                        >
+                                            {(w) => <Item key={w.id}>{w.name}</Item>}
+                                        </Picker>
+                                        <RolePicker
+                                            roles={workspaceRoles}
+                                            selectedRole={selectedWorkspaceRole as USER_ROLE}
+                                            options={{ showLabel: true, labelText: 'Workspace Role' } as any}
+                                            setSelectedRole={(r) => setSelectedWorkspaceRole(r as USER_ROLE)}
+                                            width={'100%'}
+                                        />
+                                    </Flex>
+                                ) : (
+                                    <></>
+                                )}
                                 <ErrorMessage marginTop={'size-150'} message={errorMsg} id={'invite'} />
                                 <Flex alignItems={'center'} gap={'size-100'} marginTop={'size-150'}>
                                     <Info />
@@ -148,7 +201,11 @@ export const InviteUser = ({ isAdmin, id, organizationId, workspaceId }: InviteU
                                     </Button>
                                     <Button
                                         isPending={inviteUser.isPending}
-                                        isDisabled={isBtnDisabled}
+                                        isDisabled={
+                                            isBtnDisabled ||
+                                            (selectedOrgRole === USER_ROLE.ORGANIZATION_CONTRIBUTOR &&
+                                                (!selectedWorkspaceId || !selectedWorkspaceRole))
+                                        }
                                         id={'send-btn-id'}
                                         type={'submit'}
                                         aria-label={'send invitation'}

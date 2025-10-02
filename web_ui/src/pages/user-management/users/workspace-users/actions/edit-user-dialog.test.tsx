@@ -34,7 +34,7 @@ jest.mock('../../../../../providers/workspaces-provider/workspaces-provider.comp
 }));
 
 describe('EditWorkspaceUserDialog', () => {
-    it('allows organization admin who is only a workspace contributor to edit another user\'s workspace role (regression test)', async () => {
+    it("allows organization admin who is only a workspace contributor to edit another user's workspace role (regression test)", async () => {
         const orgAdminWorkspaceContributor = getMockedUser({
             roles: [
                 {
@@ -74,7 +74,8 @@ describe('EditWorkspaceUserDialog', () => {
                 closeDialog={jest.fn()}
                 activeUser={orgAdminWorkspaceContributor}
                 users={[orgAdminWorkspaceContributor, targetUser]}
-            />, { featureFlags: { FEATURE_FLAG_WORKSPACE_ACTIONS: false, FEATURE_FLAG_MANAGE_USERS_ROLES: true } }
+            />,
+            { featureFlags: { FEATURE_FLAG_WORKSPACE_ACTIONS: false, FEATURE_FLAG_MANAGE_USERS_ROLES: true } }
         );
 
         // Role button should be present and enabled (org admin even if not workspace admin)

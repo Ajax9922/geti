@@ -46,13 +46,13 @@ export const AvailableWorkspaceUsers = ({ workspaceId, activeUser }: AvailableWo
         totalMatchedCount: _wsMatched,
     } = useGetUsersQuery(organizationId, { resourceType: RESOURCE_TYPE.WORKSPACE, resourceId: workspaceId });
 
-        const availableUsers = useMemo(() => {
-            if (isWsLoading || orgUsers === undefined || wsUsers === undefined) return [] as User[];
-            const wsSet = new Set(wsUsers.map((u) => u.id));
-            return orgUsers.filter(
-                (u) => !wsSet.has(u.id) && u.roles.every((r) => r.role !== USER_ROLE.ORGANIZATION_ADMIN)
-            ); // filter out org admins and workspace members
-        }, [orgUsers, wsUsers, isWsLoading]);
+    const availableUsers = useMemo(() => {
+        if (isWsLoading || orgUsers === undefined || wsUsers === undefined) return [] as User[];
+        const wsSet = new Set(wsUsers.map((u) => u.id));
+        return orgUsers.filter(
+            (u) => !wsSet.has(u.id) && u.roles.every((r) => r.role !== USER_ROLE.ORGANIZATION_ADMIN)
+        ); // filter out org admins and workspace members
+    }, [orgUsers, wsUsers, isWsLoading]);
 
     const updateUserRoleMutation = useUpdateUserRoles();
     const updateMemberRoleMutation = useUpdateMemberRole();

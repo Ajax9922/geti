@@ -8,7 +8,7 @@ import { getMockedWorkspaceIdentifier } from '../../../../test-utils/mocked-item
 import { getMockedAdminUser } from '../../../../test-utils/mocked-items-factory/mocked-users';
 import { getMockedWorkspace } from '../../../../test-utils/mocked-items-factory/mocked-workspace';
 import { providersRender as render } from '../../../../test-utils/required-providers-render';
-import { InviteUser } from './invite-user.component';
+import { InviteUserDialog } from './invite-user.component';
 
 const mockedAdmin = getMockedAdminUser();
 const mockedInviteUserMutation = jest.fn();
@@ -41,7 +41,7 @@ jest.mock('@geti/core/src/users/hook/use-users.hook', () => ({
 describe('Invite user to the workspace', () => {
     it('Check if user invitation is sending proper roles', async () => {
         render(
-            <InviteUser
+            <InviteUserDialog
                 isAdmin={mockedAdmin.isAdmin}
                 id={mockedAdmin.id}
                 organizationId={mockedWorkspaceIdentifier.organizationId}
@@ -76,7 +76,7 @@ describe('Invite user to the workspace', () => {
 
     it('Check if admin can invite user to the workspace - admin and contributor role', async () => {
         render(
-            <InviteUser
+            <InviteUserDialog
                 isAdmin={mockedAdmin.isAdmin}
                 id={mockedAdmin.id}
                 organizationId={mockedWorkspaceIdentifier.organizationId}
@@ -93,7 +93,7 @@ describe('Invite user to the workspace', () => {
 
     it('Check if contributor can invite user to the workspace - contributor role', async () => {
         render(
-            <InviteUser
+            <InviteUserDialog
                 isAdmin={false}
                 id={mockedAdmin.id}
                 organizationId={mockedWorkspaceIdentifier.organizationId}

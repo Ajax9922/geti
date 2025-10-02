@@ -1,4 +1,4 @@
-// Copyright (C) 2025 Intel Corporation
+// Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
 import { useState } from 'react';
@@ -25,4 +25,3 @@ export const WorkspaceUsersManagement = ({ activeUser }: { activeUser: User }) =
         </Flex>
     );
 };
-

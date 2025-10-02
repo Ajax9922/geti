@@ -1,7 +1,7 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
-import { Dispatch, SetStateAction, useState, ReactNode } from 'react';
+import { Dispatch, ReactNode, SetStateAction, useState } from 'react';
 
 import { USER_ROLE, UsersQueryParams } from '@geti/core/src/users/users.interface';
 import { Flex, SearchField } from '@geti/ui';

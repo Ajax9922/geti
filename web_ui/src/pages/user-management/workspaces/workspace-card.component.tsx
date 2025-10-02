@@ -7,8 +7,6 @@ import { WorkspaceEntity } from '@geti/core/src/workspaces/services/workspaces.i
 import { Button, Divider, Flex, Heading, View } from '@geti/ui';
 import { useNavigate } from 'react-router-dom';
 
-import { useProjectActions } from '../../../core/projects/hooks/use-project-actions.hook';
-import { useOrganizationIdentifier } from '../../../hooks/use-organization-identifier/use-organization-identifier.hook';
 import { ActionMenu } from '../../../shared/components/action-menu/action-menu.component';
 import { EditNameDialog } from '../../../shared/components/edit-name-dialog/edit-name-dialog.component';
 import { HasPermission } from '../../../shared/components/has-permission/has-permission.component';
@@ -25,14 +23,8 @@ interface WorkspaceCardProps {
 
 export const WorkspaceCard = ({ workspace, workspaces }: WorkspaceCardProps) => {
     const navigate = useNavigate();
-    const { organizationId } = useOrganizationIdentifier();
-    const { useGetProjectNames } = useProjectActions();
-    const projectsNamesQuery = useGetProjectNames({ organizationId, workspaceId: workspace.id });
-
-    const isWorkspaceEmpty = projectsNamesQuery.data?.projects.length === 0;
-    const { items, handleMenuAction, deleteDialog, editDialog, grayedOutKeys, disabledKeys } = useWorkspaceActions(
+    const { items, handleMenuAction, deleteDialog, editDialog, disabledKeys } = useWorkspaceActions(
         workspaces.length,
-        isWorkspaceEmpty,
         workspace.id
     );
 
@@ -83,7 +75,6 @@ export const WorkspaceCard = ({ workspace, workspaces }: WorkspaceCardProps) => 
                         items={workspaceActions}
                         id={`${workspace.name}-action-menu`}
                         onAction={handleMenuAction}
-                        grayedOutKeys={grayedOutKeys}
                         disabledKeys={disabledKeys}
                     />
                 </HasPermission>
@@ -98,7 +89,7 @@ export const WorkspaceCard = ({ workspace, workspaces }: WorkspaceCardProps) => 
                         name={workspace.name}
                         onAction={handleDeleteWorkspace}
                         triggerState={deleteDialog.deleteWorkspaceDialogState}
-                        isWorkspaceEmpty={isWorkspaceEmpty}
+                        workspaceId={workspace.id}
                     />
                 )}
                 <EditNameDialog
