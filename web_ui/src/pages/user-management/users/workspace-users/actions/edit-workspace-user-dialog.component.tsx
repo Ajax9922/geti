@@ -119,6 +119,7 @@ export const EditWorkspaceUserDialog = ({
                 <UserSummary user={user} />
                 <Form onSubmit={handleOnSubmit}>
                     <RolePicker
+                        options={{showLabel: true, labelText: 'Workspace role'}}
                         roles={rolesOptions}
                         selectedRole={workspaceRoles[0]?.role}
                         setSelectedRole={changeRoleHandler}

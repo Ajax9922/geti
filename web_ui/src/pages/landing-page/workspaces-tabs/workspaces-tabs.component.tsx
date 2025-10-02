@@ -19,6 +19,7 @@ import { CustomTabItemWithMenu } from './custom-tab-item-with-menu.component';
 import { useWorkspacesTabs } from './hooks/use-pinned-collapsed-workspace.hook';
 
 import classes from '../../../shared/components/custom-tab-item/custom-tab-item.module.scss';
+import { RESOURCE_TYPE } from '@geti/core/src/users/users.interface';
 
 export const WorkspacesTabs = () => {
     const { organizationId } = useOrganizationIdentifier();
@@ -72,7 +73,7 @@ export const WorkspacesTabs = () => {
                                         {selectedWorkspaceId === item.key && FEATURE_FLAG_WORKSPACE_ACTIONS ? (
                                             <HasPermission
                                                 operations={[OPERATION.WORKSPACE_MANAGEMENT]}
-                                                specialCondition={true}
+                                                resources={[{ type: RESOURCE_TYPE.WORKSPACE, id: selectedWorkspaceId }]}
                                                 Fallback={
                                                     <CustomTabItem
                                                         name={item.name as string}

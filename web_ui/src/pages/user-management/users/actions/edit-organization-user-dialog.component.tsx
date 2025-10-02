@@ -185,6 +185,7 @@ export const EditOrganizationUserDialog = ({
                         />
                     </Flex>
                     <RolePicker
+                        options={{showLabel: true, labelText: 'Organization role'}}
                         roles={[USER_ROLE.ORGANIZATION_ADMIN, USER_ROLE.ORGANIZATION_CONTRIBUTOR]}
                         selectedRole={selectedOrgRole as USER_ROLE}
                         setSelectedRole={setSelectedOrgRole}
