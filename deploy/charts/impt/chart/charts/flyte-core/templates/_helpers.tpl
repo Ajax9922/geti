@@ -224,7 +224,7 @@ args:
 
 {{- define "flyte.init-flyte-storage-yaml" -}}
 image: "{{ .Values.global.busybox.registry }}/{{ if .Values.global.busybox.repository }}{{ .Values.global.busybox.repository }}/{{ end }}{{ .Values.global.busybox.name }}"
-command: ["/bin/sh", "-ecu"]
+command: ["/bin/sh", "-c"]
 args:
 - |
   cp /etc/flyte/config/* /tmp/flyte/config/
