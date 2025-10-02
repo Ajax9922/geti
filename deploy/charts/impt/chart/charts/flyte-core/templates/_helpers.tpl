@@ -232,16 +232,16 @@ securityContext:
     drop:
       - ALL
   readOnlyRootFilesystem: true
-command: ["/bin/sh", "-c"]
+command: ["/bin/sh", "-ecu"]
 args:
 - |
   cp /etc/flyte/config/* /tmp/flyte/config/
-  sed -i "s/^[[:space:]]*container:.*$/  container: ${BUCKET_NAME}/g" /tmp/flyte/config/storage.yaml
-  sed -i "s/^[[:space:]]*access_key_id:.*$/      access_key_id: ${FLYTE_ACCESS_KEY}/g" /tmp/flyte/config/storage.yaml
-  sed -i "s/^[[:space:]]*secret_key:.*$/      secret_key: ${FLYTE_SECRET_KEY}/g" /tmp/flyte/config/storage.yaml
-  sed -i "s/^[[:space:]]*endpoint:.*$/      endpoint: ${S3_ENDPOINT}/g" /tmp/flyte/config/storage.yaml
-  sed -i "s/^[[:space:]]*enable-multicontainer:.*$/  enable-multicontainer: ${MULTI_CONTAINER}/g" /tmp/flyte/config/storage.yaml
-  sed -i "s/^[[:space:]]*maxDownloadMBs:.*$/    maxDownloadMBs: ${MAX_DOWNLOAD_MBS}/g" /tmp/flyte/config/storage.yaml
+  sed -i "s|^[[:space:]]*container: ReplaceMe|  container: ${BUCKET_NAME}|g" /tmp/flyte/config/storage.yaml
+  sed -i "s|^[[:space:]]*access_key_id: ReplaceMe|      access_key_id: ${FLYTE_ACCESS_KEY}|g" /tmp/flyte/config/storage.yaml
+  sed -i "s|^[[:space:]]*secret_key: ReplaceMe|      secret_key: ${FLYTE_SECRET_KEY}|g" /tmp/flyte/config/storage.yaml
+  sed -i "s|^[[:space:]]*endpoint: ReplaceMe|      endpoint: ${S3_ENDPOINT}|g" /tmp/flyte/config/storage.yaml
+  sed -i "s|^[[:space:]]*enable-multicontainer: ReplaceMe|  enable-multicontainer: ${MULTI_CONTAINER}|g" /tmp/flyte/config/storage.yaml
+  sed -i "s|^[[:space:]]*maxDownloadMBs: ReplaceMe|    maxDownloadMBs: ${MAX_DOWNLOAD_MBS}|g" /tmp/flyte/config/storage.yaml
 env:
 - name: BUCKET_NAME
   value: {{ .Values.storage.bucketName }}

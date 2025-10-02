@@ -32,7 +32,6 @@ stringData:
       enable-multicontainer: ReplaceMe
       limits:
         maxDownloadMBs: ReplaceMe
-
 ---
 apiVersion: v1
 kind: Secret
