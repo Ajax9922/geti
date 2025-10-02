@@ -131,8 +131,6 @@ stringData:
         delete-resource-on-finalize: false
         default-env-vars:
         - FLYTE_AWS_ENDPOINT: http://localhost:8333
-        - FLYTE_AWS_ACCESS_KEY_ID: {{ randAlphaNum 20 }}
-        - FLYTE_AWS_SECRET_ACCESS_KEY: {{ randAlphaNum 40 }}
         - KAFKA_ADDRESS: impt-kafka.impt:9092
         - SPICEDB_ADDRESS: impt-spice-db.impt:50051
         - SPICEDB_CREDENTIALS: "token_and_ca"

@@ -42,6 +42,40 @@ spec:
       {{- if .Values.flytepropeller.priorityClassName }}
       priorityClassName: {{ .Values.flytepropeller.priorityClassName }}
       {{- end }}
+      initContainers:
+        - name: prepare-storage-yaml
+          image: "{{ .Values.global.busybox.registry }}/{{ if .Values.global.busybox.repository }}{{ .Values.global.busybox.repository }}/{{ end }}{{ .Values.global.busybox.name }}"
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              sed -i "s/[[:space:]]*container:.*$/  container: ${BUCKET_NAME}/g" /etc/flyte/config/storage.yaml
+              sed -i "s/[[:space:]]*access_key_id:.*$/      access_key_id: ${FLYTE_ACCESS_KEY}/g" /etc/flyte/config/storage.yaml
+              sed -i "s/[[:space:]]*secret_key:.*$/      secret_key: ${FLYTE_SECRET_KEY}/g" /etc/flyte/config/storage.yaml
+              sed -i "s/[[:space:]]*endpoint:.*$/      endpoint: ${S3_ENDPOINT}/g" /etc/flyte/config/storage.yaml
+              sed -i "s/[[:space:]]*enable-multicontainer:.*$/  enable-multicontainer: ${MULTI_CONTAINER}/g" /etc/flyte/config/storage.yaml
+              sed -i "s/[[:space:]]*maxDownloadMBs:.*$/    maxDownloadMBs: ${MAX_DOWNLOAD_MBS}/g" /etc/flyte/config/storage.yaml
+          env:
+            - name: BUCKET_NAME
+              value: {{ .Values.storage.bucketName }}
+            - name: FLYTE_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: impt-seaweed-fs
+                  key: flyte_access_key
+            - name: FLYTE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: impt-seaweed-fs
+                  key: flyte_secret_key
+            - name: S3_ENDPOINT
+              value: {{ .Values.storage.s3.endpoint }}
+            - name: MULTI_CONTAINER
+              value: "{{ .Values.storage.enableMultiContainer }}"
+            - name: MAX_DOWNLOAD_MBS
+              value: "{{ .Values.storage.limits.maxDownloadMBs }}"
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/flyte/config
       containers:
       - command:
         {{- if .Values.flytepropeller.manager }}
