@@ -9,7 +9,6 @@ import { DialogContainer } from '@geti/ui';
 import { Delete, Edit } from '@geti/ui/icons';
 import { isEmpty } from 'lodash-es';
 
-import { AccountStatus } from '../../../../../core/organizations/organizations.interface';
 import { useIsSaasEnv } from '../../../../../hooks/use-is-saas-env/use-is-saas-env.hook';
 import { useOrganizationIdentifier } from '../../../../../hooks/use-organization-identifier/use-organization-identifier.hook';
 import { ActionMenu } from '../../../../../shared/components/action-menu/action-menu.component';
@@ -17,7 +16,6 @@ import { MenuAction } from '../../../../../shared/components/action-menu/menu-ac
 import { HasPermission } from '../../../../../shared/components/has-permission/has-permission.component';
 import { OPERATION } from '../../../../../shared/components/has-permission/has-permission.interface';
 import { EditOrganizationUserDialog } from '../../actions/edit-organization-user-dialog.component';
-import { checkStatusFlowValidity } from '../../utils';
 import { EditWorkspaceUserDialog } from './edit-workspace-user-dialog.component';
 import { RemoveFromWorkspaceDialog } from './remove-from-workspace-dialog.component';
 

@@ -6,6 +6,7 @@ import { Key } from 'react';
 import { useFeatureFlags } from '@geti/core/src/feature-flags/hooks/use-feature-flags.hook';
 import { useActiveUser } from '@geti/core/src/users/hook/use-users.hook';
 import { isOrganizationAdmin } from '@geti/core/src/users/user-role-utils';
+import { RESOURCE_TYPE } from '@geti/core/src/users/users.interface';
 import { useWorkspacesApi } from '@geti/core/src/workspaces/hooks/use-workspaces.hook';
 import { WorkspaceEntity } from '@geti/core/src/workspaces/services/workspaces.interface';
 import { ActionButton, Flex, Item, Loading, TabList, Tabs, Tooltip, TooltipTrigger } from '@geti/ui';
@@ -74,7 +75,7 @@ export const WorkspaceUsersToolbar = ({
                                         {item.key === selectedWorkspaceId && FEATURE_FLAG_WORKSPACE_ACTIONS ? (
                                             <HasPermission
                                                 operations={[OPERATION.WORKSPACE_MANAGEMENT]}
-                                                resources={[{ type: 'WORKSPACE', id: item.key }] as any}
+                                                resources={[{ type: RESOURCE_TYPE.WORKSPACE, id: item.key }]}
                                                 specialCondition={
                                                     activeUser !== undefined &&
                                                     isOrganizationAdmin(activeUser, organizationId)

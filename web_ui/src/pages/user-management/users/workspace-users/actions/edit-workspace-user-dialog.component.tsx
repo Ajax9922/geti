@@ -40,11 +40,6 @@ export const EditWorkspaceUserDialog = ({
 }: EditWorkspaceUserDialogProps) => {
     const { workspaces } = useWorkspaces();
     const isOrgAdmin = isOrganizationAdmin(activeUser, organizationId);
-    const adminWorkspaceIds = activeUser.roles
-        .filter(
-            ({ resourceType, role }) => resourceType === RESOURCE_TYPE.WORKSPACE && role === USER_ROLE.WORKSPACE_ADMIN
-        )
-        .map(({ resourceId }) => resourceId);
     const { useUpdateUserRoles } = useUsers();
     const updateRoles = useUpdateUserRoles();
     useFeatureFlags();

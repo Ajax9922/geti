@@ -49,12 +49,12 @@ export const RemoveFromWorkspaceDialog = ({
             cancelLabel='Cancel'
         >
             <span>
-                "{user.email}" will be removed from "{workspaceName}". Before removing the user, please make sure that
-                the user is added to another workspace so that they can still access your Geti organization. You can add
-                the user back to this workspace at any time.
+                &quot;{user.email}&quot; will be removed from &quot;{workspaceName}&quot;. Before removing the user,
+                please make sure that the user is added to another workspace so that they can still access your Geti
+                organization. You can add the user back to this workspace at any time.
                 <br />
                 <br />
-                Are you sure you want to remove "{user.email}" from "{workspaceName}"?
+                Are you sure you want to remove &quot;{user.email}&quot; from &quot;{workspaceName}&quot;?
             </span>
         </AlertDialog>
     );

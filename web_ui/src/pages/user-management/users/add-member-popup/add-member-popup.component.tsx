@@ -257,7 +257,7 @@ export const AddMemberPopup = ({ organizationId, workspaceId }: AddMemberPopupPr
                                             options={{ showLabel: true, labelText: 'Workspace Role' }}
                                             roles={roles}
                                             selectedRole={(selectedWorkspaceRole || roles[0]) as USER_ROLE}
-                                            setSelectedRole={setSelectedWorkspaceRole as any}
+                                            setSelectedRole={setSelectedWorkspaceRole}
                                             width={'100%'}
                                         />
                                     </Flex>

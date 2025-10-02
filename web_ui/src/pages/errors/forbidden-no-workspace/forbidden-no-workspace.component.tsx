@@ -14,8 +14,6 @@ interface ForbiddenNoWorkspaceProps {
     onReset?: () => void;
 }
 
-// Full-app banner shown when an authenticated user belongs to an organization
-// but currently has access to zero workspaces.
 export const ForbiddenNoWorkspace = ({ onReset }: ForbiddenNoWorkspaceProps) => {
     useEffect(() => {
         const previousHtmlTitle = document.title;
@@ -32,8 +30,8 @@ export const ForbiddenNoWorkspace = ({ onReset }: ForbiddenNoWorkspaceProps) => 
             <Forbidden />
             <Heading UNSAFE_className={classes.errorMessageHeader}>No workspace access</Heading>
             <Text UNSAFE_className={classes.errorMessage}>
-                You don't have access to any workspaces in this organization yet. An organization administrator must
-                assign you to a workspace before you can continue.
+                You don&apos;t have access to any workspaces in this organization yet. An organization administrator
+                must assign you to a workspace before you can continue.
             </Text>
             <Text UNSAFE_className={classes.errorMessage}>
                 If you believe this is a mistake, contact an administrator or try refreshing later.

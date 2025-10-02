@@ -78,7 +78,7 @@ export const EditOrganizationUserDialog = ({
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        const promises: Promise<any>[] = [];
+        const promises: Promise<User | void>[] = [];
 
         if (nameChanged && !isSaasEnvironment && canEditNames) {
             promises.push(
@@ -187,7 +187,7 @@ export const EditOrganizationUserDialog = ({
                     <RolePicker
                         roles={[USER_ROLE.ORGANIZATION_ADMIN, USER_ROLE.ORGANIZATION_CONTRIBUTOR]}
                         selectedRole={selectedOrgRole as USER_ROLE}
-                        setSelectedRole={setSelectedOrgRole as any}
+                        setSelectedRole={setSelectedOrgRole}
                         isDisabled={isLastRemainingOrgAdmin}
                     />
                     <ButtonGroup align={'end'} marginTop={'size-350'}>

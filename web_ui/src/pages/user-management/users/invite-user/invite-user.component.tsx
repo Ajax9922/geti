@@ -24,7 +24,6 @@ import {
 } from '@geti/ui';
 import { Info } from '@geti/ui/icons';
 
-import { useIsSaasEnv } from '../../../../hooks/use-is-saas-env/use-is-saas-env.hook';
 import { useWorkspaces } from '../../../../providers/workspaces-provider/workspaces-provider.component';
 import { isYupValidationError } from '../../profile-page/utils';
 import { ErrorMessage } from '../add-member-popup/error-message/error-message.component';
@@ -88,8 +87,6 @@ export const InviteUserDialog = ({ isAdmin, id, organizationId, workspaceId }: I
         setSelectedWorkspaceId(workspaceId);
     };
 
-    const isSaasEnvironment = useIsSaasEnv();
-
     const handleSubmit = (event: FormEvent): void => {
         event.preventDefault();
         const rolesPayload: { resourceId: string; resourceType: RESOURCE_TYPE; role: USER_ROLE }[] = [];
@@ -146,7 +143,7 @@ export const InviteUserDialog = ({ isAdmin, id, organizationId, workspaceId }: I
                                 <RolePicker
                                     roles={orgRoles}
                                     selectedRole={selectedOrgRole}
-                                    options={{ showLabel: true, labelText: 'Organization Role' } as any}
+                                    options={{ showLabel: true, labelText: 'Organization Role' }}
                                     setSelectedRole={(r) => {
                                         setSelectedOrgRole(r as USER_ROLE);
                                         if (r === USER_ROLE.ORGANIZATION_ADMIN) {
@@ -182,7 +179,7 @@ export const InviteUserDialog = ({ isAdmin, id, organizationId, workspaceId }: I
                                         <RolePicker
                                             roles={workspaceRoles}
                                             selectedRole={selectedWorkspaceRole as USER_ROLE}
-                                            options={{ showLabel: true, labelText: 'Workspace Role' } as any}
+                                            options={{ showLabel: true, labelText: 'Workspace Role' }}
                                             setSelectedRole={(r) => setSelectedWorkspaceRole(r as USER_ROLE)}
                                             width={'100%'}
                                         />
