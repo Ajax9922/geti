@@ -36,10 +36,8 @@ global:
 
 replicaCount: 1
 
-main_namespace: impt
-flyte_workflows:
-  name: "jobs"
-  domain: "production"
+flyte_workflows_namespace: "impt-jobs-production"
+flyte_namespace: "flyte"
 
 jobs:
   backoffLimit: 3

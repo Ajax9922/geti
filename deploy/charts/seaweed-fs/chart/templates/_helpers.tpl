@@ -61,16 +61,3 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
-
-
-{{- define "flyteworkflow.domain" -}}
-{{.Values.flyte_workflows.domain }}
-{{- end -}}
-
-{{- define "flyteworkflow.name" }}
-{{- .Values.main_namespace }}-{{ .Values.flyte_workflows.name }}
-{{- end -}}
-
-{{- define "flyteworkflow.namespace" }}
-{{- .Values.main_namespace }}-{{ .Values.flyte_workflows.name }}-{{ include "flyteworkflow.domain" . }}
-{{- end -}}
