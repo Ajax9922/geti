@@ -26,6 +26,8 @@ spec:
             defaultMode: 0755
         - name: base-config-volume
           emptyDir: {}
+        - name: writable-config
+          emptyDir: {}
         - name: base-config-projected-volume
           projected:
             sources:
@@ -77,6 +79,13 @@ spec:
             - mountPath: /config-destination
               name: clusters-config-volume
           {{- include "flyte.init-flyte-db-container" . | nindent 10 }}
+        - name: prepare-storage-yaml
+          volumeMounts:
+            - name: clusters-config-volume
+              mountPath: /etc/flyte/config
+            - name: writable-config
+              mountPath: /tmp/flyte/config
+          {{- include "flyte.init-flyte-storage-yaml" . | nindent 10 }}
         - name: init-postgresql
           image: "{{ .Values.global.busybox.registry }}/{{ if .Values.global.busybox.repository }}{{ .Values.global.busybox.repository }}/{{ end }}{{ .Values.global.busybox.name }}"
           command: [ 'sh', '-c', "until nc -w 5 -z $POSTGRES_HOST $POSTGRES_PORT; do echo wait...; sleep 2; done;" ]
@@ -274,7 +283,7 @@ spec:
             - mountPath: /etc/flyte/clusterresource/templates
               name: resource-templates
             - mountPath: /etc/flyte/config
-              name: clusters-config-volume
+              name: writable-config
               readOnly: true
             - mountPath: /etc/secrets/
               name: admin-secrets

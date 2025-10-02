@@ -40,6 +40,13 @@ spec:
             - mountPath: /config-destination
               name: clusters-config-volume
           {{- include "flyte.init-flyte-db-container" . | nindent 10 }}
+        - name: prepare-storage-yaml
+          volumeMounts:
+            - name: clusters-config-volume
+              mountPath: /etc/flyte/config
+            - name: writable-config
+              mountPath: /tmp/flyte/config
+          {{- include "flyte.init-flyte-storage-yaml" . | nindent 10 }}
         # [mTLS STRICT] The kubectl-wait init container is used to wait for the init job that is related to this specific component.
         # This is a workaround to address the issue that arises when using Istio mTLS strict mode and init containers
         # that do not have the Istio proxy sidecar
@@ -123,7 +130,7 @@ spec:
         - mountPath: /srv/flyte
           name: shared-data
         - mountPath: /etc/flyte/config
-          name: clusters-config-volume
+          name: writable-config
           readOnly: true
         - mountPath: /etc/secrets/
           name: admin-secrets
@@ -135,6 +142,8 @@ spec:
       {{- end }}
       serviceAccountName: {{ template "flyteadmin.name" . }}
       volumes: {{- include "databaseSecret.volume" . | nindent 8 }}
+        - name: writable-config
+          emptyDir: {}
         - name: clusters-config-volume
           emptyDir: {}
         - emptyDir: {}

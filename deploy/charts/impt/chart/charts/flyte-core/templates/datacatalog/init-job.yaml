@@ -28,6 +28,13 @@ spec:
             - mountPath: /config-destination
               name: config-volume
           {{- include "flyte.init-flyte-db-container" . | nindent 10 }}
+        - name: prepare-storage-yaml
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/flyte/config
+            - name: writable-config
+              mountPath: /tmp/flyte/config
+          {{- include "flyte.init-flyte-storage-yaml" . | nindent 10 }}
         - name: wait-for-flyte-admin
           image: "{{ .Values.global.busybox.registry }}/{{ if .Values.global.busybox.repository }}{{ .Values.global.busybox.repository }}/{{ end }}{{ .Values.global.busybox.name }}"
           command: [ 'sh', '-c', "until nc -w 5 -z $FLYTE_ADMIN_HOST $FLYTE_ADMIN_PORT; do echo wait...; sleep 2; done;" ]
@@ -72,7 +79,7 @@ spec:
             readOnlyRootFilesystem: true
           volumeMounts:
             - mountPath: /etc/datacatalog/config
-              name: config-volume
+              name: writable-config
               readOnly: true
             - name: "init"
               mountPath: "/init"
@@ -101,6 +108,8 @@ spec:
               mountPath: "/init"
         {{- end }}
       volumes:
+        - name: writable-config
+          emptyDir: {}
         - name: config-volume
           emptyDir: {}
         - name: config-projected-volume

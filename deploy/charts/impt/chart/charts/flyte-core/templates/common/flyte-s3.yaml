@@ -16,22 +16,22 @@ stringData:
   storage.yaml: |
     storage:
       type: minio
-      container: {{ .Values.storage.bucketName | quote }}
+      container: ReplaceMe
       stow:
         kind: s3
         config:
-          access_key_id: {{ $flyteAccessKey }}
+          access_key_id: ReplaceMe
           auth_type: accesskey
-          secret_key: {{ $flyteSecretKey }}
+          secret_key: ReplaceMe
           disable_ssl: true
-          endpoint: {{ .Values.storage.s3.endpoint }}
+          endpoint: ReplaceMe
           region: us-east-1
       signedUrl:
         stowConfigOverride:
           endpoint: http://localhost:8333
-      enable-multicontainer: {{ .Values.storage.enableMultiContainer }}
+      enable-multicontainer: ReplaceMe
       limits:
-        maxDownloadMBs: {{ .Values.storage.limits.maxDownloadMBs }}
+        maxDownloadMBs: ReplaceMe
 
 ---
 apiVersion: v1
