@@ -224,16 +224,26 @@ args:
 
 {{- define "flyte.init-flyte-storage-yaml" -}}
 image: "{{ .Values.global.busybox.registry }}/{{ if .Values.global.busybox.repository }}{{ .Values.global.busybox.repository }}/{{ end }}{{ .Values.global.busybox.name }}"
+securityContext:
+  allowPrivilegeEscalation: false
+  runAsNonRoot: true
+  runAsUser: 10001
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
 command: ["/bin/sh", "-c"]
 args:
 - |
   cp /etc/flyte/config/* /tmp/flyte/config/
-  sed -i "s/^[[:space:]]*container:.*$/  container: ${BUCKET_NAME}/g" /tmp/flyte/config/storage.yaml
-  sed -i "s/^[[:space:]]*access_key_id:.*$/      access_key_id: ${FLYTE_ACCESS_KEY}/g" /tmp/flyte/config/storage.yaml
-  sed -i "s/^[[:space:]]*secret_key:.*$/      secret_key: ${FLYTE_SECRET_KEY}/g" /tmp/flyte/config/storage.yaml
-  sed -i "s/^[[:space:]]*endpoint:.*$/      endpoint: ${S3_ENDPOINT}/g" /tmp/flyte/config/storage.yaml
-  sed -i "s/^[[:space:]]*enable-multicontainer:.*$/  enable-multicontainer: ${MULTI_CONTAINER}/g" /tmp/flyte/config/storage.yaml
-  sed -i "s/^[[:space:]]*maxDownloadMBs:.*$/    maxDownloadMBs: ${MAX_DOWNLOAD_MBS}/g" /tmp/flyte/config/storage.yaml
+  sed -i -E \
+    -e "s/^[[:space:]]*container:.*$/  container: \"${BUCKET_NAME}\"/" \
+    -e "s/^[[:space:]]*access_key_id:.*$/      access_key_id: \"${FLYTE_ACCESS_KEY}\"/" \
+    -e "s/^[[:space:]]*secret_key:.*$/      secret_key: \"${FLYTE_SECRET_KEY}\"/" \
+    -e "s/^[[:space:]]*endpoint:.*$/      endpoint: \"${S3_ENDPOINT}\"/" \
+    -e "s/^[[:space:]]*enable-multicontainer:.*$/  enable-multicontainer: \"${MULTI_CONTAINER}\"/" \
+    -e "s/^[[:space:]]*maxDownloadMBs:.*$/    maxDownloadMBs: \"${MAX_DOWNLOAD_MBS}\"/" \
+    /tmp/flyte/config/storage.yaml
 env:
 - name: BUCKET_NAME
   value: {{ .Values.storage.bucketName }}

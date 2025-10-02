@@ -177,7 +177,7 @@ spec:
           name: run-migrations
           volumeMounts:
             - mountPath: /etc/flyte/config
-              name: base-config-volume
+              name: writable-config
               readOnly: true
             - name: "init"
               mountPath: "/init"
@@ -209,7 +209,7 @@ spec:
           name: seed-projects
           volumeMounts:
             - mountPath: /etc/flyte/config
-              name: base-config-volume
+              name: writable-config
               readOnly: true
             - name: "init"
               mountPath: "/init"
@@ -244,7 +244,7 @@ spec:
           name: generate-secrets
           volumeMounts:
             - mountPath: /etc/flyte/config
-              name: base-config-volume
+              name: writable-config
               readOnly: true
             - mountPath: /etc/scratch
               name: scratch
