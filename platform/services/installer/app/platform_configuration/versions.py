@@ -12,12 +12,12 @@ from platform_utils.kube_config_handler import KubernetesConfigHandler
 
 
 def get_current_platform_version(kubeconfig_path: str) -> str:
-    """Retrieves current platform version from the impt-versions configmap"""
+    """Retrieves current platform version from the impt-configuration configmap"""
     KubernetesConfigHandler(kube_config=kubeconfig_path)
     try:
         with kube_client.ApiClient() as client:
             core_api = kube_client.CoreV1Api(client)
-            result = core_api.read_namespaced_config_map(f"{PLATFORM_NAMESPACE}-versions", PLATFORM_NAMESPACE)
+            result = core_api.read_namespaced_config_map(f"{PLATFORM_NAMESPACE}-configuration", PLATFORM_NAMESPACE)
         return result.data["platformVersion"]
     except ApiException:
         return "unknown version"
