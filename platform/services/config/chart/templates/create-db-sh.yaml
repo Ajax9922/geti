@@ -4,6 +4,8 @@ kind: ConfigMap
 metadata:
   name: create-db-sh
   namespace: {{ .Release.Namespace }}
+  annotations:
+    replicator.v1.mittwald.de/replicate-to: "flyte"
 data:
   create-db.sh: |
     set -e
