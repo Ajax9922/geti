@@ -55,6 +55,7 @@ data:
   {{ end }}
   kafka_topic_prefix: "{{ .Values.global.kafka_topic_prefix }}"
   num_models_to_keep_in_storage: "{{ .Values.global.num_models_to_keep_in_storage }}"
+  max_training_dataset_size: "{{ .Values.global.max_training_dataset_size }}"
   project_ie_key_source: "{{ .Values.global.project_ie_key_source }}"
   overwrite_resources_cpu_limits: "{{ .Values.global.overwrite_resources_cpu_limits }}"
   proxy_enabled: "{{ .Values.global.proxy_enabled }}"
