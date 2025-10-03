@@ -20,6 +20,8 @@ spec:
       serviceAccountName: {{ template "flyteadmin.name" . }}-init-job
       restartPolicy: Never
       volumes:
+        - name: tmp
+          emptyDir: {}
         - name: create-db
           configMap:
             name: create-db-sh
@@ -85,6 +87,8 @@ spec:
               mountPath: /etc/flyte/config
             - name: writable-config
               mountPath: /tmp/flyte/config
+            - name: tmp
+              mountPath: /tmp
           {{- include "flyte.init-flyte-storage-yaml" . | nindent 10 }}
         - name: init-postgresql
           image: "{{ .Values.global.busybox.registry }}/{{ if .Values.global.busybox.repository }}{{ .Values.global.busybox.repository }}/{{ end }}{{ .Values.global.busybox.name }}"

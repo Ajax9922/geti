@@ -49,6 +49,8 @@ spec:
               mountPath: /etc/flyte/config
             - name: writable-config
               mountPath: /tmp/flyte/config
+            - name: tmp
+              mountPath: /tmp
           {{- include "flyte.init-flyte-storage-yaml" . | nindent 10 }}
       containers:
       - command:
@@ -121,6 +123,8 @@ spec:
                   - key: k8s.yaml
                     path: ./k8s.yaml
       - name: writable-config
+        emptyDir: {}
+      - name: tmp
         emptyDir: {}
       - name: auth
         secret:
