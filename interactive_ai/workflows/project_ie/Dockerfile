@@ -1,4 +1,4 @@
-FROM python:3.10-slim-bookworm@sha256:f72a1f1edc9431c288fe27af1e68c433f64ff9e595cd726be72502cdb3f93927 AS base
+FROM python:3.10-slim-bookworm@sha256:e7eed6c2e7fd1ecc43f0a37da7a115f4c9c9f50f247e9cba086c2f4583412fd9 AS base
 
 FROM base AS build
 
@@ -30,7 +30,7 @@ FROM base AS runtime
 
 # Install runtime dependencies
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
+    apt-get install -y --no-install-recommends ffmpeg=7:5.1.*-0+deb12u1 \
     libgl1=1.6.* \
     libglib2.0-0=2.74.* \
     curl && \
