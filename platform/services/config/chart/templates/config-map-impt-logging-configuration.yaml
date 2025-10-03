@@ -4,6 +4,8 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Namespace }}-logging-config
   namespace: {{ .Release.Namespace }}
+  annotations:
+    replicator.v1.mittwald.de/replicate-to: "impt-jobs-production"
 data:
   # The general telemetry retention period, expressed in days.
   retention: "{{ .Values.global.telemetry_retention_geti }}"

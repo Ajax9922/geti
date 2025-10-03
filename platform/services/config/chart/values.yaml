@@ -17,6 +17,8 @@ accelerator:
   name: ''
 
 global:
+  telemetry_retention_geti: 30
+  telemetry_retention_k8s: 10
   serverAddress: ''
   grafana_enabled: ''
   s3_credentials_provider: local
@@ -33,6 +35,12 @@ global:
   max_video_length: 10800
   kafka_topic_prefix: ""
   num_models_to_keep_in_storage: "-1"
+  project_ie_key_source: "cert-manager"
+  overwrite_resources_cpu_limits: "100"
+  proxy_enabled: false
+  http_proxy: ""
+  https_proxy: ""
+  no_proxy: ""
 
 feature_flags_data: {}
 

@@ -4,6 +4,8 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Namespace }}-feature-flags
   namespace: {{ .Release.Namespace }}
+  annotations:
+    replicator.v1.mittwald.de/replicate-to: "impt-jobs-production"
 data:
 {{- if .Values.feature_flags_data }}
 {{ .Values.feature_flags_data | toYaml | indent 2 }}
