@@ -46,8 +46,6 @@ spec:
               mountPath: /etc/flyte/config
             - name: writable-config
               mountPath: /tmp/flyte/config
-            - name: tmp
-              mountPath: /tmp
           {{- include "flyte.init-flyte-storage-yaml" . | nindent 10 }}
         # [mTLS STRICT] The kubectl-wait init container is used to wait for the init job that is related to this specific component.
         # This is a workaround to address the issue that arises when using Istio mTLS strict mode and init containers
@@ -104,8 +102,6 @@ spec:
       serviceAccountName: {{ template "datacatalog.name" . }}
       volumes: {{- include "databaseSecret.volume" . | nindent 6 }}
       - name: writable-config
-        emptyDir: {}
-      - name: tmp
         emptyDir: {}
       - emptyDir: {}
         name: shared-data
