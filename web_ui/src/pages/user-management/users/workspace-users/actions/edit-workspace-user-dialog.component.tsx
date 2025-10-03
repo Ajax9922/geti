@@ -9,11 +9,12 @@ import { getRoleCreationPayload, getRoleDeletionPayload } from '@geti/core/src/u
 import { isOrganizationAdmin } from '@geti/core/src/users/user-role-utils';
 import { RESOURCE_TYPE, User, USER_ROLE, WorkspaceRole } from '@geti/core/src/users/users.interface';
 import { WorkspaceIdentifier } from '@geti/core/src/workspaces/services/workspaces.interface';
-import { Button, ButtonGroup, Content, Dialog, Divider, Form, Heading } from '@geti/ui';
+import { Button, ButtonGroup, Content, Dialog, Divider, Form, Heading, Tooltip, TooltipTrigger } from '@geti/ui';
 import { isEqual } from 'lodash-es';
 
 import { useWorkspaces } from '../../../../../providers/workspaces-provider/workspaces-provider.component';
 import { RolePicker } from '../../old-project-users/role-picker.component';
+import { WorkspaceRoleTooltipContent } from '../../workspace-role-tooltip/workspace-role-tooltip';
 import { getAvailableWorkspaceRoles } from './roles-validation';
 import { UserSummary } from './user-summary.component';
 import { mapRolesToWorkspaceRoles } from './workspace-roles/utils';
@@ -118,13 +119,18 @@ export const EditWorkspaceUserDialog = ({
             <Content>
                 <UserSummary user={user} />
                 <Form onSubmit={handleOnSubmit}>
-                    <RolePicker
-                        options={{showLabel: true, labelText: 'Workspace role'}}
-                        roles={rolesOptions}
-                        selectedRole={workspaceRoles[0]?.role}
-                        setSelectedRole={changeRoleHandler}
-                        isDisabled={rolesOptions.length === 0}
-                    />
+                    <TooltipTrigger placement={'bottom'}>
+                        <RolePicker
+                            options={{ showLabel: true, labelText: 'Workspace role' }}
+                            roles={rolesOptions}
+                            selectedRole={workspaceRoles[0]?.role}
+                            setSelectedRole={changeRoleHandler}
+                            isDisabled={rolesOptions.length === 0}
+                        />
+                        <Tooltip>
+                            <WorkspaceRoleTooltipContent />
+                        </Tooltip>
+                    </TooltipTrigger>
                     <ButtonGroup align={'end'} marginTop={'size-350'}>
                         <Button variant='secondary' onPress={closeDialog} id={'cancel-edit-user'}>
                             Cancel

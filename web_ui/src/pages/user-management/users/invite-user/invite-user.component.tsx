@@ -21,6 +21,8 @@ import {
     Text,
     TextField,
     TextFieldRef,
+    Tooltip,
+    TooltipTrigger,
 } from '@geti/ui';
 import { Info } from '@geti/ui/icons';
 
@@ -28,7 +30,9 @@ import { useWorkspaces } from '../../../../providers/workspaces-provider/workspa
 import { isYupValidationError } from '../../profile-page/utils';
 import { ErrorMessage } from '../add-member-popup/error-message/error-message.component';
 import { RolePicker } from '../old-project-users/role-picker.component';
+import { OrganizationRoleTooltipContent } from '../organization-role-tooltip/organization-role-tooltip';
 import { MAX_NUMBER_OF_CHARACTERS, validateEmail, validateUserEmail } from '../utils';
+import { WorkspaceRoleTooltipContent } from '../workspace-role-tooltip/workspace-role-tooltip';
 
 interface InviteUserDialogProps extends WorkspaceIdentifier {
     id: string;
@@ -140,25 +144,30 @@ export const InviteUserDialog = ({ isAdmin, id, organizationId, workspaceId }: I
                                     maxLength={MAX_NUMBER_OF_CHARACTERS}
                                     validationState={!isValidEmail || errorMsg ? 'invalid' : undefined}
                                 />
-                                <RolePicker
-                                    roles={orgRoles}
-                                    selectedRole={selectedOrgRole}
-                                    options={{ showLabel: true, labelText: 'Organization Role' }}
-                                    setSelectedRole={(r) => {
-                                        setSelectedOrgRole(r as USER_ROLE);
-                                        if (r === USER_ROLE.ORGANIZATION_ADMIN) {
-                                            setSelectedWorkspaceId(undefined);
-                                            setSelectedWorkspaceRole(undefined);
-                                        } else {
-                                            if (!selectedWorkspaceId && workspaces.length > 0) {
-                                                setSelectedWorkspaceId(workspaces[0].id);
+                                <TooltipTrigger placement={'bottom'}>
+                                    <RolePicker
+                                        roles={orgRoles}
+                                        selectedRole={selectedOrgRole}
+                                        options={{ showLabel: true, labelText: 'Organization Role' }}
+                                        setSelectedRole={(r) => {
+                                            setSelectedOrgRole(r as USER_ROLE);
+                                            if (r === USER_ROLE.ORGANIZATION_ADMIN) {
+                                                setSelectedWorkspaceId(undefined);
+                                                setSelectedWorkspaceRole(undefined);
+                                            } else {
+                                                if (!selectedWorkspaceId && workspaces.length > 0) {
+                                                    setSelectedWorkspaceId(workspaces[0].id);
+                                                }
+                                                if (!selectedWorkspaceRole) {
+                                                    setSelectedWorkspaceRole(workspaceRoles[0]);
+                                                }
                                             }
-                                            if (!selectedWorkspaceRole) {
-                                                setSelectedWorkspaceRole(workspaceRoles[0]);
-                                            }
-                                        }
-                                    }}
-                                />
+                                        }}
+                                    />
+                                    <Tooltip width={'size-4600'}>
+                                        <OrganizationRoleTooltipContent />
+                                    </Tooltip>
+                                </TooltipTrigger>
                                 {selectedOrgRole === USER_ROLE.ORGANIZATION_CONTRIBUTOR ? (
                                     <Flex
                                         direction={'row'}
@@ -176,13 +185,18 @@ export const InviteUserDialog = ({ isAdmin, id, organizationId, workspaceId }: I
                                         >
                                             {(w) => <Item key={w.id}>{w.name}</Item>}
                                         </Picker>
-                                        <RolePicker
-                                            roles={workspaceRoles}
-                                            selectedRole={selectedWorkspaceRole as USER_ROLE}
-                                            options={{ showLabel: true, labelText: 'Workspace Role' }}
-                                            setSelectedRole={(r) => setSelectedWorkspaceRole(r as USER_ROLE)}
-                                            width={'100%'}
-                                        />
+                                        <TooltipTrigger placement={'bottom'}>
+                                            <RolePicker
+                                                roles={workspaceRoles}
+                                                selectedRole={selectedWorkspaceRole as USER_ROLE}
+                                                options={{ showLabel: true, labelText: 'Workspace Role' }}
+                                                setSelectedRole={(r) => setSelectedWorkspaceRole(r as USER_ROLE)}
+                                                width={'100%'}
+                                            />
+                                            <Tooltip width={'size-4600'}>
+                                                <WorkspaceRoleTooltipContent />
+                                            </Tooltip>
+                                        </TooltipTrigger>
                                     </Flex>
                                 ) : (
                                     <></>

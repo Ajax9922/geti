@@ -16,6 +16,7 @@ import { CasualCell } from '../../../../shared/components/table/components/casua
 import { StatusCell } from '../../../../shared/components/table/status-cell/status-cell.component';
 import { TableCellProps } from '../../../../shared/components/table/table.interface';
 import { SpectrumTableLoadingState } from '../../../../shared/utils';
+import { WorkspaceRoleTooltipContent } from '../workspace-role-tooltip/workspace-role-tooltip';
 import { LastLoginCell } from './last-login-cell.component';
 import { ProjectRoleCell } from './project-role-cell.component';
 import { UserNameCell } from './user-name-cell/user-name-cell.component';
@@ -113,6 +114,7 @@ export const UsersTable = ({
                 dataKey: USERS_TABLE_COLUMNS.ROLES,
                 width: 150,
                 isSortable: false,
+                tooltip: <WorkspaceRoleTooltipContent />,
                 component: (data: TableCellProps) => {
                     if (overrideRoleColumn) {
                         return overrideRoleColumn(data);

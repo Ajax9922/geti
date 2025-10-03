@@ -7,6 +7,7 @@ import { capitalize, isEmpty } from 'lodash-es';
 
 import { CasualCell } from '../../../../shared/components/table/components/casual-cell/casual-cell.component';
 import { TableCellProps } from '../../../../shared/components/table/table.interface';
+import { WorkspaceRoleTooltipContent } from '../workspace-role-tooltip/workspace-role-tooltip';
 
 interface WorkspacesRoleCellProps extends Omit<TableCellProps, 'cellData'> {
     workspaceId: string | undefined;
@@ -24,5 +25,14 @@ export const WorkspacesRoleCell = ({ cellData, workspaceId, workspaces, ...rest 
 
     const rolesWorkspacesCellData = !isEmpty(workspaceId) ? selectedWorkspaceRoles : availableWorkspaces;
 
-    return <CasualCell {...rest} cellData={rolesWorkspacesCellData} />;
+    return (
+        <CasualCell
+            {...rest}
+            cellData={rolesWorkspacesCellData}
+            tooltip={<WorkspaceRoleTooltipContent />}
+            tooltipProps={{
+                width: 'size-4600',
+            }}
+        />
+    );
 };

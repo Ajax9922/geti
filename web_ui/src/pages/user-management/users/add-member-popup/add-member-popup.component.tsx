@@ -22,6 +22,8 @@ import {
     PasswordField,
     Picker,
     TextField,
+    Tooltip,
+    TooltipTrigger,
 } from '@geti/ui';
 import { useQueryClient } from '@tanstack/react-query';
 import { ValidationError } from 'yup';
@@ -31,7 +33,9 @@ import { CONFIRM_PASSWORD_ERROR_MESSAGE, encodeToBase64 } from '../../../../shar
 import { EditFullName } from '../../profile-page/edit-full-name.component';
 import { isYupValidationError } from '../../profile-page/utils';
 import { RolePicker } from '../old-project-users/role-picker.component';
+import { OrganizationRoleTooltipContent } from '../organization-role-tooltip/organization-role-tooltip';
 import { MAX_NUMBER_OF_CHARACTERS, validateEmail, validateUserEmail } from '../utils';
+import { WorkspaceRoleTooltipContent } from '../workspace-role-tooltip/workspace-role-tooltip';
 import { PasswordState } from './add-member-popup.interface';
 import { ErrorMessage } from './error-message/error-message.component';
 import { defaultPasswordState, handlePassword, validatePasswordsSchema } from './utils';
@@ -223,19 +227,24 @@ export const AddMemberPopup = ({ organizationId, workspaceId }: AddMemberPopupPr
                                     setLastName={setLastName}
                                     flex={1}
                                 />
-                                <RolePicker
-                                    roles={orgRoles}
-                                    selectedRole={selectedOrgRole as USER_ROLE}
-                                    options={{ showLabel: true, labelText: 'Organization Role' }}
-                                    setSelectedRole={(r) => {
-                                        setSelectedOrgRole(r as USER_ROLE);
-                                        if (r === USER_ROLE.ORGANIZATION_ADMIN) {
-                                            setSelectedWorkspaceRole(undefined);
-                                        } else if (selectedWorkspaceRole === undefined) {
-                                            setSelectedWorkspaceRole(roles[0]);
-                                        }
-                                    }}
-                                />
+                                <TooltipTrigger placement={'bottom'}>
+                                    <RolePicker
+                                        roles={orgRoles}
+                                        selectedRole={selectedOrgRole as USER_ROLE}
+                                        options={{ showLabel: true, labelText: 'Organization Role' }}
+                                        setSelectedRole={(r) => {
+                                            setSelectedOrgRole(r as USER_ROLE);
+                                            if (r === USER_ROLE.ORGANIZATION_ADMIN) {
+                                                setSelectedWorkspaceRole(undefined);
+                                            } else if (selectedWorkspaceRole === undefined) {
+                                                setSelectedWorkspaceRole(roles[0]);
+                                            }
+                                        }}
+                                    />
+                                    <Tooltip width={'size-4600'}>
+                                        <OrganizationRoleTooltipContent />
+                                    </Tooltip>
+                                </TooltipTrigger>
                                 {selectedOrgRole === USER_ROLE.ORGANIZATION_CONTRIBUTOR ? (
                                     <Flex
                                         direction={'row'}
@@ -253,13 +262,18 @@ export const AddMemberPopup = ({ organizationId, workspaceId }: AddMemberPopupPr
                                         >
                                             {(w) => <Item key={w.id}>{w.name}</Item>}
                                         </Picker>
-                                        <RolePicker
-                                            options={{ showLabel: true, labelText: 'Workspace Role' }}
-                                            roles={roles}
-                                            selectedRole={(selectedWorkspaceRole || roles[0]) as USER_ROLE}
-                                            setSelectedRole={setSelectedWorkspaceRole}
-                                            width={'100%'}
-                                        />
+                                        <TooltipTrigger placement={'bottom'}>
+                                            <RolePicker
+                                                options={{ showLabel: true, labelText: 'Workspace Role' }}
+                                                roles={roles}
+                                                selectedRole={(selectedWorkspaceRole || roles[0]) as USER_ROLE}
+                                                setSelectedRole={setSelectedWorkspaceRole}
+                                                width={'100%'}
+                                            />
+                                            <Tooltip width={'size-4600'}>
+                                                <WorkspaceRoleTooltipContent />
+                                            </Tooltip>
+                                        </TooltipTrigger>
                                     </Flex>
                                 ) : (
                                     <></>
