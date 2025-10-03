@@ -223,7 +223,7 @@ args:
 {{- end -}}
 
 {{- define "flyte.init-flyte-storage-yaml" -}}
-image: "{{ .Values.global.kubectl.registry }}/{{ if .Values.global.kubectl.repository }}{{ .Values.global.kubectl.repository }}/{{ end }}{{ .Values.global.kubectl.name }}"
+image: "{{ .Values.global.busybox.registry }}/{{ if .Values.global.busybox.repository }}{{ .Values.global.busybox.repository }}/{{ end }}{{ .Values.global.busybox.name }}"
 securityContext:
   allowPrivilegeEscalation: false
   runAsNonRoot: true
@@ -232,12 +232,16 @@ securityContext:
     drop:
       - ALL
   readOnlyRootFilesystem: true
-command: ["/bin/bash", "-ecu"]
+command: ["/bin/sh", "-ecu"]
 args:
 - |
   cp /etc/flyte/config/* /tmp/flyte/config/
-  tmpfile=$(mktemp)
-  envsubst < /tmp/flyte/config/storage.yaml > $tmpfile && mv $tmpfile /tmp/flyte/config/storage.yaml
+  sed -i "s|^[[:space:]]*container: ReplaceMe|  container: ${BUCKET_NAME}|g" /tmp/flyte/config/storage.yaml
+  sed -i "s|^[[:space:]]*access_key_id: ReplaceMe|      access_key_id: ${FLYTE_ACCESS_KEY}|g" /tmp/flyte/config/storage.yaml
+  sed -i "s|^[[:space:]]*secret_key: ReplaceMe|      secret_key: ${FLYTE_SECRET_KEY}|g" /tmp/flyte/config/storage.yaml
+  sed -i "s|^[[:space:]]*endpoint: ReplaceMe|      endpoint: ${S3_ENDPOINT}|g" /tmp/flyte/config/storage.yaml
+  sed -i "s|^[[:space:]]*enable-multicontainer: ReplaceMe|  enable-multicontainer: ${MULTI_CONTAINER}|g" /tmp/flyte/config/storage.yaml
+  sed -i "s|^[[:space:]]*maxDownloadMBs: ReplaceMe|    maxDownloadMBs: ${MAX_DOWNLOAD_MBS}|g" /tmp/flyte/config/storage.yaml
 env:
 - name: BUCKET_NAME
   value: {{ .Values.storage.bucketName }}
