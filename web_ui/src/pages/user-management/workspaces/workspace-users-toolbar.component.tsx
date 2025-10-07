@@ -66,8 +66,8 @@ export const WorkspaceUsersToolbar = ({
                 aria-label={'Workspace tabs'}
                 items={tabItems}
             >
-                <Flex alignItems={'center'} gap={'size-200'} UNSAFE_style={{ overflowY: 'hidden', overflowX: 'auto' }}>
-                    <TabList>
+                <Flex alignItems={'center'} gap={'size-200'} UNSAFE_style={{ overflow: 'hidden' }}>
+                    <TabList width={'100%'}>
                         {(item: { key: string; name: string }) => {
                             return (
                                 <Item key={item.key} textValue={item.name}>
