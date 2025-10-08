@@ -67,7 +67,7 @@ export const WorkspacesTabs = () => {
                 onSelectionChange={handleSelectWorkspace}
             >
                 <Flex width={'100%'} alignItems={'center'} UNSAFE_className={classes.tabWrapper}>
-                    <TabList UNSAFE_className={classes.tabList}>
+                    <TabList UNSAFE_className={classes.tabList} width={'100%'}>
                         {(item: TabItem) => (
                             <Item textValue={item.name as string} key={item.key}>
                                 <Flex alignItems={'center'}>
