@@ -5,7 +5,7 @@ import QUERY_KEYS from '@geti/core/src/requests/query-keys';
 import { useUsers } from '@geti/core/src/users/hook/use-users.hook';
 import { getRoleDeletionPayload } from '@geti/core/src/users/services/utils';
 import { RESOURCE_TYPE, User } from '@geti/core/src/users/users.interface';
-import { AlertDialog } from '@geti/ui';
+import { AlertDialog, Flex, Text } from '@geti/ui';
 import { useQueryClient } from '@tanstack/react-query';
 
 import { useWorkspaces } from '../../../../../providers/workspaces-provider/workspaces-provider.component';
@@ -48,14 +48,16 @@ export const RemoveFromWorkspaceDialog = ({
             onPrimaryAction={removeAction}
             cancelLabel='Cancel'
         >
-            <span>
-                &quot;{user.email}&quot; will be removed from &quot;{workspaceName}&quot;. Before removing the user,
-                please make sure that the user is added to another workspace so that they can still access your Geti
-                organization. You can add the user back to this workspace at any time.
-                <br />
-                <br />
-                Are you sure you want to remove &quot;{user.email}&quot; from &quot;{workspaceName}&quot;?
-            </span>
+            <Flex direction={'column'} gap={'size-150'}>
+                <Text>
+                    {user.email} will be removed from {workspaceName}. Before removing the user, please make sure that
+                    the user is added to another workspace so that they can still access your Geti organization. You can
+                    add the user back to this workspace at any time.
+                </Text>
+                <Text>
+                    Are you sure you want to remove {user.email} from {workspaceName}?
+                </Text>
+            </Flex>
         </AlertDialog>
     );
 };

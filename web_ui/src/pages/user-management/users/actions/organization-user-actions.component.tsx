@@ -19,7 +19,7 @@ import { RemoveUserDialog } from '../workspace-users/actions/remove-user-dialog.
 import { EditOrganizationUserDialog } from './edit-organization-user-dialog.component';
 
 enum ORG_USER_ACTIONS_OPTIONS {
-    DELETE = 'Delete',
+    DELETE = 'Delete from organization',
     EDIT = 'Edit',
 }
 

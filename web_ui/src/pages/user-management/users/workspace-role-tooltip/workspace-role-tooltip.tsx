@@ -1,11 +1,9 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
-import { ReactNode } from 'react';
-
 import { Flex, Text, View } from '@geti/ui';
 
-export const WORKSPACE_ROLE_TOOLTIP_TEXT = (
+export const WorkspaceRoleTooltipContent = () => (
     <View width={350}>
         <Flex direction={'column'} gap={'size-100'}>
             <Text>
@@ -24,5 +22,3 @@ export const WORKSPACE_ROLE_TOOLTIP_TEXT = (
         </Flex>
     </View>
 );
-
-export const WorkspaceRoleTooltipContent = () => WORKSPACE_ROLE_TOOLTIP_TEXT as unknown as ReactNode;
