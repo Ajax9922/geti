@@ -57,17 +57,18 @@ export const WorkspacesTabs = () => {
     };
 
     return (
-        <Flex id={`page-layout-id`} direction='column' height='100%'>
+        <Flex id={`page-layout-id`} direction='column' height='100%' UNSAFE_className={classes.componentWrapper}>
             <Tabs
                 selectedKey={selectedWorkspaceId}
                 items={items}
                 aria-label={'Workspaces tabs'}
                 height={'100%'}
                 width={'100%'}
+                orientation={'vertical'}
                 onSelectionChange={handleSelectWorkspace}
             >
                 <Flex width={'100%'} alignItems={'center'} UNSAFE_className={classes.tabWrapper}>
-                    <TabList UNSAFE_className={classes.tabList} width={'100%'}>
+                    <TabList UNSAFE_className={classes.tabList}>
                         {(item: TabItem) => (
                             <Item textValue={item.name as string} key={item.key}>
                                 <Flex alignItems={'center'}>
