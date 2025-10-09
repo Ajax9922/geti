@@ -7,7 +7,7 @@ import { isOrganizationAdmin } from '@geti/core/src/users/user-role-utils';
 import { RESOURCE_TYPE } from '@geti/core/src/users/users.interface';
 import { useWorkspacesApi } from '@geti/core/src/workspaces/hooks/use-workspaces.hook';
 import { WorkspaceEntity } from '@geti/core/src/workspaces/services/workspaces.interface';
-import { ActionButton, Flex, Item, Loading, TabList, TabPanels, Tabs, Tooltip, TooltipTrigger } from '@geti/ui';
+import { ActionButton, Flex, Item, Loading, TabList, TabPanels, Tabs, Tooltip, TooltipTrigger, View } from '@geti/ui';
 import { Add } from '@geti/ui/icons';
 
 import { useOrganizationIdentifier } from '../../../hooks/use-organization-identifier/use-organization-identifier.hook';
@@ -70,8 +70,8 @@ export const WorkspacesTabs = () => {
                     <TabList UNSAFE_className={classes.tabList} width={'100%'}>
                         {(item: TabItem) => (
                             <Item textValue={item.name as string} key={item.key}>
-                                <Flex alignItems={'center'}>
-                                    {selectedWorkspaceId === item.key && FEATURE_FLAG_WORKSPACE_ACTIONS ? (
+                                {selectedWorkspaceId === item.key && FEATURE_FLAG_WORKSPACE_ACTIONS ? (
+                                    <View marginTop={'size-65'}>
                                         <HasPermission
                                             operations={[OPERATION.WORKSPACE_MANAGEMENT]}
                                             resources={[{ type: RESOURCE_TYPE.WORKSPACE, id: selectedWorkspaceId }]}
@@ -89,10 +89,12 @@ export const WorkspacesTabs = () => {
                                                 selectWorkspace={selectWorkspace}
                                             />
                                         </HasPermission>
-                                    ) : (
+                                    </View>
+                                ) : (
+                                    <View>
                                         <CustomTabItem name={item.name as string} isMoreIconVisible={false} />
-                                    )}
-                                </Flex>
+                                    </View>
+                                )}
                             </Item>
                         )}
                     </TabList>
