@@ -72,7 +72,7 @@ export const WorkspaceUsersToolbar = ({
                             return (
                                 <Item key={item.key} textValue={item.name}>
                                     {item.key === selectedWorkspaceId && FEATURE_FLAG_WORKSPACE_ACTIONS ? (
-                                        <View>
+                                        <View marginTop={'size-65'}>
                                             <HasPermission
                                                 operations={[OPERATION.WORKSPACE_MANAGEMENT]}
                                                 resources={[{ type: RESOURCE_TYPE.WORKSPACE, id: item.key }]}
@@ -82,18 +82,18 @@ export const WorkspaceUsersToolbar = ({
                                                 }
                                                 Fallback={<CustomTabItem name={item.name} isMoreIconVisible={false} />}
                                             >
-                                                <View marginTop={'size-65'}>
-                                                    <CustomTabItemWithMenu
-                                                        workspace={selectedWorkspace as WorkspaceEntity}
-                                                        isMoreIconVisible={item.key === selectedWorkspaceId}
-                                                        workspaces={workspaces}
-                                                        selectWorkspace={(id: string) => handleSelection(id)}
-                                                    />
-                                                </View>
+                                                <CustomTabItemWithMenu
+                                                    workspace={selectedWorkspace as WorkspaceEntity}
+                                                    isMoreIconVisible={item.key === selectedWorkspaceId}
+                                                    workspaces={workspaces}
+                                                    selectWorkspace={(id: string) => handleSelection(id)}
+                                                />
                                             </HasPermission>
                                         </View>
                                     ) : (
-                                        <CustomTabItem isMoreIconVisible={false} name={item.name} />
+                                        <View>
+                                            <CustomTabItem isMoreIconVisible={false} name={item.name} />
+                                        </View>
                                     )}
                                 </Item>
                             );
