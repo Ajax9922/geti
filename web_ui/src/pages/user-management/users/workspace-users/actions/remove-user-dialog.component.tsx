@@ -53,10 +53,10 @@ export const RemoveUserDialog = ({ organizationId, user, activeUser, onDeleting 
         >
             <Flex direction={'column'} gap={'size-150'}>
                 <Text>
-                    This user account of ${email} will be permanently deleted from your Geti™ organization. After
+                    This user account of {email} will be permanently deleted from your Geti™ organization. After
                     deleting the account, the user will not be able to log in again with this account.
                 </Text>
-                <Text>Are you sure you want to delete ${email}?</Text>
+                <Text>Are you sure you want to delete {email}?</Text>
             </Flex>
         </AlertDialog>
     );

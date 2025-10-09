@@ -38,7 +38,7 @@ export const WorkspaceDeleteDialog = ({ triggerState, onAction, name, workspaceI
                 Before deleting the workspace, please make sure that the associated users are added to another workspace
                 so that they can still access your Geti organization.
             </p>
-            <p>Are you sure you want to delete workspace &quot;{name}&quot;?</p>
+            <p>Are you sure you want to delete workspace {name}?</p>
         </AlertDialog>
     );
 
