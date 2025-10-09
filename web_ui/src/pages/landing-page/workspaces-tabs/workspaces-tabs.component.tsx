@@ -4,7 +4,7 @@
 import { useFeatureFlags } from '@geti/core/src/feature-flags/hooks/use-feature-flags.hook';
 import { useWorkspacesApi } from '@geti/core/src/workspaces/hooks/use-workspaces.hook';
 import { WorkspaceEntity } from '@geti/core/src/workspaces/services/workspaces.interface';
-import { ActionButton, Flex, Item, Loading, TabList, TabPanels, Tabs, Tooltip, TooltipTrigger } from '@geti/ui';
+import { ActionButton, Flex, Item, Loading, TabList, TabPanels, Tabs, Tooltip, TooltipTrigger, View } from '@geti/ui';
 import { Add } from '@geti/ui/icons';
 
 import { useOrganizationIdentifier } from '../../../hooks/use-organization-identifier/use-organization-identifier.hook';
@@ -66,31 +66,28 @@ export const WorkspacesTabs = () => {
                     <TabList UNSAFE_className={classes.tabList} width={'100%'}>
                         {(item: TabItem) => (
                             <Item textValue={item.name as string} key={item.key}>
-                                <>
-                                    <Flex alignItems={'center'}>
-                                        {selectedWorkspaceId === item.key && FEATURE_FLAG_WORKSPACE_ACTIONS ? (
-                                            <HasPermission
-                                                operations={[OPERATION.WORKSPACE_MANAGEMENT]}
-                                                specialCondition={true}
-                                                Fallback={
-                                                    <CustomTabItem
-                                                        name={item.name as string}
-                                                        isMoreIconVisible={false}
-                                                    />
-                                                }
-                                            >
-                                                <CustomTabItemWithMenu
-                                                    workspace={selectedWorkspace as WorkspaceEntity}
-                                                    isMoreIconVisible={item.key === selectedWorkspaceId}
-                                                    workspaces={workspaces}
-                                                    selectWorkspace={selectWorkspace}
-                                                />
-                                            </HasPermission>
-                                        ) : (
-                                            <CustomTabItem name={item.name as string} isMoreIconVisible={false} />
-                                        )}
-                                    </Flex>
-                                </>
+                                {selectedWorkspaceId === item.key && FEATURE_FLAG_WORKSPACE_ACTIONS ? (
+                                    <View marginTop={'size-65'}>
+                                        <HasPermission
+                                            operations={[OPERATION.WORKSPACE_MANAGEMENT]}
+                                            specialCondition={true}
+                                            Fallback={
+                                                <CustomTabItem name={item.name as string} isMoreIconVisible={false} />
+                                            }
+                                        >
+                                            <CustomTabItemWithMenu
+                                                workspace={selectedWorkspace as WorkspaceEntity}
+                                                isMoreIconVisible={item.key === selectedWorkspaceId}
+                                                workspaces={workspaces}
+                                                selectWorkspace={selectWorkspace}
+                                            />
+                                        </HasPermission>
+                                    </View>
+                                ) : (
+                                    <View>
+                                        <CustomTabItem name={item.name as string} isMoreIconVisible={false} />
+                                    </View>
+                                )}
                             </Item>
                         )}
                     </TabList>
