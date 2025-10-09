@@ -9,7 +9,7 @@ import { isOrganizationAdmin } from '@geti/core/src/users/user-role-utils';
 import { RESOURCE_TYPE } from '@geti/core/src/users/users.interface';
 import { useWorkspacesApi } from '@geti/core/src/workspaces/hooks/use-workspaces.hook';
 import { WorkspaceEntity } from '@geti/core/src/workspaces/services/workspaces.interface';
-import { ActionButton, Flex, Item, Loading, TabList, Tabs, Tooltip, TooltipTrigger } from '@geti/ui';
+import { ActionButton, Flex, Item, Loading, TabList, Tabs, Tooltip, TooltipTrigger, View } from '@geti/ui';
 import { Add } from '@geti/ui/icons';
 
 import { useOrganizationIdentifier } from '../../../hooks/use-organization-identifier/use-organization-identifier.hook';
@@ -71,8 +71,8 @@ export const WorkspaceUsersToolbar = ({
                         {(item: { key: string; name: string }) => {
                             return (
                                 <Item key={item.key} textValue={item.name}>
-                                    <Flex alignItems={'center'} gap={'size-75'}>
-                                        {item.key === selectedWorkspaceId && FEATURE_FLAG_WORKSPACE_ACTIONS ? (
+                                    {item.key === selectedWorkspaceId && FEATURE_FLAG_WORKSPACE_ACTIONS ? (
+                                        <View>
                                             <HasPermission
                                                 operations={[OPERATION.WORKSPACE_MANAGEMENT]}
                                                 resources={[{ type: RESOURCE_TYPE.WORKSPACE, id: item.key }]}
@@ -82,17 +82,19 @@ export const WorkspaceUsersToolbar = ({
                                                 }
                                                 Fallback={<CustomTabItem name={item.name} isMoreIconVisible={false} />}
                                             >
-                                                <CustomTabItemWithMenu
-                                                    workspace={selectedWorkspace as WorkspaceEntity}
-                                                    isMoreIconVisible={item.key === selectedWorkspaceId}
-                                                    workspaces={workspaces}
-                                                    selectWorkspace={(id: string) => handleSelection(id)}
-                                                />
+                                                <View marginTop={'size-65'}>
+                                                    <CustomTabItemWithMenu
+                                                        workspace={selectedWorkspace as WorkspaceEntity}
+                                                        isMoreIconVisible={item.key === selectedWorkspaceId}
+                                                        workspaces={workspaces}
+                                                        selectWorkspace={(id: string) => handleSelection(id)}
+                                                    />
+                                                </View>
                                             </HasPermission>
-                                        ) : (
-                                            <CustomTabItem isMoreIconVisible={false} name={item.name} />
-                                        )}
-                                    </Flex>
+                                        </View>
+                                    ) : (
+                                        <CustomTabItem isMoreIconVisible={false} name={item.name} />
+                                    )}
                                 </Item>
                             );
                         }}
