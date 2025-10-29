@@ -1,7 +1,7 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
-import { ComponentProps, FormEvent, useState } from 'react';
+import { ComponentProps, FormEvent, useMemo, useState } from 'react';
 
 import { useWorkspacesApi } from '@geti/core/src/workspaces/hooks/use-workspaces.hook';
 import {
@@ -18,9 +18,10 @@ import {
     TextField,
 } from '@geti/ui';
 import { OverlayTriggerState } from '@react-stately/overlays';
-import { isEmpty } from 'lodash-es';
 
 import { useOrganizationIdentifier } from '../../../../hooks/use-organization-identifier/use-organization-identifier.hook';
+import { isYupValidationError } from '../../profile-page/utils';
+import { WORKSPACE_NAME_REQUIRED_VALIDATION_MESSAGE, WorkspaceNameErrorPath, workspaceNameSchema } from '../utils';
 
 interface CreateWorkspaceDialogProps {
     triggerState: OverlayTriggerState;
@@ -31,11 +32,26 @@ interface CreateWorkspaceDialogProps {
 export const CreateWorkspaceDialog = ({ names, triggerState, nameLimitations = {} }: CreateWorkspaceDialogProps) => {
     const [workspaceName, setWorkspaceName] = useState<string>('');
 
-    const isEmptyName = isEmpty(workspaceName);
-    const isDuplicatedName = names.some(
-        (name) => name.toLocaleLowerCase() === workspaceName.trim().toLocaleLowerCase()
-    );
-    const isConfirmButtonDisabled = isEmptyName || isDuplicatedName;
+    const trimmedWorkspaceName = useMemo(() => workspaceName.trim(), [workspaceName]);
+    const workspaceNameYupSchema = useMemo(() => workspaceNameSchema(names), [names]);
+
+    const workspaceNameValidationError = useMemo(() => {
+        try {
+            workspaceNameYupSchema.validateSync({ name: workspaceName }, { abortEarly: false });
+            return undefined;
+        } catch (error: unknown) {
+            if (isYupValidationError(error)) {
+                const fieldError = error.inner.find(
+                    (validationError) => validationError.path === WorkspaceNameErrorPath.NAME
+                );
+                return fieldError?.message ?? error.message ?? WORKSPACE_NAME_REQUIRED_VALIDATION_MESSAGE;
+            }
+
+            return WORKSPACE_NAME_REQUIRED_VALIDATION_MESSAGE;
+        }
+    }, [workspaceName, workspaceNameYupSchema]);
+
+    const isConfirmButtonDisabled = Boolean(workspaceNameValidationError);
     const { organizationId } = useOrganizationIdentifier();
     const { useCreateWorkspaceMutation } = useWorkspacesApi(organizationId);
     const createWorkspace = useCreateWorkspaceMutation();
@@ -46,7 +62,11 @@ export const CreateWorkspaceDialog = ({ names, triggerState, nameLimitations = {
 
     const handleConfirm = (event: FormEvent) => {
         event.preventDefault();
-        const newName = workspaceName.trim();
+        const newName = trimmedWorkspaceName;
+
+        if (workspaceNameValidationError) {
+            return;
+        }
 
         createWorkspace.mutate(
             { name: newName },
@@ -81,8 +101,8 @@ export const CreateWorkspaceDialog = ({ names, triggerState, nameLimitations = {
                                 value={workspaceName}
                                 onChange={handleOnChange}
                                 label={'Workspace name'}
-                                validationState={isDuplicatedName ? 'invalid' : undefined}
-                                errorMessage={isDuplicatedName ? `Workspace name must be unique` : undefined}
+                                validationState={workspaceNameValidationError ? 'invalid' : undefined}
+                                errorMessage={workspaceNameValidationError}
                                 maxLength={nameLimitations?.maxLength}
                                 minLength={nameLimitations?.minLength}
                                 // eslint-disable-next-line jsx-a11y/no-autofocus

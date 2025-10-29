@@ -22,6 +22,7 @@ import { WorkspaceDeleteDialog } from '../../landing-page/workspaces-tabs/compon
 import { CustomTabItemWithMenu } from '../../landing-page/workspaces-tabs/custom-tab-item-with-menu.component';
 import { useWorkspaceActions } from '../../landing-page/workspaces-tabs/hooks/use-workspace-actions.hook';
 import { CreateWorkspaceDialog } from './create-workspace-dialog/create-workspace-dialog.component';
+import { MAX_LENGTH_OF_WORKSPACE_NAME, MIN_LENGTH_OF_WORKSPACE_NAME } from './utils';
 
 import classes from '../../../shared/components/custom-tab-item/custom-tab-item.module.scss';
 
@@ -139,13 +140,16 @@ export const WorkspaceUsersToolbar = ({
                     defaultName={selectedWorkspace.name}
                     names={workspaces.map((w) => w.name).filter((n) => n !== selectedWorkspace.name)}
                     title={'workspace name'}
-                    nameLimitations={{ maxLength: 64, minLength: 1 }}
+                    nameLimitations={{
+                        maxLength: MAX_LENGTH_OF_WORKSPACE_NAME,
+                        minLength: MIN_LENGTH_OF_WORKSPACE_NAME,
+                    }}
                 />
             )}
             <CreateWorkspaceDialog
                 triggerState={createWorkspaceDialogState}
                 names={workspacesNames}
-                nameLimitations={{ maxLength: 64, minLength: 1 }}
+                nameLimitations={{ maxLength: MAX_LENGTH_OF_WORKSPACE_NAME, minLength: MIN_LENGTH_OF_WORKSPACE_NAME }}
             />
         </Flex>
     );

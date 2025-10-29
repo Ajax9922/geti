@@ -16,7 +16,7 @@ const mockOverlayTriggerState = {
 };
 
 describe('CreateWorkspaceDialog', () => {
-    it('if the newName is empty, confirm button should be disabled', () => {
+    it('if the newName is empty, confirm button should be disabled and show validation error', () => {
         providersRender(
             <CreateWorkspaceDialog
                 triggerState={mockOverlayTriggerState}
@@ -30,6 +30,25 @@ describe('CreateWorkspaceDialog', () => {
 
         fireEvent.change(input, { target: { value: '' } });
 
+        expect(screen.getByText('Workspace name cannot be empty')).toBeInTheDocument();
+        expect(confirmButton).toBeDisabled();
+    });
+
+    it('should trim whitespace-only inputs and show validation error', () => {
+        providersRender(
+            <CreateWorkspaceDialog
+                triggerState={mockOverlayTriggerState}
+                names={[]}
+                nameLimitations={{ maxLength: 64, minLength: 1 }}
+            />
+        );
+
+        const input = screen.getByRole('textbox', { name: 'Workspace name' });
+        const confirmButton = screen.getByRole('button', { name: /confirm/i });
+
+        fireEvent.change(input, { target: { value: '   ' } });
+
+        expect(screen.getByText('Workspace name cannot be empty')).toBeInTheDocument();
         expect(confirmButton).toBeDisabled();
     });
 
