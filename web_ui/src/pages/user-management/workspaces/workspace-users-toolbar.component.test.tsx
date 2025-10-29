@@ -1,11 +1,13 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
-import { RESOURCE_TYPE, USER_ROLE } from '@geti/core/src/users/users.interface';
+import { createInMemoryUsersService } from '@geti/core/src/users/services/in-memory-users-service';
+import { User } from '@geti/core/src/users/users.interface';
 import { createInMemoryApiWorkspacesService } from '@geti/core/src/workspaces/services/in-memory-api-workspaces-service';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import { getMockedAdminUser, getMockedContributorUser } from '../../../test-utils/mocked-items-factory/mocked-users';
 import { getMockedWorkspace } from '../../../test-utils/mocked-items-factory/mocked-workspace';
 import { providersRender } from '../../../test-utils/required-providers-render';
 import { WorkspaceUsersToolbar } from './workspace-users-toolbar.component';
@@ -20,48 +22,27 @@ jest.mock('../../../hooks/use-organization-identifier/use-organization-identifie
     useOrganizationIdentifier: () => ({ organizationId: 'org-123' }),
 }));
 
-const mockUseActiveUser = jest.fn();
-const mockUseUsers = jest.fn();
-jest.mock('@geti/core/src/users/hook/use-users.hook', () => ({
-    ...jest.requireActual('@geti/core/src/users/hook/use-users.hook'),
-    useActiveUser: (...args: unknown[]) => mockUseActiveUser(...args),
-    useUsers: (...args: unknown[]) => mockUseUsers(...args),
-}));
-
-const mockIsOrganizationAdmin = jest.fn();
-jest.mock('@geti/core/src/users/user-role-utils', () => ({
-    isOrganizationAdmin: (...args: unknown[]) => mockIsOrganizationAdmin(...args),
-}));
-
 const workspaces = [
     getMockedWorkspace({ id: 'workspace-1', name: 'Workspace 1' }),
     getMockedWorkspace({ id: 'workspace-2', name: 'Workspace 2' }),
 ];
 
+const organizationId = 'org-123';
+
+const createUsersServiceWithActiveUser = (activeUser: User) => {
+    const usersService = createInMemoryUsersService();
+    usersService.getActiveUser = jest.fn().mockResolvedValue(activeUser);
+
+    return usersService;
+};
+
 describe('WorkspaceUsersToolbar', () => {
     beforeEach(() => {
-        jest.clearAllMocks();
-        mockUseParams.mockReturnValue({ organizationId: 'org-123', workspaceId: 'workspace-1' });
-        const adminUser = {
-            roles: [
-                {
-                    role: USER_ROLE.WORKSPACE_ADMIN,
-                    resourceType: RESOURCE_TYPE.WORKSPACE,
-                    resourceId: 'workspace-1',
-                },
-                {
-                    role: USER_ROLE.ORGANIZATION_ADMIN,
-                    resourceType: RESOURCE_TYPE.ORGANIZATION,
-                    resourceId: 'org-123',
-                },
-            ],
-        };
+        mockUseParams.mockReturnValue({ organizationId, workspaceId: workspaces[0].id });
+    });
 
-        mockUseUsers.mockReturnValue({
-            useActiveUser: (...args: unknown[]) => mockUseActiveUser(...args),
-        });
-        mockUseActiveUser.mockReturnValue({ data: adminUser });
-        mockIsOrganizationAdmin.mockReturnValue(true);
+    afterEach(() => {
+        jest.clearAllMocks();
     });
 
     it('renders a tab for each workspace and highlights the selected workspace', async () => {
@@ -114,7 +95,9 @@ describe('WorkspaceUsersToolbar', () => {
     it('shows workspace actions when flag and permissions allow it', async () => {
         const workspacesService = createInMemoryApiWorkspacesService();
         workspacesService.getWorkspaces = jest.fn().mockResolvedValue(workspaces);
-        mockUseParams.mockReturnValue({ organizationId: 'org-123', workspaceId: workspaces[0].id });
+        mockUseParams.mockReturnValue({ organizationId, workspaceId: workspaces[0].id });
+        const adminUser = getMockedAdminUser({}, workspaces[0].id, true, organizationId);
+        const usersService = createUsersServiceWithActiveUser(adminUser);
 
         providersRender(
             <WorkspaceUsersToolbar
@@ -124,7 +107,7 @@ describe('WorkspaceUsersToolbar', () => {
             />,
             {
                 featureFlags: { FEATURE_FLAG_WORKSPACE_ACTIONS: true },
-                services: { workspacesService },
+                services: { workspacesService, usersService },
             }
         );
 
@@ -140,21 +123,8 @@ describe('WorkspaceUsersToolbar', () => {
     it('renders fallback when permissions fail even with the feature flag enabled', async () => {
         const workspacesService = createInMemoryApiWorkspacesService();
         workspacesService.getWorkspaces = jest.fn().mockResolvedValue(workspaces);
-        const nonAdminUser = {
-            roles: [
-                {
-                    role: 'WORKSPACE_CONTRIBUTOR',
-                    resourceType: 'WORKSPACE',
-                    resourceId: 'workspace-1',
-                },
-            ],
-        };
-
-        mockUseActiveUser.mockReturnValue({ data: nonAdminUser });
-        mockUseUsers.mockReturnValue({
-            useActiveUser: (...args: unknown[]) => mockUseActiveUser(...args),
-        });
-        mockIsOrganizationAdmin.mockReturnValue(false);
+        const nonAdminUser = getMockedContributorUser({}, workspaces[0].id);
+        const usersService = createUsersServiceWithActiveUser(nonAdminUser);
 
         providersRender(
             <WorkspaceUsersToolbar
@@ -164,7 +134,7 @@ describe('WorkspaceUsersToolbar', () => {
             />,
             {
                 featureFlags: { FEATURE_FLAG_WORKSPACE_ACTIONS: true },
-                services: { workspacesService },
+                services: { workspacesService, usersService },
             }
         );
 
@@ -176,6 +146,8 @@ describe('WorkspaceUsersToolbar', () => {
     it('opens the create workspace dialog when the action button is pressed', async () => {
         const workspacesService = createInMemoryApiWorkspacesService();
         workspacesService.getWorkspaces = jest.fn().mockResolvedValue(workspaces);
+        const adminUser = getMockedAdminUser({}, workspaces[0].id, true, organizationId);
+        const usersService = createUsersServiceWithActiveUser(adminUser);
 
         providersRender(
             <WorkspaceUsersToolbar
@@ -185,7 +157,7 @@ describe('WorkspaceUsersToolbar', () => {
             />,
             {
                 featureFlags: { FEATURE_FLAG_WORKSPACE_ACTIONS: true },
-                services: { workspacesService },
+                services: { workspacesService, usersService },
             }
         );
 
