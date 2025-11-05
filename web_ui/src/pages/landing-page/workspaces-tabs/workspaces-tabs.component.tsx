@@ -87,7 +87,7 @@ export const WorkspacesTabs = () => {
                           }
                         : undefined
                 }
-                ariaLabel='Workspaces tabs'
+                ariaLabel={'Workspaces tabs'}
             />
             <CreateWorkspaceDialog
                 triggerState={createWorkspaceDialogState}

@@ -26,11 +26,19 @@ import classes from './project-dataset.module.scss';
     datasets to the Picker. The new dataset is placed at the end of pinned datasets.
 */
 export const ProjectDataset = () => {
-    const { isSingleDomainProject, project } = useProject();
-    const { handleSelectDataset, selectedDataset, createDataset, handleCreateDataset } = useDataset();
+    const { isSingleDomainProject } = useProject();
+    const {
+        handleSelectDataset,
+        selectedDataset,
+        createDataset,
+        handleCreateDataset,
+        pinnedDatasets,
+        collapsedDatasets,
+    } = useDataset();
     const { exportDialogState } = useExportImportDatasetDialogStates();
 
     const isAnomalyProject = isSingleDomainProject(isAnomalyDomain);
+    const allDatasets = [...pinnedDatasets, ...collapsedDatasets];
 
     return (
         <Flex direction={'column'} UNSAFE_className={classes.componentWrapper} height={'100%'}>
@@ -41,7 +49,7 @@ export const ProjectDataset = () => {
                 />
             )}
             <ManagedTabs<Dataset>
-                items={project.datasets}
+                items={allDatasets}
                 selectedKey={selectedDataset.id}
                 onSelectionChange={(key) => handleSelectDataset(String(key))}
                 renderTabItem={(dataset) => <ProjectDatasetTabActions dataset={dataset} />}
@@ -58,7 +66,7 @@ export const ProjectDataset = () => {
                     pickerAriaLabel: 'Collapsed datasets',
                     onCollapsedItemSelect: handleSelectDataset,
                 }}
-                ariaLabel='Dataset page tabs'
+                ariaLabel={'Dataset page tabs'}
             />
             <ExportDatasetDialog triggerState={exportDialogState} datasetName={selectedDataset.name} />
         </Flex>

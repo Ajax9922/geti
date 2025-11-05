@@ -89,7 +89,7 @@ export const WorkspaceUsersToolbar = ({
                           }
                         : undefined
                 }
-                ariaLabel='Workspace tabs'
+                ariaLabel={'Workspace tabs'}
             />
             {selectedWorkspace && deleteDialog.deleteWorkspaceDialogState.isOpen && (
                 <WorkspaceDeleteDialog
