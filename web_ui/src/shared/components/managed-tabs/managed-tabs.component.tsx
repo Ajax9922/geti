@@ -55,25 +55,11 @@ export const ManagedTabs = <T extends { id: string; name: string }>({
     tabListClassName,
     ariaLabel,
 }: ManagedTabsProps<T>) => {
-    const { visibleItems, collapsedItems, hasSelectedCollapsedItem } = (() => {
-        if (!overflow || items.length <= overflow.maxVisibleTabs) {
-            return {
-                visibleItems: items,
-                collapsedItems: [],
-                hasSelectedCollapsedItem: false,
-            };
-        }
+    const hasOverflow = overflow && items.length > overflow.maxVisibleTabs;
 
-        const visible = items.slice(0, overflow.maxVisibleTabs);
-        const collapsed = items.slice(overflow.maxVisibleTabs);
-        const hasCollapsedSelection = collapsed.some((item) => item.id === selectedKey);
-
-        return {
-            visibleItems: visible,
-            collapsedItems: collapsed,
-            hasSelectedCollapsedItem: hasCollapsedSelection,
-        };
-    })();
+    const visibleItems = hasOverflow ? items.slice(0, overflow.maxVisibleTabs) : items;
+    const collapsedItems = hasOverflow ? items.slice(overflow.maxVisibleTabs) : [];
+    const hasSelectedCollapsedItem = collapsedItems.some((item) => item.id === selectedKey);
 
     const tabItems = visibleItems.map((item) => ({
         id: item.id,
