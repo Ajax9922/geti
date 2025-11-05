@@ -1,7 +1,8 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
-import { Flex } from '@geti/ui';
+import { ActionButton, Flex, Loading, Tooltip, TooltipTrigger } from '@geti/ui';
+import { Add } from '@geti/ui/icons';
 
 import { Dataset } from '../../../../core/projects/dataset.interface';
 import { isAnomalyDomain } from '../../../../core/projects/domains';
@@ -54,13 +55,20 @@ export const ProjectDataset = () => {
                 onSelectionChange={(key) => handleSelectDataset(String(key))}
                 renderTabItem={(dataset) => <ProjectDatasetTabActions dataset={dataset} />}
                 renderTabPanel={(dataset) => <DatasetTabPanel dataset={dataset} />}
-                addButton={{
-                    id: 'create-dataset-button-id',
-                    ariaLabel: 'Create dataset',
-                    tooltipText: 'Create new testing set',
-                    onPress: handleCreateDataset,
-                    isLoading: createDataset.isPending,
-                }}
+                addButton={
+                    <TooltipTrigger placement='bottom'>
+                        <ActionButton
+                            isQuiet
+                            id={'create-dataset-button-id'}
+                            onPress={handleCreateDataset}
+                            isDisabled={createDataset.isPending}
+                            aria-label={'Create dataset'}
+                        >
+                            {createDataset.isPending ? <Loading mode='inline' size='S' /> : <Add />}
+                        </ActionButton>
+                        <Tooltip>Create new testing set</Tooltip>
+                    </TooltipTrigger>
+                }
                 overflow={{
                     maxVisibleTabs: MAX_NUMBER_OF_DISPLAYED_DATASETS,
                     pickerAriaLabel: 'Collapsed datasets',

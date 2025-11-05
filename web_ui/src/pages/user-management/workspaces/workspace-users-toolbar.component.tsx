@@ -7,7 +7,8 @@ import { isOrganizationAdmin } from '@geti/core/src/users/user-role-utils';
 import { RESOURCE_TYPE } from '@geti/core/src/users/users.interface';
 import { useWorkspacesApi } from '@geti/core/src/workspaces/hooks/use-workspaces.hook';
 import { WorkspaceEntity } from '@geti/core/src/workspaces/services/workspaces.interface';
-import { Flex } from '@geti/ui';
+import { ActionButton, Flex, Loading, Tooltip, TooltipTrigger } from '@geti/ui';
+import { Add } from '@geti/ui/icons';
 import { useOverlayTriggerState } from 'react-stately';
 
 import { useOrganizationIdentifier } from '../../../hooks/use-organization-identifier/use-organization-identifier.hook';
@@ -79,15 +80,20 @@ export const WorkspaceUsersToolbar = ({
                 }}
                 renderTabPanel={() => <></>}
                 addButton={
-                    FEATURE_FLAG_WORKSPACE_ACTIONS
-                        ? {
-                              id: 'create-workspace-toolbar-btn',
-                              ariaLabel: 'Create workspace',
-                              tooltipText: 'Create workspace',
-                              onPress: createWorkspaceDialogState.open,
-                              isLoading: createWorkspace.isPending,
-                          }
-                        : undefined
+                    FEATURE_FLAG_WORKSPACE_ACTIONS ? (
+                        <TooltipTrigger placement='bottom'>
+                            <ActionButton
+                                isQuiet
+                                id={'create-workspace-toolbar-btn'}
+                                onPress={createWorkspaceDialogState.open}
+                                isDisabled={createWorkspace.isPending}
+                                aria-label={'Create workspace'}
+                            >
+                                {createWorkspace.isPending ? <Loading mode='inline' size='S' /> : <Add />}
+                            </ActionButton>
+                            <Tooltip>Create workspace</Tooltip>
+                        </TooltipTrigger>
+                    ) : undefined
                 }
                 ariaLabel={'Workspace tabs'}
             />

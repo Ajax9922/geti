@@ -7,6 +7,8 @@ import { isOrganizationAdmin } from '@geti/core/src/users/user-role-utils';
 import { RESOURCE_TYPE } from '@geti/core/src/users/users.interface';
 import { useWorkspacesApi } from '@geti/core/src/workspaces/hooks/use-workspaces.hook';
 import { WorkspaceEntity } from '@geti/core/src/workspaces/services/workspaces.interface';
+import { ActionButton, Loading, Tooltip, TooltipTrigger } from '@geti/ui';
+import { Add } from '@geti/ui/icons';
 import { useOverlayTriggerState } from 'react-stately';
 
 import { useOrganizationIdentifier } from '../../../hooks/use-organization-identifier/use-organization-identifier.hook';
@@ -20,7 +22,7 @@ import { NoPermissionPlaceholder } from './components/no-permission-placeholder.
 import { CustomTabItemWithMenu } from './custom-tab-item-with-menu.component';
 import { useWorkspacesTabs } from './hooks/use-pinned-collapsed-workspace.hook';
 
-const WorkspaceItem = ({ workspace }: { workspace: WorkspaceEntity }) => {
+const WorkspaceTabItem = ({ workspace }: { workspace: WorkspaceEntity }) => {
     const { organizationId } = useOrganizationIdentifier();
     const { data: activeUser } = useActiveUser(organizationId);
     const { workspaces, selectWorkspace, selectedWorkspaceId } = useWorkspacesTabs();
@@ -66,7 +68,7 @@ export const WorkspacesTabs = () => {
                 items={workspaces}
                 selectedKey={selectedWorkspaceId}
                 onSelectionChange={handleSelectWorkspace}
-                renderTabItem={(workspace) => <WorkspaceItem workspace={workspace} />}
+                renderTabItem={(workspace) => <WorkspaceTabItem workspace={workspace} />}
                 renderTabPanel={() => (
                     <HasPermission
                         operations={[OPERATION.CAN_SEE_WORKSPACE]}
@@ -77,15 +79,20 @@ export const WorkspacesTabs = () => {
                     </HasPermission>
                 )}
                 addButton={
-                    FEATURE_FLAG_WORKSPACE_ACTIONS
-                        ? {
-                              id: 'create-new-workspace-id',
-                              ariaLabel: 'Create new workspace',
-                              tooltipText: 'Create a new workspace',
-                              onPress: createWorkspaceDialogState.open,
-                              isLoading: createWorkspace.isPending,
-                          }
-                        : undefined
+                    FEATURE_FLAG_WORKSPACE_ACTIONS ? (
+                        <TooltipTrigger placement='bottom'>
+                            <ActionButton
+                                isQuiet
+                                id={'create-new-workspace-id'}
+                                onPress={createWorkspaceDialogState.open}
+                                isDisabled={createWorkspace.isPending}
+                                aria-label={'Create new workspace'}
+                            >
+                                {createWorkspace.isPending ? <Loading mode='inline' size='S' /> : <Add />}
+                            </ActionButton>
+                            <Tooltip>Create a new workspace</Tooltip>
+                        </TooltipTrigger>
+                    ) : undefined
                 }
                 ariaLabel={'Workspaces tabs'}
             />

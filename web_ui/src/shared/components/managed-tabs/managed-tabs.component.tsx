@@ -3,8 +3,7 @@
 
 import { Key, ReactNode } from 'react';
 
-import { ActionButton, Flex, Item, Loading, TabList, TabPanels, Tabs, Tooltip, TooltipTrigger } from '@geti/ui';
-import { Add } from '@geti/ui/icons';
+import { Flex, Item, TabList, TabPanels, Tabs } from '@geti/ui';
 
 import { CollapsedItemsPicker } from '../collapsed-items-picker/collapsed-items-picker.component';
 import { TabItem } from '../tabs/tabs.interface';
@@ -33,7 +32,7 @@ export interface ManagedTabsProps<T extends { id: string; name: string }> {
     onSelectionChange: (key: Key) => void;
     renderTabItem: (item: T) => ReactNode;
     renderTabPanel: (item: T) => ReactNode;
-    addButton?: AddButtonConfig;
+    addButton?: ReactNode;
     overflow?: OverflowConfig;
     orientation?: 'horizontal' | 'vertical';
     wrapperClassName?: string;
@@ -115,20 +114,7 @@ export const ManagedTabs = <T extends { id: string; name: string }>({
                         />
                     )}
 
-                    {addButton && (
-                        <TooltipTrigger placement='bottom'>
-                            <ActionButton
-                                isQuiet
-                                id={addButton.id}
-                                onPress={addButton.onPress}
-                                isDisabled={addButton.isDisabled || addButton.isLoading}
-                                aria-label={addButton.ariaLabel}
-                            >
-                                {addButton.isLoading ? <Loading mode='inline' size='S' /> : <Add />}
-                            </ActionButton>
-                            <Tooltip>{addButton.tooltipText}</Tooltip>
-                        </TooltipTrigger>
-                    )}
+                    {addButton && addButton}
                 </Flex>
 
                 <TabPanels>{(item: TabItem) => <Item key={item.key}>{item.children}</Item>}</TabPanels>
