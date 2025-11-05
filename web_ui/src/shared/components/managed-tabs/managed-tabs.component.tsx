@@ -3,21 +3,11 @@
 
 import { Key, ReactNode } from 'react';
 
-import { Flex, Item, TabList, TabPanels, Tabs } from '@geti/ui';
+import { Flex, Item, Picker, TabList, TabPanels, Tabs } from '@geti/ui';
 
-import { CollapsedItemsPicker } from '../collapsed-items-picker/collapsed-items-picker.component';
 import { TabItem } from '../tabs/tabs.interface';
 
 import classes from './managed-tabs.module.scss';
-
-export interface AddButtonConfig {
-    ariaLabel: string;
-    tooltipText: string;
-    onPress: () => void;
-    isLoading?: boolean;
-    isDisabled?: boolean;
-    id?: string;
-}
 
 export interface OverflowConfig {
     maxVisibleTabs: number;
@@ -31,7 +21,7 @@ export interface ManagedTabsProps<T extends { id: string; name: string }> {
     selectedKey: string;
     onSelectionChange: (key: Key) => void;
     renderTabItem: (item: T) => ReactNode;
-    renderTabPanel: (item: T) => ReactNode;
+    children?: ReactNode;
     addButton?: ReactNode;
     overflow?: OverflowConfig;
     orientation?: 'horizontal' | 'vertical';
@@ -46,7 +36,7 @@ export const ManagedTabs = <T extends { id: string; name: string }>({
     selectedKey,
     onSelectionChange,
     renderTabItem,
-    renderTabPanel,
+    children,
     addButton,
     overflow,
     orientation = 'vertical',
@@ -64,7 +54,6 @@ export const ManagedTabs = <T extends { id: string; name: string }>({
         id: item.id,
         key: item.id,
         name: item.name,
-        children: renderTabPanel(item),
         originalItem: item,
     }));
 
@@ -102,22 +91,28 @@ export const ManagedTabs = <T extends { id: string; name: string }>({
                                 </Item>
                             )}
                         </TabList>
-                    </div>
 
-                    {overflow && collapsedItems.length > 0 && (
-                        <CollapsedItemsPicker
-                            items={collapsedPickerItems}
-                            ariaLabel={overflow.pickerAriaLabel}
-                            onSelectionChange={overflow.onCollapsedItemSelect}
-                            hasSelectedPinnedItem={!hasSelectedCollapsedItem}
-                            numberOfCollapsedItems={collapsedItems.length}
-                        />
-                    )}
+                        {overflow && collapsedItems.length > 0 && (
+                            <Picker
+                                isQuiet
+                                items={collapsedPickerItems}
+                                aria-label={overflow.pickerAriaLabel}
+                                onSelectionChange={(key) => overflow.onCollapsedItemSelect(String(key))}
+                                placeholder={`${collapsedItems.length} more`}
+                                UNSAFE_className={[
+                                    classes.collapsedItemsPicker,
+                                    !hasSelectedCollapsedItem ? classes.selected : '',
+                                ].join(' ')}
+                            >
+                                {(item) => <Item>{item.name}</Item>}
+                            </Picker>
+                        )}
+                    </div>
 
                     {addButton && addButton}
                 </Flex>
 
-                <TabPanels>{(item: TabItem) => <Item key={item.key}>{item.children}</Item>}</TabPanels>
+                <TabPanels>{(item: TabItem) => <Item key={item.key}>{children}</Item>}</TabPanels>
             </Tabs>
         </Flex>
     );

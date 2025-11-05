@@ -81,4 +81,27 @@
     flex: 1 1 auto;
     min-width: 0;
     overflow: auto hidden;
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.collapsedItemsPicker {
+    position: relative;
+    flex-shrink: 0;
+
+    &.selected::after {
+        content: '';
+        position: absolute;
+        height: var(--spectrum-global-dimension-size-25);
+        left: 0;
+        bottom: -15px;
+        right: var(--spectrum-global-dimension-size-400);
+        background-color: var(--energy-blue);
+    }
+
+    span[class*='spectrum-Dropdown-label'] {
+        font-size: var(--spectrum-global-dimension-font-size-100) !important;
+        font-style: normal !important;
+    }
 }
