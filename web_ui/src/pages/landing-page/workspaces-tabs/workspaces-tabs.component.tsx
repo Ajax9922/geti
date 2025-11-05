@@ -69,15 +69,6 @@ export const WorkspacesTabs = () => {
                 selectedKey={selectedWorkspaceId}
                 onSelectionChange={handleSelectWorkspace}
                 renderTabItem={(workspace) => <WorkspaceTabItem workspace={workspace} />}
-                renderTabPanel={() => (
-                    <HasPermission
-                        operations={[OPERATION.CAN_SEE_WORKSPACE]}
-                        specialCondition={!FEATURE_FLAG_WORKSPACE_ACTIONS || undefined}
-                        Fallback={<NoPermissionPlaceholder />}
-                    >
-                        <Workspace />
-                    </HasPermission>
-                )}
                 addButton={
                     FEATURE_FLAG_WORKSPACE_ACTIONS ? (
                         <TooltipTrigger placement='bottom'>
@@ -95,7 +86,15 @@ export const WorkspacesTabs = () => {
                     ) : undefined
                 }
                 ariaLabel={'Workspaces tabs'}
-            />
+            >
+                <HasPermission
+                    operations={[OPERATION.CAN_SEE_WORKSPACE]}
+                    specialCondition={!FEATURE_FLAG_WORKSPACE_ACTIONS || undefined}
+                    Fallback={<NoPermissionPlaceholder />}
+                >
+                    <Workspace />
+                </HasPermission>
+            </ManagedTabs>
             <CreateWorkspaceDialog
                 triggerState={createWorkspaceDialogState}
                 names={workspacesNames}

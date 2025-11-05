@@ -78,7 +78,6 @@ export const WorkspaceUsersToolbar = ({
 
                     return <CustomTabItem isMoreIconVisible={false} name={workspace.name} />;
                 }}
-                renderTabPanel={() => <></>}
                 addButton={
                     FEATURE_FLAG_WORKSPACE_ACTIONS ? (
                         <TooltipTrigger placement='bottom'>

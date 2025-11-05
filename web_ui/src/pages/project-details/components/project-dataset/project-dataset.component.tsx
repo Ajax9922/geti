@@ -54,7 +54,6 @@ export const ProjectDataset = () => {
                 selectedKey={selectedDataset.id}
                 onSelectionChange={(key) => handleSelectDataset(String(key))}
                 renderTabItem={(dataset) => <ProjectDatasetTabActions dataset={dataset} />}
-                renderTabPanel={(dataset) => <DatasetTabPanel dataset={dataset} />}
                 addButton={
                     <TooltipTrigger placement='bottom'>
                         <ActionButton
@@ -75,7 +74,9 @@ export const ProjectDataset = () => {
                     onCollapsedItemSelect: handleSelectDataset,
                 }}
                 ariaLabel={'Dataset page tabs'}
-            />
+            >
+                <DatasetTabPanel dataset={selectedDataset} />
+            </ManagedTabs>
             <ExportDatasetDialog triggerState={exportDialogState} datasetName={selectedDataset.name} />
         </Flex>
     );
