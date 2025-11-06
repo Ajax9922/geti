@@ -1,14 +1,13 @@
 // Copyright (C) 2022-2025 Intel Corporation
 // LIMITED EDGE SOFTWARE DISTRIBUTION LICENSE
 
-import { ActionButton, Flex, Loading, Tooltip, TooltipTrigger } from '@geti/ui';
+import { ActionButton, Flex, Loading, ManagedTabs, Tooltip, TooltipTrigger } from '@geti/ui';
 import { Add } from '@geti/ui/icons';
 
 import { Dataset } from '../../../../core/projects/dataset.interface';
 import { isAnomalyDomain } from '../../../../core/projects/domains';
 import { TUTORIAL_CARD_KEYS } from '../../../../core/user-settings/dtos/user-settings.interface';
 import { useDataset } from '../../../../providers/dataset-provider/dataset-provider.component';
-import { ManagedTabs } from '../../../../shared/components/managed-tabs/managed-tabs.component';
 import { TutorialCardBuilder } from '../../../../shared/components/tutorial-card/tutorial-card-builder.component';
 import { useProject } from '../../providers/project-provider/project-provider.component';
 import { DatasetTabPanel } from './dataset-tab-panel.component';

@@ -7,7 +7,7 @@ import { isOrganizationAdmin } from '@geti/core/src/users/user-role-utils';
 import { RESOURCE_TYPE } from '@geti/core/src/users/users.interface';
 import { useWorkspacesApi } from '@geti/core/src/workspaces/hooks/use-workspaces.hook';
 import { WorkspaceEntity } from '@geti/core/src/workspaces/services/workspaces.interface';
-import { ActionButton, Loading, Tooltip, TooltipTrigger } from '@geti/ui';
+import { ActionButton, Loading, ManagedTabs, Tooltip, TooltipTrigger } from '@geti/ui';
 import { Add } from '@geti/ui/icons';
 import { useOverlayTriggerState } from 'react-stately';
 
@@ -15,7 +15,6 @@ import { useOrganizationIdentifier } from '../../../hooks/use-organization-ident
 import { CustomTabItem } from '../../../shared/components/custom-tab-item/custom-tab-item.component';
 import { HasPermission } from '../../../shared/components/has-permission/has-permission.component';
 import { OPERATION } from '../../../shared/components/has-permission/has-permission.interface';
-import { ManagedTabs } from '../../../shared/components/managed-tabs/managed-tabs.component';
 import { CreateWorkspaceDialog } from '../../user-management/workspaces/create-workspace-dialog/create-workspace-dialog.component';
 import { LandingPageWorkspace as Workspace } from '../landing-page-workspace/landing-page-workspace.component';
 import { NoPermissionPlaceholder } from './components/no-permission-placeholder.component';

@@ -3,19 +3,24 @@
 
 import { Key, ReactNode } from 'react';
 
-import { Flex, Item, Picker, TabList, TabPanels, Tabs } from '@geti/ui';
-
-import { TabItem } from '../tabs/tabs.interface';
+import { Flex, Item, Picker, TabList, TabPanels, Tabs } from '@adobe/react-spectrum';
 
 import classes from './managed-tabs.module.scss';
 
-export interface OverflowConfig {
+interface TabItem {
+    id: string;
+    key: string;
+    name: ReactNode;
+    children: ReactNode;
+}
+
+interface OverflowConfig {
     maxVisibleTabs: number;
     pickerAriaLabel: string;
     onCollapsedItemSelect: (key: string) => void;
 }
 
-export interface ManagedTabsProps<T extends { id: string; name: string }> {
+interface ManagedTabsProps<T extends { id: string; name: string }> {
     id?: string;
     items: T[];
     selectedKey: string;

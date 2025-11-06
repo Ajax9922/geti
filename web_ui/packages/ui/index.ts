@@ -163,6 +163,7 @@ export { ViewModes, INITIAL_VIEW_MODE, VIEW_MODE_LABEL } from './src/view-modes/
 export { useViewMode } from './src/view-modes/use-view-mode.hook';
 export { Toast, toast, removeToasts, removeToast, CustomToast } from './src/toast/toast.component';
 export { HorizontalLayout, type HorizontalLayoutOptions } from './src/virtualized-horizontal-grid/horizontal-layout';
+export { ManagedTabs } from './src/managed-tabs/managed-tabs.component';
 
 export {
     ListBox as AriaComponentsListBox,
